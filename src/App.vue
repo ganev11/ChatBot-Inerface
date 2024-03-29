@@ -14,9 +14,9 @@ import ChatWindow from './components/ChatWindow.vue'
 }
 #ChatWindow {
   margin-left: 262px;
+  margin-bottom: auto; /* Push the chat window to the bottom */
   width: calc(100% - 250px);
-  height: 100vh;
-  padding: 12px;
+  height: 100%;
   box-sizing: border-box;
   background-color: #212121;
   color: white;

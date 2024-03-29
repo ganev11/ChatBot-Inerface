@@ -24,47 +24,24 @@ const count = ref(0)
       <p>hi</p>
       <p>hi</p>
       <p>hi</p>
+
       <p>hi</p>
       <p>hi</p>
       <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <fixedInput />
+      <p>posledni</p>
     </div>
+    <fixedInput />
   </div>
 </template>
 
 <style scoped>
-.chat {
-  height: 100vh;
-  width: 100%;
-  overflow-y: auto;
-  padding: 12px;
-  box-sizing: border-box;
-}
-
 .background-chat {
   color: rgba(255, 255, 255, 0);
   background-color: #212121;
 }
 .chat {
-  height: 100vh;
+  height: calc(100% - 86px);
+  margin-bottom: 86px;
   width: 100%;
   overflow-y: auto;
   padding: 12px;
