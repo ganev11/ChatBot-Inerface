@@ -6,13 +6,32 @@ defineProps({
   msg: String
 })
 
-const count = ref(0)
+function handleRowUpdate(newHeight) {
+  textAreaHeight.value = newHeight
+}
+
+const textAreaHeight = ref(1)
 </script>
 
 <template>
   <div class="background-chat">
-    <div class="chat">
-      <button type="button" @click="count++">count is {{ count }}</button>
+    <div
+      :key="textAreaHeight"
+      class="chat"
+      :style="{ paddingBottom: textAreaHeight + 'px' }"
+    >
+      <button type="button" @click="count++">count is</button>
+      <p>hi</p>
+      <p>hi</p>
+      <p>hi</p>
+      <p>hi</p>
+      {{ textAreaHeight + 'px' }}
+      <p>hi</p>
+      <p>hi</p>
+      <p>hi</p>
+      <p>hi</p>
+      <p>hi</p>
+      <p>hi</p>
       <p>hi</p>
       <p>hi</p>
       <p>hi</p>
@@ -30,7 +49,7 @@ const count = ref(0)
       <p>hi</p>
       <p>posledni</p>
     </div>
-    <fixedInput />
+    <fixedInput @new-height="handleRowUpdate" />
   </div>
 </template>
 

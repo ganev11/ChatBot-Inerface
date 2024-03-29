@@ -5,7 +5,7 @@
   <div class="input-content">
     <div class="input-div">
       <div class="input-stack">
-        <img class="clip" src="../assets/svg/paperclip.svg" alt="" />
+        <!-- <img class="clip" src="../assets/svg/paperclip.svg" alt="" />   -->
         <textarea
           type="textarea"
           class="input-bar"
@@ -86,6 +86,7 @@ export default {
 
       // Set the textarea height
       this.textAreaHeight = `${newHeight}px`
+      this.$emit('new-height', newHeight)
     }
   },
   watch: {
@@ -121,7 +122,7 @@ export default {
   height: auto;
   padding: 0;
   bottom: 0;
-  background-color: #2c2c2e;
+  background-color: #212121;
 }
 .input-stack {
   display: flex;
@@ -161,7 +162,7 @@ export default {
 .input-bar {
   width: 46vw;
   min-height: 24px;
-  padding: 14px 48px 10px 55px;
+  padding: 14px 48px 10px 20px;
   border: 1px solid #5f5f61;
   border-radius: 15px;
   background-color: #212121;
@@ -207,5 +208,30 @@ export default {
   rotate: 180deg;
   width: 25px;
   height: 25px;
+}
+</style>
+
+<style scoped>
+/* Styles for the scrollbar track */
+.input-bar::-webkit-scrollbar {
+  width: 6px; /* Adjust scrollbar width */
+  background-color: #f9f9f900; /* Track color */
+}
+
+/* Styles for the scrollbar thumb */
+.input-bar::-webkit-scrollbar-thumb {
+  background-color: #555; /* Thumb color */
+  border-radius: 5px; /* Optional: Round corners of the thumb */
+  border: 1px solid #f9f9f900; /* Optional: Add border around the thumb */
+}
+
+/* Optionally, style the scrollbar button (arrows at the ends of the scrollbar) */
+.input-bar::-webkit-scrollbar-button {
+  display: none; /* Often not styled, but can be used to hide or style the buttons */
+}
+
+/* Optionally, style the scrollbar corner (where horizontal and vertical scrollbars meet) */
+.input-bar::-webkit-scrollbar-corner {
+  background-color: black; /* Corner color */
 }
 </style>

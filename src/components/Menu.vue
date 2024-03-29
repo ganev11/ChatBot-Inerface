@@ -19,8 +19,8 @@ const count = ref(0)
   color: white;
   background-color: #171717;
   height: 100vh;
-  width: 236px;
+  width: 238px;
   padding: 0 12px;
-  border: 1px solid #333;
+  /* border: 1px solid #333; */
 }
 </style>
