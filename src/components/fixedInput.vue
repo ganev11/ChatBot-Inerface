@@ -154,7 +154,7 @@ export default {
   font-size: 0.75rem;
   color: #8e8e93;
   height: 15px;
-  margin: 3px;
+  margin: 11px auto;
 }
 .input-width {
   width: 50%;
@@ -181,7 +181,7 @@ export default {
 
 .send-button {
   position: relative;
-  right: 45px;
+  right: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -193,7 +193,7 @@ export default {
   color: #212121;
   font-size: 20px;
   cursor: pointer;
-  bottom: 12px;
+  bottom: 10px;
 }
 .send-button-disabled {
   background-color: #3f3f3f;
