@@ -55,17 +55,20 @@ const textAreaHeight = ref(1)
 
 <style scoped>
 .background-chat {
+  width: 100%;
   color: rgba(255, 255, 255, 0);
   background-color: #212121;
 }
 .chat {
   height: calc(100% - 86px);
   margin-bottom: 86px;
-  width: 100%;
+  width: max-content;
   overflow-y: auto;
   padding: 12px;
   box-sizing: border-box;
   /* Firefox scrollbar styling */
+  color: white;
+  background-color: #212121;
   scrollbar-color: #555 #f9f9f900; /* thumb and track color */
   scrollbar-width: thin; /* 'auto', 'thin', 'none' */
 }
@@ -91,10 +94,5 @@ const textAreaHeight = ref(1)
 /* Optionally, style the scrollbar corner (where horizontal and vertical scrollbars meet) */
 .chat::-webkit-scrollbar-corner {
   background-color: black; /* Corner color */
-}
-
-.background-chat {
-  color: white;
-  background-color: #212121;
 }
 </style>
