@@ -56,7 +56,7 @@ const count = ref(0)
   /* border: 4px solid #333; */
 }
 .background-menu-off {
-  width: 0;
+  width: 1px;
   padding: 0;
   background-color: #171717;
   transition: width 0.5s;

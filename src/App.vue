@@ -1,6 +1,7 @@
 <template>
   <Menu id="menu" @menu-toggle="toggleChatbotMargin" />
   <ChatWindow
+    :hideMenu="hideMenu"
     :class="{
       'chat-window-margin-on': !hideMenu,
       'chat-window-margin-off': hideMenu
@@ -25,6 +26,7 @@ function toggleChatbotMargin() {
 <style>
 #menu {
   position: fixed;
+  z-index: 1000;
 }
 #ChatWindow {
   margin-bottom: auto; /* Push the chat window to the bottom */
@@ -49,6 +51,7 @@ function toggleChatbotMargin() {
   #ChatWindow {
     margin-left: 0;
     width: 100%;
+    transition: width 0.5s;
   }
 }
 </style>

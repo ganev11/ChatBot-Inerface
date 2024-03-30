@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import fixedInput from './fixedInput.vue' // Adjusted to match the actual file name
 
 defineProps({
-  msg: String
+  hideMenu: Boolean
 })
 
 function handleRowUpdate(newHeight) {
@@ -49,7 +49,7 @@ const textAreaHeight = ref(1)
       <p>hi</p>
       <p>posledni</p>
     </div>
-    <fixedInput @new-height="handleRowUpdate" />
+    <fixedInput :hideMenu="hideMenu" @new-height="handleRowUpdate" />
   </div>
 </template>
 

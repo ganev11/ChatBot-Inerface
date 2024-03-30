@@ -2,7 +2,13 @@
   <!-- <div class="input-content"> -->
   <!-- <div class="input-bar-container"> -->
   <!-- <clip /> -->
-  <div class="input-content">
+  <div
+    class="input-content"
+    :class="{
+      'max-width': !hideMenu,
+      'max-width-off': hideMenu
+    }"
+  >
     <div class="input-div">
       <div class="input-stack">
         <!-- <img class="clip" src="../assets/svg/paperclip.svg" alt="" />   -->
@@ -14,13 +20,15 @@
           wrap="hard"
           :style="{ height: textAreaHeight }"
         />
-        <div
-          class="send-button"
-          :class="{ 'send-button-disabled': inputText === '' }"
-          @click="sendMessage"
-        >
-          <b> ↑ </b>
-        </div>
+        <span class="parent-container">
+          <div
+            class="send-button"
+            :class="{ 'send-button-disabled': inputText === '' }"
+            @click="sendMessage"
+          >
+            <b> ↑ </b>
+          </div>
+        </span>
       </div>
       <!--   <span class="input-width">
         <input
@@ -58,6 +66,9 @@ export default {
       inputText: '',
       textAreaHeight: 'auto' // Set a default height, can be a specific value like '50px'
     }
+  },
+  props: {
+    hideMenu: Boolean
   },
   components: {
     clip
@@ -104,13 +115,16 @@ export default {
 </script>
 
 <style scoped>
-.input-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-content {
+.max-width {
   max-width: calc(100% - 264px);
+  transition: max-width 0.5s;
+}
+.max-width-off {
+  max-width: 100%;
+  transition: max-width 0.5s;
+}
+.input-content {
+  transition: max-width 0.5s;
   width: 100%;
   flex-direction: column;
   position: fixed;
@@ -131,17 +145,15 @@ export default {
   width: 100%;
 }
 @media screen and (max-width: 768px) {
-  /* .input-bar {
-    max-width: 60% !important;
-  } */
   .input-content {
     max-width: calc(100% - 2px);
   }
 }
 @media screen and (max-width: 540px) {
-  /* .input-bar {
-    max-width: 40% !important;
-  } */
+  .small-txt {
+    height: 37px !important;
+    margin: 10px !important;
+  }
 }
 .flex {
   display: flex;
@@ -178,10 +190,12 @@ export default {
   border: 1px solid #727274;
   outline: none;
 }
-
-.send-button {
+.parent-container {
   position: relative;
-  right: 40px;
+}
+.send-button {
+  position: absolute;
+  right: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
