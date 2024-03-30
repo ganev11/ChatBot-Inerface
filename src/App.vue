@@ -1,14 +1,6 @@
 <template>
-  <Menu
-    :class="{
-      'menu-display-none': closeMenuMobile
-    }"
-    :closeMenuMobile="closeMenuMobile"
-    id="menu"
-    @menu-toggle="toggleChatbotMargin"
-  />
+  <Menu id="menu" @menu-toggle="toggleChatbotMargin" />
   <ChatWindow
-    @menu-toggle-mobile="toggleMenuMobile"
     :hideMenu="hideMenu"
     :class="{
       'chat-window-margin-on': !hideMenu,
@@ -24,24 +16,17 @@ import ChatWindow from './components/ChatWindow.vue'
 import { ref } from 'vue'
 
 const hideMenu = ref(false)
-const closeMenuMobile = ref(true)
 
 function toggleChatbotMargin() {
+  console.log('object :>> ')
   hideMenu.value = !hideMenu.value
-}
-
-function toggleMenuMobile() {
-  closeMenuMobile.value = !closeMenuMobile.value
 }
 </script>
 
 <style>
 #menu {
   position: fixed;
-  z-index: 1000;
-}
-.menu-display-none {
-  width: 0;
+  z-index: 6000;
 }
 #ChatWindow {
   margin-bottom: auto; /* Push the chat window to the bottom */
@@ -60,6 +45,9 @@ function toggleMenuMobile() {
   transition: margin-left 0.5s;
 }
 @media (max-width: 768px) {
+  #menu {
+    display: none;
+  }
   #ChatWindow {
     margin-left: 0;
     width: 100%;

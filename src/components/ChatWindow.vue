@@ -1,6 +1,17 @@
 <script setup>
 import fixedInput from './fixedInput.vue' // Adjusted to match the actual file name
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useModels } from '../composables/models.js'
+
+const { fetchModels } = useModels()
+
+async function loadModels() {
+  try {
+    const data = await fetchModels()
+  } catch (error) {
+    console.error('Failed to load models:', error)
+  }
+}
 
 defineProps({
   hideMenu: Boolean
@@ -25,6 +36,7 @@ function tohhleMenuMobile() {
 }
 
 onMounted(() => {
+  loadModels()
   checkMobileScreen() // Check immediately on mount
   window.addEventListener('resize', checkMobileScreen) // Add resize listener
 })

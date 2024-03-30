@@ -149,7 +149,7 @@ export default {
     max-width: calc(100% - 2px);
   }
 }
-@media screen and (max-width: 540px) {
+@media screen and (max-width: 670px) {
   .small-txt {
     height: 37px !important;
     margin: 10px !important;

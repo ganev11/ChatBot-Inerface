@@ -1,82 +1,67 @@
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useHistory } from '../composables/history.js'
+import ConversationsList from './ConversationsList.vue'
 
-const props = defineProps({
-  closeMenuMobile: Boolean
-})
-const mobileScreen = ref(false)
-const emit = defineEmits(['menu-toggle'])
+// Call the composable to get access to its methods
+const { fetchOldConversations } = useHistory()
 
-watch(mobileScreen, newValue => {
-  if (newValue === true) {
-    console.log('Mobile screen detected:', newValue)
-    hideMenu.value = false // Close menu if mobile screen is detected
-  } else {
-    props.closeMenuMobile = false
+// A ref to store the fetched conversations
+const conversations = ref([])
+
+// An async function to load conversations for a given ID
+async function loadConversations(conversationId) {
+  try {
+    const data = await fetchOldConversations(conversationId)
+    // console.log('conversations data :>> ', data.items)
+    return data.items
+  } catch (error) {
+    console.error('Failed to load conversations:', error)
   }
-  console.log('Mobile screen:', newValue, 'Hide menu:', hideMenu.value)
+}
+onMounted(async () => {
+  conversations.value = await loadConversations('your-conversation-id')
 })
+defineProps({
+  msg: String
+})
+const emit = defineEmits(['menu-toggle'])
 function toggleMenu() {
   hideMenu.value = !hideMenu.value
   emit('menu-toggle')
 }
-function checkMobileScreen() {
-  // This is a common breakpoint for mobile devices
-  const query = window.matchMedia('(max-width: 768px)')
-  mobileScreen.value = query.matches
-}
-
 const hideMenu = ref(false)
 const count = ref(0)
-onMounted(() => {
-  console.log(props.closeMenuMobile)
-})
-onMounted(() => {
-  checkMobileScreen() // Check immediately on mount
-  window.addEventListener('resize', checkMobileScreen) // Add resize listener
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobileScreen) // Clean up listener
-})
 </script>
 
 <template>
   <div class="menu">
     <div
-      v-if="!hideMenu"
-      :class="{
-        'background-menu': !hideMenu && !props.closeMenuMobile,
-        'background-menu-off': hideMenu && props.closeMenuMobile
-      }"
+      :class="{ 'background-menu': !hideMenu, 'background-menu-off': hideMenu }"
     >
       <div
-        :class="{
-          'menu-content': !hideMenu,
-          'menu-content-on': !hideMenu && !props.closeMenuMobile,
-          'menu-content-off': hideMenu && props.closeMenuMobile
-        }"
+        :class="{ 'menu-content-on': !hideMenu, 'menu-content-off': hideMenu }"
       >
         <!-- menu content -->
+
         <!-- new chat btn fixed -->
-        <div class="menu-btn">
+        <div class="menu-bn">
           <button type="button" @click="count++">New Chat</button>
         </div>
         <!-- history -->
+        <ConversationsList :conversations="conversations" />
+
         <!-- user Info fixed -->
       </div>
     </div>
     <!-- Toggle btn -->
-    <span class="tgl" v-if="!mobileScreen">
+    <span class="tgl">
       <button @click="toggleMenu">tgl</button>
     </span>
   </div>
 </template>
 
 <style scoped>
-.menu-content {
-  width: 262px;
-}
 .menu {
   display: flex;
   height: 100vh;
@@ -100,8 +85,7 @@ onUnmounted(() => {
   background-color: #171717;
   transition: width 0.5s;
 }
-.menu-btn {
-  width: max-content;
+.menu-bn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -120,15 +104,11 @@ onUnmounted(() => {
   align-items: center;
 }
 .menu-content-on {
-  /* display: block; */
+  display: block;
   transition: display 0.5s;
-  width: 100%;
-  transition: width 0.5s;
 }
 .menu-content-off {
-  /* display: none; */
+  display: none;
   transition: display 0.5s;
-  width: 0;
-  transition: width 0.5s;
 }
 </style>
