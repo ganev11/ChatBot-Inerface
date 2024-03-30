@@ -1,29 +1,65 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 
-defineProps({
-  msg: String
+const props = defineProps({
+  closeMenuMobile: Boolean
 })
+const mobileScreen = ref(false)
 const emit = defineEmits(['menu-toggle'])
+
+watch(mobileScreen, newValue => {
+  if (newValue === true) {
+    console.log('Mobile screen detected:', newValue)
+    hideMenu.value = false // Close menu if mobile screen is detected
+  } else {
+    props.closeMenuMobile = false
+  }
+  console.log('Mobile screen:', newValue, 'Hide menu:', hideMenu.value)
+})
 function toggleMenu() {
   hideMenu.value = !hideMenu.value
   emit('menu-toggle')
 }
+function checkMobileScreen() {
+  // This is a common breakpoint for mobile devices
+  const query = window.matchMedia('(max-width: 768px)')
+  mobileScreen.value = query.matches
+}
+
 const hideMenu = ref(false)
 const count = ref(0)
+onMounted(() => {
+  console.log(props.closeMenuMobile)
+})
+onMounted(() => {
+  checkMobileScreen() // Check immediately on mount
+  window.addEventListener('resize', checkMobileScreen) // Add resize listener
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobileScreen) // Clean up listener
+})
 </script>
 
 <template>
   <div class="menu">
     <div
-      :class="{ 'background-menu': !hideMenu, 'background-menu-off': hideMenu }"
+      v-if="!hideMenu"
+      :class="{
+        'background-menu': !hideMenu && !props.closeMenuMobile,
+        'background-menu-off': hideMenu && props.closeMenuMobile
+      }"
     >
       <div
-        :class="{ 'menu-content-on': !hideMenu, 'menu-content-off': hideMenu }"
+        :class="{
+          'menu-content': !hideMenu,
+          'menu-content-on': !hideMenu && !props.closeMenuMobile,
+          'menu-content-off': hideMenu && props.closeMenuMobile
+        }"
       >
         <!-- menu content -->
         <!-- new chat btn fixed -->
-        <div class="menu-bn">
+        <div class="menu-btn">
           <button type="button" @click="count++">New Chat</button>
         </div>
         <!-- history -->
@@ -31,13 +67,16 @@ const count = ref(0)
       </div>
     </div>
     <!-- Toggle btn -->
-    <span class="tgl">
+    <span class="tgl" v-if="!mobileScreen">
       <button @click="toggleMenu">tgl</button>
     </span>
   </div>
 </template>
 
 <style scoped>
+.menu-content {
+  width: 262px;
+}
 .menu {
   display: flex;
   height: 100vh;
@@ -61,7 +100,8 @@ const count = ref(0)
   background-color: #171717;
   transition: width 0.5s;
 }
-.menu-bn {
+.menu-btn {
+  width: max-content;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,11 +120,15 @@ const count = ref(0)
   align-items: center;
 }
 .menu-content-on {
-  display: block;
+  /* display: block; */
   transition: display 0.5s;
+  width: 100%;
+  transition: width 0.5s;
 }
 .menu-content-off {
-  display: none;
+  /* display: none; */
   transition: display 0.5s;
+  width: 0;
+  transition: width 0.5s;
 }
 </style>
