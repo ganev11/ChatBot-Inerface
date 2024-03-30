@@ -141,30 +141,42 @@ onUnmounted(() => {
   /* Firefox scrollbar styling */
   color: white;
   background-color: #212121;
-  scrollbar-color: #555 #f9f9f900; /* thumb and track color */
-  scrollbar-width: thin; /* 'auto', 'thin', 'none' */
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: transparent transparent; /* For Firefox, set default state to transparent */
 }
 
-/* Styles for the scrollbar track */
+/* Default state for Webkit browsers, set scrollbar to transparent */
 .chat::-webkit-scrollbar {
-  width: 10px; /* Adjust scrollbar width */
-  background-color: #f9f9f9; /* Track color */
+  width: 10px;
+  background-color: transparent; /* Make scrollbar track transparent */
 }
 
-/* Styles for the scrollbar thumb */
 .chat::-webkit-scrollbar-thumb {
-  background-color: #555; /* Thumb color */
-  border-radius: 5px; /* Optional: Round corners of the thumb */
-  border: 2px solid #f9f9f9; /* Optional: Add border around the thumb */
+  background-color: transparent; /* Make scrollbar thumb transparent */
+  border-radius: 5px;
+  border: 2px solid transparent;
 }
 
-/* Optionally, style the scrollbar button (arrows at the ends of the scrollbar) */
+.chat:hover {
+  scrollbar-color: #555 transparent; /* For Firefox, visible state */
+}
+
+/* On hover, change Webkit scrollbar colors to be visible */
+.chat:hover::-webkit-scrollbar {
+  background-color: #f9f9f900; /* Optional: Change track color on hover */
+}
+
+.chat:hover::-webkit-scrollbar-thumb {
+  background-color: #555; /* Change thumb color on hover */
+  border: 2px solid #f9f9f900; /* Optional: Adjust border color on hover */
+}
+
+/* Optionally, adjust the ::-webkit-scrollbar-button and ::-webkit-scrollbar-corner styles as needed */
 .chat::-webkit-scrollbar-button {
-  display: none; /* Often not styled, but can be used to hide or style the buttons */
+  display: none;
 }
 
-/* Optionally, style the scrollbar corner (where horizontal and vertical scrollbars meet) */
 .chat::-webkit-scrollbar-corner {
-  background-color: black; /* Corner color */
+  background-color: black; /* Adjust if needed */
 }
 </style>

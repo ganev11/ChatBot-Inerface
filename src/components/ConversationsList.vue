@@ -1,34 +1,59 @@
 <template>
   <div class="conversations-list">
     <span class="time-text"> Today </span>
-    <div v-for="conversation in todayConversations" :key="conversation.id">
-      {{ formatDate(conversation.update_time) }}
+    <div
+      class="convo"
+      v-for="conversation in todayConversations"
+      :key="conversation.id"
+    >
+      {{ conversation.title }}
+      <!-- {{ formatDate(conversation.update_time) }} -->
     </div>
   </div>
   <div class="conversations-list">
     <span class="time-text"> Yesterday </span>
 
-    <div v-for="conversation in yesterdayConversations" :key="conversation.id">
-      {{ formatDate(conversation.update_time) }}
+    <div
+      class="convo"
+      v-for="conversation in yesterdayConversations"
+      :key="conversation.id"
+    >
+      {{ conversation.title }}
+      <!-- {{ formatDate(conversation.update_time) }} -->
     </div>
   </div>
   <div class="conversations-list">
     <span class="time-text"> Previous 7 Days </span>
 
-    <div v-for="conversation in last7DaysConversations" :key="conversation.id">
-      {{ formatDate(conversation.update_time) }}
+    <div
+      class="convo"
+      v-for="conversation in last7DaysConversations"
+      :key="conversation.id"
+    >
+      {{ conversation.title }}
+      <!-- {{ formatDate(conversation.update_time) }} -->
     </div>
   </div>
   <div class="conversations-list">
     <span class="time-text"> Previous 30 Days </span>
-    <div v-for="conversation in last30DaysConversations" :key="conversation.id">
-      {{ formatDate(conversation.update_time) }}
+    <div
+      class="convo"
+      v-for="conversation in last30DaysConversations"
+      :key="conversation.id"
+    >
+      {{ conversation.title }}
+      <!-- {{ formatDate(conversation.update_time) }} -->
     </div>
   </div>
   <div class="conversations-list">
     <span class="time-text"> Older </span>
-    <div v-for="conversation in olderConversations" :key="conversation.id">
-      {{ formatDate(conversation.update_time) }}
+    <div
+      class="convo"
+      v-for="conversation in olderConversations"
+      :key="conversation.id"
+    >
+      {{ conversation.title }}
+      <!-- {{ formatDate(conversation.update_time) }} -->
     </div>
   </div>
 </template>
@@ -131,7 +156,6 @@ const olderConversations = computed(() => {
 .conversations-list {
   color: white;
   border: 1px solid #3b3b93;
-  background-color: #212121;
   padding: 8px;
 }
 .time-text {
@@ -139,5 +163,14 @@ const olderConversations = computed(() => {
   font-size: 0.7rem;
   font-weight: bold;
   padding: 8px 0;
+}
+.convo {
+  padding: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+.convo:hover {
+  background-color: #212121;
 }
 </style>
