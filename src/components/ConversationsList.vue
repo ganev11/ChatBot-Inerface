@@ -1,30 +1,32 @@
 <template>
   <div class="conversations-list">
-    Today
+    <span class="time-text"> Today </span>
     <div v-for="conversation in todayConversations" :key="conversation.id">
       {{ formatDate(conversation.update_time) }}
     </div>
   </div>
   <div class="conversations-list">
-    Yesterday
+    <span class="time-text"> Yesterday </span>
+
     <div v-for="conversation in yesterdayConversations" :key="conversation.id">
       {{ formatDate(conversation.update_time) }}
     </div>
   </div>
   <div class="conversations-list">
-    Previous 7 Days
+    <span class="time-text"> Previous 7 Days </span>
+
     <div v-for="conversation in last7DaysConversations" :key="conversation.id">
       {{ formatDate(conversation.update_time) }}
     </div>
   </div>
   <div class="conversations-list">
-    Previous 30 Days
+    <span class="time-text"> Previous 30 Days </span>
     <div v-for="conversation in last30DaysConversations" :key="conversation.id">
       {{ formatDate(conversation.update_time) }}
     </div>
   </div>
   <div class="conversations-list">
-    Older
+    <span class="time-text"> Older </span>
     <div v-for="conversation in olderConversations" :key="conversation.id">
       {{ formatDate(conversation.update_time) }}
     </div>
@@ -59,6 +61,9 @@ const formatDate = dateString => {
 // Helper to determine if a date falls within a specified range
 const isDateInRange = (date, startDate, endDate) => {
   const targetDate = new Date(date)
+  console.log('targetDate :>> ', targetDate)
+  //   const targetDate = new Date(Date.UTC(2024, 3, 30))
+
   return targetDate >= startDate && targetDate < endDate
 }
 
@@ -128,5 +133,11 @@ const olderConversations = computed(() => {
   border: 1px solid #3b3b93;
   background-color: #212121;
   padding: 8px;
+}
+.time-text {
+  color: #878787;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 8px 0;
 }
 </style>
