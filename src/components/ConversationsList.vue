@@ -1,6 +1,6 @@
 <template>
   <div class="conversations-list">
-    <span class="time-text"> Today </span>
+    <div class="time-text">Today</div>
     <div
       class="convo"
       v-for="conversation in todayConversations"
@@ -8,11 +8,14 @@
     >
       {{ conversation.title }}
       <!-- {{ formatDate(conversation.update_time) }} -->
+      <div class="gradient"></div>
+      <div class="gradient-end"></div>
+      <div class="gradient-hover"></div>
+      <div class="gradient-end-hover"></div>
     </div>
   </div>
   <div class="conversations-list">
-    <span class="time-text"> Yesterday </span>
-
+    <div class="time-text">Yesterday</div>
     <div
       class="convo"
       v-for="conversation in yesterdayConversations"
@@ -20,10 +23,18 @@
     >
       {{ conversation.title }}
       <!-- {{ formatDate(conversation.update_time) }} -->
+      <div class="gradient"></div>
+      <div class="gradient-end"></div>
+      <div class="gradient-hover"></div>
+      <div class="gradient-end-hover">
+        <div class="convo-icon">
+          <img class="dots-position" src="./../assets/dots.svg" alt="" />
+        </div>
+      </div>
     </div>
   </div>
   <div class="conversations-list">
-    <span class="time-text"> Previous 7 Days </span>
+    <div class="time-text">Previous 7 Days</div>
 
     <div
       class="convo"
@@ -32,10 +43,12 @@
     >
       {{ conversation.title }}
       <!-- {{ formatDate(conversation.update_time) }} -->
+      <div class="gradient"></div>
+      <div class="gradient-end"></div>
     </div>
   </div>
   <div class="conversations-list">
-    <span class="time-text"> Previous 30 Days </span>
+    <div class="time-text">Previous 30 Days</div>
     <div
       class="convo"
       v-for="conversation in last30DaysConversations"
@@ -43,10 +56,12 @@
     >
       {{ conversation.title }}
       <!-- {{ formatDate(conversation.update_time) }} -->
+      <div class="gradient"></div>
+      <div class="gradient-end"></div>
     </div>
   </div>
   <div class="conversations-list">
-    <span class="time-text"> Older </span>
+    <div class="time-text">Older</div>
     <div
       class="convo"
       v-for="conversation in olderConversations"
@@ -54,6 +69,8 @@
     >
       {{ conversation.title }}
       <!-- {{ formatDate(conversation.update_time) }} -->
+      <div class="gradient"></div>
+      <div class="gradient-end"></div>
     </div>
   </div>
 </template>
@@ -155,22 +172,104 @@ const olderConversations = computed(() => {
 <style scoped>
 .conversations-list {
   color: white;
-  border: 1px solid #3b3b93;
-  padding: 8px;
+  /* border: 1px solid #3b3b93; */
+  padding-bottom: 2px;
 }
 .time-text {
   color: #878787;
   font-size: 0.7rem;
   font-weight: bold;
-  padding: 8px 0;
+  padding: 8px;
 }
 .convo {
-  padding: 8px;
+  position: relative;
+  padding: 8px 14px 8px 8px;
+  display: flex;
   cursor: pointer;
   font-size: 0.9rem;
   border-radius: 4px;
+  text-wrap: nowrap;
 }
 .convo:hover {
-  background-color: #212121;
+  background-color: #2e2e2e;
+}
+
+.dots-position {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 20px;
+}
+.dots-position:hover {
+  opacity: 0.5;
+}
+.gradient {
+  position: absolute;
+  left: 150px;
+  background-image: linear-gradient(to right, #17171700, #171717cd);
+  height: 37px;
+  width: 50px;
+  z-index: 7000;
+  bottom: 0px;
+}
+.gradient-end {
+  position: absolute;
+  bottom: 0px;
+  height: 37px;
+  left: 200px;
+  width: 40px;
+  z-index: 7000;
+  background-image: linear-gradient(to right, #171717cd, #171717);
+}
+
+/* Gradient hover effect */
+/* Initially show the gradient elements */
+.convo .gradient,
+.convo .gradient-end {
+  display: block;
+}
+
+/* When hovering over .convo, hide the gradient elements */
+.convo:hover .gradient,
+.convo:hover .gradient-end {
+  display: none;
+}
+/* Initially hide the gradient-hover elements */
+.convo .gradient-hover,
+.convo .gradient-end-hover {
+  display: none;
+}
+
+/* When hovering over .convo, display the gradient-hover elements */
+.convo:hover .gradient-hover,
+.convo:hover .gradient-end-hover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.gradient-hover {
+  position: absolute;
+  left: 100px;
+  background-image: linear-gradient(to right, #2e2e2e3b, #2e2e2e);
+  height: 37px;
+  width: 50px;
+  z-index: 7000;
+  bottom: 0px;
+}
+
+.gradient-end-hover {
+  position: absolute;
+  bottom: 0px;
+  height: 37px;
+  left: 150px;
+  width: 77px;
+  z-index: 7000;
+  border-radius: 4px;
+  /* border: 1px solid #3b3b93; */
+  background-image: linear-gradient(to right, #2e2e2e, #2e2e2e);
+  flex-direction: row;
 }
 </style>
