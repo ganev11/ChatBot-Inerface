@@ -22,15 +22,31 @@
       :key="conversation.id"
     >
       {{ conversation.title }}
-      <!-- {{ formatDate(conversation.update_time) }} -->
       <div class="gradient"></div>
       <div class="gradient-end"></div>
       <div class="gradient-hover"></div>
       <div class="gradient-end-hover">
-        <div class="convo-icon">
+        <div
+          class="convo-icon"
+          @click="toggleDropdown(conversation.id, $event)"
+        >
           <img class="dots-position" src="./../assets/dots.svg" alt="" />
         </div>
       </div>
+      <Teleport to=".conversations">
+        <div
+          class="dropdown-menu"
+          :style="dropdownStyle"
+          v-if="openMenuId === conversation.id"
+        >
+          <button @click="deleteConversation(conversation.id)">Delete</button>
+        </div>
+        <div
+          v-if="openMenuId === conversation.id"
+          class="overlay"
+          @click="closeDropdown()"
+        ></div>
+      </Teleport>
     </div>
   </div>
   <div class="conversations-list">
@@ -76,29 +92,61 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed } from 'vue'
+import { defineProps, defineEmits, computed, ref } from 'vue'
 
 const props = defineProps({
   conversations: Array
 })
 // Optionally, define an emit function if you want to handle button clicks
 const emit = defineEmits(['conversationSelected'])
+const openMenuId = ref(null)
 
 function handleClick(conversationId) {
   // Emit an event with the conversation ID
   emit('conversationSelected', conversationId)
 }
 
-const formatDate = dateString => {
-  const options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }
-  return new Date(dateString).toLocaleDateString(undefined, options)
+const closeDropdown = () => {
+  openMenuId.value = null
 }
+
+const dropdownStyle = ref({}) // For dynamic positioning
+
+// Adjusted toggleDropdown to accept event
+const toggleDropdown = (id, event) => {
+  console.log('event :>> ', event)
+  const clickX = event.clientX
+  const clickY = event.clientY
+  if (openMenuId.value === id) {
+    openMenuId.value = null
+  } else {
+    openMenuId.value = id
+    // Calculate position
+    const bounds = event.target.getBoundingClientRect()
+    dropdownStyle.value = {
+      position: 'absolute',
+      top: `${20 + clickY}px`,
+      left: `${-10 + clickX}px`
+      // Ensure it doesn't go off-screen, etc.
+    }
+  }
+}
+
+const deleteConversation = id => {
+  // Logic to delete conversation
+  closeDropdown()
+}
+
+// const formatDate = dateString => {
+//   const options = {
+//     year: 'numeric',
+//     month: 'long',
+//     day: 'numeric',
+//     hour: '2-digit',
+//     minute: '2-digit'
+//   }
+//   return new Date(dateString).toLocaleDateString(undefined, options)
+// }
 
 // Helper to determine if a date falls within a specified range
 const isDateInRange = (date, startDate, endDate) => {
@@ -174,6 +222,8 @@ const olderConversations = computed(() => {
   color: white;
   /* border: 1px solid #3b3b93; */
   padding-bottom: 2px;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 .time-text {
   color: #878787;
@@ -271,5 +321,46 @@ const olderConversations = computed(() => {
   /* border: 1px solid #3b3b93; */
   background-image: linear-gradient(to right, #2e2e2e, #2e2e2e);
   flex-direction: row;
+}
+
+.dropdown-menu {
+  position: absolute;
+  z-index: 8000; /* Ensure it's above other items */
+  right: 0;
+  top: 100%; /* Position it directly below the dots */
+  background-color: #333; /* Dark grey background */
+  border: 1px solid #ccc; /* Light grey border */
+  border-radius: 4px; /* Rounded corners */
+  min-width: 120px; /* Ensure it has a minimum width */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: Adds a slight shadow for depth */
+}
+
+.dropdown-menu button {
+  background-color: transparent;
+  color: white; /* Text color that contrasts with the dark background */
+  border: none; /* Remove button border */
+  width: 100%; /* Make the button fill the container */
+  text-align: left; /* Align text to the left */
+  padding: 8px 12px; /* Padding for spacing */
+  cursor: pointer; /* Change cursor to indicate clickable */
+}
+
+.dropdown-menu button:hover {
+  background-color: #474747; /* Slightly lighter grey on hover */
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0); /* Semi-transparent for demonstration */
+  z-index: 10; /* Adjust based on your layout */
+}
+
+.dropdown-menu {
+  position: absolute;
+  z-index: 8000; /* Higher than overlay */
+  /* Additional styling */
 }
 </style>
