@@ -26,7 +26,7 @@
         >
           <button
             class="delete-btn dropdown-item"
-            @click="deleteConversation(conversation.id)"
+            @click="deleteConversation(conversation)"
           >
             <img class="delete-icon" src="../assets/svg/delete.svg" />
             Delete chat
@@ -47,7 +47,10 @@
 import { defineProps, ref } from 'vue'
 import BaseModal from './BaseModal.vue' // Adjust path as needed
 import { useBaseModalStore } from './../stores/baseModalStore' // Adjust path as needed
+import { useConversationDeletion } from './../composables/useConversationDeletion' // Adjust the path as needed
+
 const modalStore = useBaseModalStore()
+const { deleteConversationCOMP, isDeleting, error } = useConversationDeletion()
 
 const openMenuId = ref(null)
 
@@ -56,16 +59,25 @@ const props = defineProps({
   conversations: Array
 })
 
-const deleteConversation = id => {
+const deleteConversation = conversation => {
   modalStore.setModalSettings({
-    title: 'Custom Modal Title',
-    content: `This is custom content for the modal. ${id} `,
+    title: 'Delete chat?',
+    content: `This will delete ${conversation.title} `,
     leftBtnText: 'Close',
     leftBtnAction: () => modalStore.closeModal(),
-    rightBtnText: 'Confirm',
+    rightBtnText: 'Delete',
     rightBtnAction: () => {
-      alert('Confirmed!')
-      modalStore.closeModal()
+      deleteConversationCOMP(conversation.id)
+        .then(() => {
+          // Handle successful deletion, e.g., refresh the list of conversations
+        })
+        .catch(err => {
+          // Handle error case
+          console.error('Deletion error:', err)
+        })
+        .finally(() => {
+          modalStore.closeModal()
+        })
     }
   })
 

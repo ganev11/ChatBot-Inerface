@@ -4,8 +4,10 @@
       <header class="modal-header">{{ modalSettings.title }}</header>
       <div class="modal-content">{{ modalSettings.content }}</div>
       <footer class="modal-footer">
-        <button @click="leftBtnAction">{{ modalSettings.leftBtn.text }}</button>
-        <button @click="rightBtnAction">
+        <button class="close" @click="leftBtnAction">
+          {{ modalSettings.leftBtn.text }}
+        </button>
+        <button class="confirm" @click="rightBtnAction">
           {{ modalSettings.rightBtn.text }}
         </button>
       </footer>
@@ -47,7 +49,7 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.109);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,9 +57,9 @@ onMounted(() => {
 }
 
 .modal-window {
-  background-color: #fff;
+  background-color: #343434;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 15px;
   max-width: 500px;
   width: 100%;
   position: relative;
@@ -66,24 +68,51 @@ onMounted(() => {
 }
 
 .modal-header {
-  font-size: 1.5em;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1em;
   margin-bottom: 20px;
 }
 
 .modal-content {
   margin-bottom: 20px;
+  font-weight: 500;
 }
 
 .modal-footer {
   text-align: right;
 }
 
-button {
-  background-color: rgb(24, 119, 119);
+button.close {
+  background-color: #343434;
+  cursor: pointer;
+  border: 1px solid rgb(97, 97, 97);
+  padding: 10px 20px;
+  margin-left: 10px;
+  border-radius: 5px;
+}
+button.confirm {
+  background-color: rgb(165, 20, 20);
   cursor: pointer;
   padding: 10px 20px;
   margin-left: 10px;
   border: none;
   border-radius: 5px;
+}
+
+button.close:hover {
+  background-color: #4d4d4d;
+}
+button.close:focus,
+button.close:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+button.confirm:hover {
+  background-color: rgb(143, 18, 18);
+}
+button.confirm:focus,
+button.confirm:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
 }
 </style>
