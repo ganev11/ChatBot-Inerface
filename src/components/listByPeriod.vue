@@ -24,7 +24,13 @@
           :style="dropdownStyle"
           v-if="openMenuId === conversation.id"
         >
-          <button @click="deleteConversation(conversation.id)">Delete</button>
+          <button
+            class="delete-btn dropdown-item"
+            @click="deleteConversation(conversation.id)"
+          >
+            <img class="delete-icon" src="../assets/svg/delete.svg" />
+            Delete chat
+          </button>
         </div>
         <div
           v-if="openMenuId === conversation.id"
@@ -33,11 +39,16 @@
         ></div>
       </Teleport>
     </div>
+    <BaseModal />
   </div>
 </template>
 
 <script setup>
 import { defineProps, ref } from 'vue'
+import BaseModal from './BaseModal.vue' // Adjust path as needed
+import { useBaseModalStore } from './../stores/baseModalStore' // Adjust path as needed
+const modalStore = useBaseModalStore()
+
 const openMenuId = ref(null)
 
 const props = defineProps({
@@ -45,6 +56,22 @@ const props = defineProps({
   conversations: Array
 })
 
+const deleteConversation = id => {
+  modalStore.setModalSettings({
+    title: 'Custom Modal Title',
+    content: `This is custom content for the modal. ${id} `,
+    leftBtnText: 'Close',
+    leftBtnAction: () => modalStore.closeModal(),
+    rightBtnText: 'Confirm',
+    rightBtnAction: () => {
+      alert('Confirmed!')
+      modalStore.closeModal()
+    }
+  })
+
+  modalStore.openModal()
+  closeDropdown()
+}
 function handleClick(conversationId) {
   // Emit an event with the conversation ID
   emit('conversationSelected', conversationId)
@@ -72,11 +99,6 @@ const toggleDropdown = (id, event) => {
       left: `${-10 + clickX}px`
     }
   }
-}
-
-const deleteConversation = id => {
-  // Logic to delete conversation
-  closeDropdown()
 }
 </script>
 
@@ -188,28 +210,44 @@ const deleteConversation = id => {
 
 .dropdown-menu {
   position: absolute;
+  padding: 8px;
   z-index: 8000; /* Ensure it's above other items */
   right: 0;
+  min-width: 180px;
   top: 100%; /* Position it directly below the dots */
   background-color: #333; /* Dark grey background */
-  border: 1px solid #ccc; /* Light grey border */
+  border: 1px solid rgb(103, 103, 103); /* Light grey border */
   border-radius: 4px; /* Rounded corners */
-  min-width: 120px; /* Ensure it has a minimum width */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: Adds a slight shadow for depth */
 }
 
 .dropdown-menu button {
   background-color: transparent;
-  color: white; /* Text color that contrasts with the dark background */
+  color: rgb(0, 0, 0); /* Text color that contrasts with the dark background */
   border: none; /* Remove button border */
   width: 100%; /* Make the button fill the container */
+  min-width: 150px;
   text-align: left; /* Align text to the left */
   padding: 8px 12px; /* Padding for spacing */
   cursor: pointer; /* Change cursor to indicate clickable */
 }
-
+.delete-btn {
+  color: rgb(238, 69, 69) !important;
+}
+.delete-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 7px;
+}
 .dropdown-menu button:hover {
+  /* border-color: #646cff; */
   background-color: #474747; /* Slightly lighter grey on hover */
+  border-radius: 5px !important;
+  /* outline: 4px auto -webkit-focus-ring-color; */
+}
+.dropdown-item {
+  display: flex;
+  align-items: center;
 }
 .overlay {
   position: fixed;

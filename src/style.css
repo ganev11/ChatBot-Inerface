@@ -61,7 +61,6 @@ html {
   min-height: 100vh !important;
   overflow-y: auto !important;
 }
-
 /* Buton styling */
 button {
   border-radius: 8px;
@@ -76,7 +75,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  /* border-color: #646cff; */
+  border-color: #646cff;
   background-color: #353535;
 }
 button:focus,
