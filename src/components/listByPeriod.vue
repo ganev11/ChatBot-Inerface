@@ -1,100 +1,83 @@
 <template>
-  <!-- Today -->
-  <ListByPeriod periodName="Today" :conversations="todayConversations" />
-  <!-- Yesterday -->
-  <ListByPeriod
-    periodName="Yesterday"
-    :conversations="yesterdayConversations"
-  />
-  <!-- 7 days -->
-  <ListByPeriod
-    periodName="Previous 7 Days"
-    :conversations="last7DaysConversations"
-  />
-  <!-- 30 days -->
-  <ListByPeriod
-    periodName="Previous 30 Days"
-    :conversations="last30DaysConversations"
-  />
-  <!-- Older -->
-  <ListByPeriod periodName="Older" :conversations="olderConversations" />
+  <div class="conversations-list">
+    <div class="time-text">{{ periodName }}</div>
+    <div
+      class="convo"
+      v-for="conversation in conversations"
+      :key="conversation.id"
+    >
+      {{ conversation.title }}
+      <div class="gradient"></div>
+      <div class="gradient-end"></div>
+      <div class="gradient-hover"></div>
+      <div class="gradient-end-hover">
+        <div
+          class="convo-icon"
+          @click="toggleDropdown(conversation.id, $event)"
+        >
+          <img class="dots-position" src="./../assets/dots.svg" alt="" />
+        </div>
+      </div>
+      <Teleport to=".conversations">
+        <div
+          class="dropdown-menu"
+          :style="dropdownStyle"
+          v-if="openMenuId === conversation.id"
+        >
+          <button @click="deleteConversation(conversation.id)">Delete</button>
+        </div>
+        <div
+          v-if="openMenuId === conversation.id"
+          class="overlay"
+          @click="closeDropdown()"
+        ></div>
+      </Teleport>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed, ref } from 'vue'
-import ListByPeriod from './listByPeriod.vue'
+import { defineProps, ref } from 'vue'
+const openMenuId = ref(null)
 
 const props = defineProps({
+  periodName: String,
   conversations: Array
 })
 
-// Helper to determine if a date falls within a specified range
-const isDateInRange = (date, startDate, endDate) => {
-  const targetDate = new Date(date)
-  console.log('targetDate :>> ', targetDate)
-  //   const targetDate = new Date(Date.UTC(2024, 3, 30))
-
-  return targetDate >= startDate && targetDate < endDate
+function handleClick(conversationId) {
+  // Emit an event with the conversation ID
+  emit('conversationSelected', conversationId)
+}
+const closeDropdown = () => {
+  openMenuId.value = null
 }
 
-// Today
-const todayConversations = computed(() => {
-  const startOfToday = new Date(new Date().setHours(0, 0, 0, 0))
-  return props.conversations.filter(
-    conversation => new Date(conversation.update_time) >= startOfToday
-  )
-})
+const dropdownStyle = ref({}) // For dynamic positioning
 
-// Yesterday
-const yesterdayConversations = computed(() => {
-  const startOfYesterday = new Date(
-    new Date().setDate(new Date().getDate() - 1)
-  ).setHours(0, 0, 0, 0)
-  const endOfYesterday = new Date(new Date().setHours(0, 0, 0, 0))
-  return props.conversations.filter(conversation =>
-    isDateInRange(conversation.update_time, startOfYesterday, endOfYesterday)
-  )
-})
+// Adjusted toggleDropdown to accept event
+const toggleDropdown = (id, event) => {
+  console.log('event :>> ', event)
+  const clickX = event.clientX
+  const clickY = event.clientY
+  if (openMenuId.value === id) {
+    openMenuId.value = null
+  } else {
+    openMenuId.value = id
+    // Calculate position
+    const bounds = event.target.getBoundingClientRect()
+    dropdownStyle.value = {
+      position: 'absolute',
+      top: `${20 + clickY}px`,
+      left: `${-10 + clickX}px`
+    }
+  }
+}
 
-// Previous 7 Days (before yesterday)
-const last7DaysConversations = computed(() => {
-  const endOf7DayPeriod = new Date(
-    new Date().setDate(new Date().getDate() - 1)
-  ).setHours(0, 0, 0, 0)
-  const startOf7DayPeriod = new Date(
-    new Date().setDate(new Date().getDate() - 8)
-  ).setHours(0, 0, 0, 0)
-  return props.conversations.filter(conversation =>
-    isDateInRange(conversation.update_time, startOf7DayPeriod, endOf7DayPeriod)
-  )
-})
-
-// Previous 30 Days (before the last 7 days)
-const last30DaysConversations = computed(() => {
-  const endOf30DayPeriod = new Date(
-    new Date().setDate(new Date().getDate() - 8)
-  ).setHours(0, 0, 0, 0)
-  const startOf30DayPeriod = new Date(
-    new Date().setDate(new Date().getDate() - 38)
-  ).setHours(0, 0, 0, 0)
-  return props.conversations.filter(conversation =>
-    isDateInRange(
-      conversation.update_time,
-      startOf30DayPeriod,
-      endOf30DayPeriod
-    )
-  )
-})
-
-// Older (before the last 30 days period)
-const olderConversations = computed(() => {
-  const startOfOlderPeriod = new Date(
-    new Date().setDate(new Date().getDate() - 38)
-  ).setHours(0, 0, 0, 0)
-  return props.conversations.filter(
-    conversation => new Date(conversation.update_time) < startOfOlderPeriod
-  )
-})
+const deleteConversation = id => {
+  // Logic to delete conversation
+  closeDropdown()
+}
 </script>
 
 <style scoped>
