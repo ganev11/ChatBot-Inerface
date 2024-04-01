@@ -127,7 +127,6 @@ const toggleDropdown = (id, event) => {
       position: 'absolute',
       top: `${20 + clickY}px`,
       left: `${-10 + clickX}px`
-      // Ensure it doesn't go off-screen, etc.
     }
   }
 }

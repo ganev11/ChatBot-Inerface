@@ -45,8 +45,14 @@ const count = ref(0)
         <!-- menu content -->
 
         <!-- new chat btn fixed -->
-        <div class="menu-bn">
-          <button type="button" @click="count++">New Chat</button>
+        <div class="new-convo">
+          New Chat
+          <img
+            class="edit-icon"
+            src="../assets/svg/edit.svg"
+            @click="count++"
+            alt=""
+          />
         </div>
         <!-- history -->
         <div class="conversations">
@@ -62,6 +68,24 @@ const count = ref(0)
 </template>
 
 <style scoped>
+.edit-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+.new-convo {
+  width: max-content;
+  position: relative;
+  padding: 8px 14px 8px 8px;
+  display: flex;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  text-wrap: nowrap;
+}
+.new-convo:hover {
+  background-color: #2e2e2e;
+}
 .menu {
   display: flex;
   height: 100vh;
@@ -85,12 +109,7 @@ const count = ref(0)
   background-color: #171717;
   transition: width 0.5s;
 }
-.menu-bn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
+
 .tgl {
   position: relative;
   cursor: pointer;
