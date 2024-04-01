@@ -71,17 +71,19 @@ const count = ref(0)
 .edit-icon {
   width: 20px;
   height: 20px;
-  margin-right: 8px;
 }
 .new-convo {
-  width: max-content;
+  width: 100%;
+  max-width: 216px;
   position: relative;
-  padding: 8px 14px 8px 8px;
-  display: flex;
+  padding: 8px 8px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
+  font-weight: 500;
   border-radius: 4px;
-  text-wrap: nowrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .new-convo:hover {
   background-color: #2e2e2e;

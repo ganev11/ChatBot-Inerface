@@ -1,23 +1,34 @@
 <template>
   <!-- Today -->
-  <ListByPeriod periodName="Today" :conversations="todayConversations" />
+  <ListByPeriod
+    class="conversations-list-margin-bot"
+    periodName="Today"
+    :conversations="todayConversations"
+  />
   <!-- Yesterday -->
   <ListByPeriod
+    class="conversations-list-margin-bot"
     periodName="Yesterday"
     :conversations="yesterdayConversations"
   />
   <!-- 7 days -->
   <ListByPeriod
+    class="conversations-list-margin-bot"
     periodName="Previous 7 Days"
     :conversations="last7DaysConversations"
   />
   <!-- 30 days -->
   <ListByPeriod
+    class="conversations-list-margin-bot"
     periodName="Previous 30 Days"
     :conversations="last30DaysConversations"
   />
   <!-- Older -->
-  <ListByPeriod periodName="Older" :conversations="olderConversations" />
+  <ListByPeriod
+    class="conversations-list-margin-bot"
+    periodName="Older"
+    :conversations="olderConversations"
+  />
 </template>
 
 <script setup>
@@ -189,7 +200,9 @@ const olderConversations = computed(() => {
   z-index: 7000;
   bottom: 0px;
 }
-
+.conversations-list-margin-bot {
+  margin-bottom: 20px;
+}
 .gradient-end-hover {
   position: absolute;
   bottom: 0px;
