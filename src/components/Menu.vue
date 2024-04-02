@@ -32,18 +32,16 @@ function logout() {
   closeUserDropdown()
 }
 
-// An async function to load conversations for a given ID
-async function loadConversations(conversationId) {
+async function loadConversations() {
   try {
-    const data = await fetchOldConversations(conversationId)
-    // console.log('conversations data :>> ', data.items)
+    const data = await fetchOldConversations()
     return data.items
   } catch (error) {
     console.error('Failed to load conversations:', error)
   }
 }
 onMounted(async () => {
-  conversations.value = await loadConversations('your-conversation-id')
+  conversations.value = await loadConversations()
   try {
     const userDetails = await fetchUser()
     user.value = userDetails

@@ -1,18 +1,8 @@
 <script setup>
 import fixedInput from './fixedInput.vue' // Adjusted to match the actual file name
 import { ref, onMounted, onUnmounted } from 'vue'
-// import { useModels } from '../composables/models.js'
 import aiModels from './aiModels.vue'
-
-// const { fetchModels } = useModels()
-
-// async function loadModels() {
-//   try {
-//     const data = await fetchModels()
-//   } catch (error) {
-//     console.error('Failed to load models:', error)
-//   }
-// }
+import initialWindow from './initialWindow.vue' // Adjusted to match the actual file name
 
 defineProps({
   hideMenu: Boolean
@@ -37,7 +27,6 @@ function tohhleMenuMobile() {
 }
 
 onMounted(() => {
-  // loadModels()
   checkMobileScreen() // Check immediately on mount
   window.addEventListener('resize', checkMobileScreen) // Add resize listener
 })
@@ -61,10 +50,11 @@ onUnmounted(() => {
         <aiModels />
       </span>
       <span>
-        <button type="button" @click="count++">count is</button>
+        <button v-if="false" type="button" @click="count++">count is</button>
       </span>
     </div>
     <div
+      v-if="chatting"
       :key="textAreaHeight"
       class="chat"
       :style="{ paddingBottom: textAreaHeight + 'px' }"
@@ -97,6 +87,7 @@ onUnmounted(() => {
       <p>hi</p>
       <p>posledni</p>
     </div>
+    <initialWindow v-else />
     <fixedInput :hideMenu="hideMenu" @new-height="handleRowUpdate" />
   </div>
 </template>
@@ -117,7 +108,7 @@ onUnmounted(() => {
   background-color: #212121;
   color: white;
   padding: 8px;
-  border: 1px solid #4343e1d9;
+  /* border: 1px solid #4343e1d9; */
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;

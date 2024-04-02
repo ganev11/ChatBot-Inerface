@@ -139,7 +139,8 @@ function closeDropdown() {
   font-weight: bold;
   border: none;
   width: 100%;
-  max-width: 160px;
+  max-width: 157px;
+  border-radius: 4px;
   text-align: left;
   padding: 8px 12px;
   cursor: pointer;

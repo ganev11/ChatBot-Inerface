@@ -116,7 +116,7 @@ export default {
 
 <style scoped>
 .max-width {
-  max-width: calc(100% - 264px);
+  max-width: calc(100%) !important;
   transition: max-width 0.5s;
 }
 .max-width-off {
