@@ -1,17 +1,18 @@
 <script setup>
 import fixedInput from './fixedInput.vue' // Adjusted to match the actual file name
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useModels } from '../composables/models.js'
+// import { useModels } from '../composables/models.js'
+import aiModels from './aiModels.vue'
 
-const { fetchModels } = useModels()
+// const { fetchModels } = useModels()
 
-async function loadModels() {
-  try {
-    const data = await fetchModels()
-  } catch (error) {
-    console.error('Failed to load models:', error)
-  }
-}
+// async function loadModels() {
+//   try {
+//     const data = await fetchModels()
+//   } catch (error) {
+//     console.error('Failed to load models:', error)
+//   }
+// }
 
 defineProps({
   hideMenu: Boolean
@@ -36,7 +37,7 @@ function tohhleMenuMobile() {
 }
 
 onMounted(() => {
-  loadModels()
+  // loadModels()
   checkMobileScreen() // Check immediately on mount
   window.addEventListener('resize', checkMobileScreen) // Add resize listener
 })
@@ -57,7 +58,7 @@ onUnmounted(() => {
     >
       <span v-if="mobileScreen" @click="tohhleMenuMobile">HAM</span>
       <span>
-        <button type="button" @click="count++">count is</button>
+        <aiModels />
       </span>
       <span>
         <button type="button" @click="count++">count is</button>

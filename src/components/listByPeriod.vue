@@ -1,6 +1,8 @@
 <template>
   <div class="conversations-list">
     <div class="time-text">{{ periodName }}</div>
+    <BaseModal />
+
     <div
       class="convo"
       v-for="conversation in conversations"
@@ -39,7 +41,6 @@
         ></div>
       </Teleport>
     </div>
-    <BaseModal />
   </div>
 </template>
 

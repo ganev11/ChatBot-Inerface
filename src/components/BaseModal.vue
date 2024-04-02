@@ -35,11 +35,6 @@ const leftBtnAction = () => {
 const rightBtnAction = () => {
   modalStore.rightBtnAction()
 }
-
-// Example on how to automatically open the modal for demonstration
-onMounted(() => {
-  modalStore.openModal()
-})
 </script>
 
 <style scoped>

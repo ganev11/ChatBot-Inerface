@@ -42,9 +42,6 @@ const props = defineProps({
 // Helper to determine if a date falls within a specified range
 const isDateInRange = (date, startDate, endDate) => {
   const targetDate = new Date(date)
-  console.log('targetDate :>> ', targetDate)
-  //   const targetDate = new Date(Date.UTC(2024, 3, 30))
-
   return targetDate >= startDate && targetDate < endDate
 }
 
