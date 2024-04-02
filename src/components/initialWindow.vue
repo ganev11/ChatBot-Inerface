@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useInitialPrompts } from '../composables/initialPrompts.js' // Make sure the path is correct
+import { useSendPrompt } from '../composables/usePrompt.js' // Make sure the path is correct
 
 // Create a ref to store the prompts
 const prompts = ref([])
+const { sendPrompt } = useSendPrompt()
 
 // Destructure fetchInitialPrompts from the composable
 const { fetchInitialPrompts } = useInitialPrompts()
@@ -17,9 +19,17 @@ onMounted(async () => {
   }
 })
 
-function choosePrompt(prompt) {
+const choosePrompt = async prompt => {
   // Implement your logic to handle the chosen prompt
-  console.log('Chosen prompt:', prompt.prompt)
+
+  try {
+    console.log('payload:', prompt.prompt)
+    const response = await sendPrompt(prompt.prompt)
+    console.log('Conversation started:', response)
+    // Handle response as needed
+  } catch (error) {
+    console.error('Failed to submit prompt:', error)
+  }
 }
 </script>
 
