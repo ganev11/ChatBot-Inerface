@@ -10,6 +10,28 @@ const user = ref(null)
 const { fetchUser } = useUser()
 const conversations = ref([])
 
+const isUserDropdownOpen = ref(false)
+
+function toggleUserDropdown() {
+  isUserDropdownOpen.value = !isUserDropdownOpen.value
+}
+
+function closeUserDropdown() {
+  isUserDropdownOpen.value = false
+}
+
+function openSettings() {
+  // Logic to open settings
+  console.log('Opening settings...')
+  closeUserDropdown()
+}
+
+function logout() {
+  // Logic to logout
+  console.log('Logging out...')
+  closeUserDropdown()
+}
+
 // An async function to load conversations for a given ID
 async function loadConversations(conversationId) {
   try {
@@ -68,15 +90,31 @@ const count = ref(0)
         </div>
 
         <!-- user Info fixed -->
-        <div class="user" v-if="user">
-          <img
-            class="edit-icon"
-            src="../assets/svg/user.svg"
-            @click="count++"
-            alt=""
-          />
+        <div class="user" v-if="user" @click="toggleUserDropdown">
+          <img class="edit-icon" src="../assets/svg/user.svg" alt="" />
           {{ user.name }}
         </div>
+        <div v-if="isUserDropdownOpen" class="dropdown-menu user-dropdown-menu">
+          <div class="responsivity-wrapper">
+            <div class="model-item dropdown-item" @click="openSettings">
+              <img
+                class="setting-icon"
+                src="../assets/svg/settings.svg"
+                alt=""
+              />
+              Settings
+            </div>
+            <div class="model-item dropdown-item" @click="logout">
+              <img class="logout-icon" src="../assets/svg/logout.svg" alt="" />
+              Logout
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="isUserDropdownOpen"
+          class="overlay"
+          @click="closeUserDropdown"
+        ></div>
       </div>
     </div>
     <!-- Toggle btn -->
@@ -210,5 +248,77 @@ const count = ref(0)
 
 .conversations::-webkit-scrollbar-corner {
   background-color: black; /* Adjust if needed */
+}
+</style>
+
+<style scoped>
+.edit-icon,
+.setting-icon,
+.logout-icon {
+  margin-right: 8px;
+  width: 20px;
+  height: 20px;
+}
+
+.models-btn {
+  background-color: #48484800;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000000;
+  display: inline-block;
+  margin: 0.5rem;
+  transition: background-color 0.3s;
+}
+
+.models-btn:hover {
+  background-color: #373737;
+}
+
+.dropdown-menu {
+  position: absolute;
+  z-index: 10000; /* Adjust z-index as necessary */
+  width: auto;
+  min-width: 213px;
+  background-color: #333;
+  color: #fff;
+  border: 1px solid rgb(82, 82, 82);
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  bottom: 60px; /* Position below the button */
+  left: 15px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  background-color: transparent;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  border: none;
+  width: 100%;
+  max-width: 190px;
+  text-align: left;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #474747;
+  border-radius: 4px;
+}
+
+.overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0); /* Transparent, change as needed */
+  z-index: 8000; /* Below dropdown menu but above other content */
 }
 </style>

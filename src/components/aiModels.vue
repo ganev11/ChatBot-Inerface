@@ -122,7 +122,7 @@ function closeDropdown() {
   min-width: 180px;
   background-color: #333;
   color: #fff;
-  border: 1px solid rgb(103, 103, 103);
+  border: 1px solid rgb(82, 82, 82);
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   padding: 8px;
@@ -143,16 +143,6 @@ function closeDropdown() {
   text-align: left;
   padding: 8px 12px;
   cursor: pointer;
-}
-
-.delete-btn {
-  color: rgb(238, 69, 69) !important;
-}
-
-.delete-icon {
-  width: 18px;
-  height: 18px;
-  margin-right: 7px;
 }
 
 .dropdown-item:hover {
