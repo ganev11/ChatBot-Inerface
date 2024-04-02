@@ -1,19 +1,27 @@
 <template>
   <div>
     <div v-if="modelList" class="models-btn" @click="toggleDropdown">
-      {{ modelList[0].id }}
+      <span v-if="activeModel">
+        {{ activeModel.id }}
+      </span>
     </div>
     <div v-if="isDropdownOpen" class="dropdown-menu">
       <div class="responsivity-wrapper">
-        <!-- Example menu item -->
-        <button class="delete-btn dropdown-item" @click="handleMenuAction">
+        <!-- Loop through modelList and display each model's ID -->
+        <div
+          class="model-item dropdown-item"
+          v-for="model in modelList"
+          :key="model.id"
+          @click="setActiveModel(model.id)"
+        >
+          {{ model.id }}
           <img
-            class="delete-icon"
-            src="../assets/svg/delete.svg"
-            alt="Delete"
+            v-if="model.active"
+            class="active-icon"
+            src="../assets/svg/active.svg"
+            alt=""
           />
-          Delete chat
-        </button>
+        </div>
       </div>
     </div>
     <div v-if="isDropdownOpen" class="overlay" @click="closeDropdown"></div>
@@ -23,28 +31,34 @@
 <script setup>
 import { onMounted, computed, ref } from 'vue'
 import { useModels } from '../composables/models.js'
+import { useModelsStore } from '../stores/modelsStore'
 
-const models = ref(null)
+const modelsStore = useModelsStore()
 const { fetchModels } = useModels()
 const isDropdownOpen = ref(false)
+const modelList = computed(() => modelsStore.getModels)
+const activeModel = computed(() =>
+  modelsStore.getModels.find(model => model.active)
+)
 
-const modelList = computed(() => {
-  if (models && models.value && models.value.data) {
-    return models.value.data
-  }
-})
+function setActiveModel(modelId) {
+  modelsStore.setActiveModel(modelId)
+  closeDropdown()
+  openNewChat()
+}
 
 onMounted(async () => {
   try {
-    // Fetch models and store them in the ref.
-    models.value = await fetchModels()
-    // Console log the fetched models.
-    console.log(models.value.data)
+    const fetchedModels = await fetchModels()
+    modelsStore.initialSetModels(fetchedModels.data) // Assume fetchModels() returns data in an appropriate format
   } catch (error) {
-    // Handle any errors that occur during fetching.
     console.error('Failed to fetch models:', error)
   }
 })
+
+function openNewChat() {
+  // Your logic to open a new chat
+}
 
 function toggleDropdown() {
   isDropdownOpen.value = !isDropdownOpen.value
@@ -52,12 +66,6 @@ function toggleDropdown() {
 
 function closeDropdown() {
   isDropdownOpen.value = false
-}
-
-function handleMenuAction() {
-  // Implement the action (e.g., delete chat)
-  console.log('Menu action triggered')
-  closeDropdown()
 }
 </script>
 
@@ -118,17 +126,20 @@ function handleMenuAction() {
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   padding: 8px;
-  top: 100%; /* Position below the button */
-  left: 30px;
+  top: calc(100% + 5px); /* Position below the button */
+  left: 15px;
 }
 
 .dropdown-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: transparent;
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  font-weight: bold;
   border: none;
   width: 100%;
+  max-width: 160px;
   text-align: left;
   padding: 8px 12px;
   cursor: pointer;
@@ -156,5 +167,9 @@ function handleMenuAction() {
   height: 100vh;
   background-color: rgba(0, 0, 0, 0); /* Transparent, change as needed */
   z-index: 800; /* Below dropdown menu but above other content */
+}
+.active-icon {
+  width: 20px;
+  height: 18px;
 }
 </style>

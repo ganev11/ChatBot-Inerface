@@ -7,6 +7,7 @@
       class="convo"
       v-for="conversation in conversations"
       :key="conversation.id"
+      @click="handleClick(conversation)"
     >
       {{ conversation.title }}
       <div class="gradient"></div>
@@ -49,7 +50,9 @@ import { defineProps, ref } from 'vue'
 import BaseModal from './BaseModal.vue' // Adjust path as needed
 import { useBaseModalStore } from './../stores/baseModalStore' // Adjust path as needed
 import { useConversationDeletion } from './../composables/useConversationDeletion' // Adjust the path as needed
+import { useModelsStore } from '../stores/modelsStore'
 
+const modelsStore = useModelsStore()
 const modalStore = useBaseModalStore()
 const { deleteConversationCOMP, isDeleting, error } = useConversationDeletion()
 
@@ -85,9 +88,11 @@ const deleteConversation = conversation => {
   modalStore.openModal()
   closeDropdown()
 }
-function handleClick(conversationId) {
+function handleClick(conversation) {
+  modelsStore.setActiveModel(conversation.model_id)
   // Emit an event with the conversation ID
-  emit('conversationSelected', conversationId)
+  // emit('conversationSelected', conversationId)
+  console.log('conversationId :>> ', conversationId)
 }
 const closeDropdown = () => {
   openMenuId.value = null

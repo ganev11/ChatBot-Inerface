@@ -2,11 +2,12 @@
 import { ref, onMounted } from 'vue'
 import { useHistory } from '../composables/history.js'
 import ConversationsList from './ConversationsList.vue'
+import { useUser } from '../composables/user.js' // Adjust the path according to your project structure
 
 // Call the composable to get access to its methods
 const { fetchOldConversations } = useHistory()
-
-// A ref to store the fetched conversations
+const user = ref(null)
+const { fetchUser } = useUser()
 const conversations = ref([])
 
 // An async function to load conversations for a given ID
@@ -21,6 +22,13 @@ async function loadConversations(conversationId) {
 }
 onMounted(async () => {
   conversations.value = await loadConversations('your-conversation-id')
+  try {
+    const userDetails = await fetchUser()
+    user.value = userDetails
+  } catch (error) {
+    console.error('Failed to load user details:', error)
+  }
+  console.log('user :>> ', user.value)
 })
 defineProps({
   msg: String
@@ -60,6 +68,15 @@ const count = ref(0)
         </div>
 
         <!-- user Info fixed -->
+        <div class="user" v-if="user">
+          <img
+            class="edit-icon"
+            src="../assets/svg/user.svg"
+            @click="count++"
+            alt=""
+          />
+          {{ user.name }}
+        </div>
       </div>
     </div>
     <!-- Toggle btn -->
@@ -86,6 +103,22 @@ const count = ref(0)
   align-items: center;
 }
 .new-convo:hover {
+  background-color: #2e2e2e;
+}
+.user {
+  width: 100%;
+  max-width: 216px;
+  position: relative;
+  padding: 8px 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 4px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.user:hover {
   background-color: #2e2e2e;
 }
 .menu {
@@ -139,7 +172,7 @@ const count = ref(0)
 }
 .conversations {
   overflow-y: auto;
-  max-height: calc(100vh - 150px);
+  max-height: calc(100vh - 110px);
   scrollbar-width: thin; /* For Firefox */
   scrollbar-color: transparent transparent; /* For Firefox, set default state to transparent */
 }

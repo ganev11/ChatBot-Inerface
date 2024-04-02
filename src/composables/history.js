@@ -18,6 +18,7 @@ export function useHistory() {
       }
 
       const data = await response.json()
+      console.log('data :>> ', data)
       return data
     } catch (error) {
       console.error('Error fetching old conversations:', error)

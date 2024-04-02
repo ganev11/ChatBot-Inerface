@@ -1,62 +1,40 @@
-// stores/baseModal.js
 import { defineStore } from 'pinia'
 
-export const useBaseModalStore = defineStore('baseModal', {
+export const useModelsStore = defineStore('modelsStore', {
   state: () => ({
-    // Initial state
-    modalSettings: {
-      action: '',
-      title: 'Add New User',
-      content: 'This is the content of the modal',
-      leftBtn: {
-        text: 'Cancel',
-        action: null
-      },
-      rightBtn: {
-        text: 'Save',
-        action: null
-      }
-    },
-    isModalOpen: false
+    models: [] // Your array of models
   }),
   actions: {
-    setModalSettings({
-      action,
-      title,
-      content,
-      leftBtnText,
-      leftBtnAction,
-      rightBtnText,
-      rightBtnAction
-    }) {
-      this.modalSettings.action = action || this.modalSettings.action
-      this.modalSettings.title = title || this.modalSettings.title
-      this.modalSettings.content = content || this.modalSettings.content
-      this.modalSettings.leftBtn.text = leftBtnText
-      this.modalSettings.leftBtn.action = leftBtnAction
-      this.modalSettings.rightBtn.text = rightBtnText
-      this.modalSettings.rightBtn.action = rightBtnAction
-    },
-    openModal() {
-      this.isModalOpen = true
-    },
-    closeModal() {
-      this.isModalOpen = false
-    },
-    leftBtnAction() {
-      if (typeof this.modalSettings.leftBtn.action === 'function') {
-        this.modalSettings.leftBtn.action()
+    setActiveModel(modelId) {
+      // First, set all models to inactive.
+      this.models.forEach(model => {
+        model.active = false
+      })
+
+      // Then, try to find and activate the model with the given modelId.
+      const foundModel = this.models.find(model => model.id === modelId)
+      if (foundModel) {
+        foundModel.active = true
+      }
+
+      // After attempting to set the specified model as active,
+      // check if any model is active.
+      const isActiveModel = this.models.some(model => model.active)
+
+      // If no model is active, set the first model as active, assuming the array is not empty.
+      if (!isActiveModel && this.models.length > 0) {
+        this.models[0].active = true
       }
     },
-    rightBtnAction() {
-      if (typeof this.modalSettings.rightBtn.action === 'function') {
-        this.modalSettings.rightBtn.action()
-      }
+    initialSetModels(models) {
+      // Ensure each model has an 'active' property when initially setting models
+      this.models = models.map((model, index) => ({
+        ...model,
+        active: index === 0 // Only the first model is set to 'active'
+      }))
     }
   },
   getters: {
-    getModalSettings() {
-      return this.modalSettings
-    }
+    getModels: state => state.models
   }
 })
