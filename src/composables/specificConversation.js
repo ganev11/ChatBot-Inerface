@@ -1,5 +1,4 @@
-export function useHistory() {
-  // New method to fetch old conversations using Fetch API
+export function useSpecificConversation() {
   const fetchSpecificConversation = async conversationId => {
     try {
       const response = await fetch(
@@ -11,7 +10,6 @@ export function useHistory() {
           }
         }
       )
-      // console.log('response fetchSpecificConversation:>> ', response)
 
       if (!response.ok) {
         throw new Error('Failed to fetch conversations')
@@ -25,7 +23,5 @@ export function useHistory() {
     }
   }
 
-  return {
-    fetchSpecificConversation // Include the new method in the returned object
-  }
+  return { fetchSpecificConversation }
 }

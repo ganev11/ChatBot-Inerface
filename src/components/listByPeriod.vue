@@ -10,6 +10,7 @@
       @click="handleClick(conversation)"
     >
       {{ conversation.title }}
+      <!-- {{ formatUpdateTime(conversation.update_time) }} -->
       <div class="gradient"></div>
       <div class="gradient-end"></div>
       <div class="gradient-hover"></div>
@@ -47,12 +48,14 @@
 
 <script setup>
 import { defineProps, ref } from 'vue'
-import BaseModal from './BaseModal.vue' // Adjust path as needed
-import { useBaseModalStore } from './../stores/baseModalStore' // Adjust path as needed
-import { useConversationDeletion } from './../composables/useConversationDeletion' // Adjust the path as needed
+import BaseModal from './BaseModal.vue'
+import { useBaseModalStore } from './../stores/baseModalStore'
+import { useConversationDeletion } from './../composables/useConversationDeletion'
+import { useConversationStore } from '../stores/conversationStore'
 import { useModelsStore } from '../stores/modelsStore'
 
 const modelsStore = useModelsStore()
+const conversationStore = useConversationStore()
 const modalStore = useBaseModalStore()
 const { deleteConversationCOMP, isDeleting, error } = useConversationDeletion()
 
@@ -90,9 +93,16 @@ const deleteConversation = conversation => {
 }
 function handleClick(conversation) {
   modelsStore.setActiveModel(conversation.model_id)
-  // Emit an event with the conversation ID
-  // emit('conversationSelected', conversationId)
-  console.log('conversationId :>> ', conversationId)
+  // Now, call the action to fetch the specific conversation
+  conversationStore
+    .loadSpecificConversation(conversation.id)
+    .then(() => {
+      // Here you can handle any post-fetch logic, like updating the UI
+      console.log('Fetched specific conversation with ID:', conversation.id)
+    })
+    .catch(error => {
+      console.error('Error fetching specific conversation:', error)
+    })
 }
 const closeDropdown = () => {
   openMenuId.value = null

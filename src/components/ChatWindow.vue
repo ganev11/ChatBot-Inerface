@@ -1,9 +1,11 @@
 <script setup>
 import fixedInput from './fixedInput.vue' // Adjusted to match the actual file name
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import aiModels from './aiModels.vue'
 import initialWindow from './initialWindow.vue' // Adjusted to match the actual file name
 import currentChat from './currentChat.vue' // Adjusted to match the actual file name
+import { useConversationStore } from '../stores/conversationStore' // Adjust the path according to your file structure
+const conversationStore = useConversationStore()
 
 defineProps({
   hideMenu: Boolean
@@ -11,6 +13,7 @@ defineProps({
 
 const textAreaHeight = ref(1)
 const mobileScreen = ref(false)
+const initialWindowComputed = computed(() => conversationStore.initialWindow)
 
 function handleRowUpdate(newHeight) {
   textAreaHeight.value = newHeight
@@ -54,43 +57,8 @@ onUnmounted(() => {
         <button v-if="false" type="button" @click="count++">count is</button>
       </span>
     </div>
-    <currentChat />
-
-    <!-- <div
-      v-if="chatting"
-      :key="textAreaHeight"
-      class="chat"
-      :style="{ paddingBottom: textAreaHeight + 'px' }"
-    >
-      <p>prvni</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      {{ textAreaHeight + 'px' }}
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-
-      <p>hi</p>
-      <p>hi</p>
-      <p>hi</p>
-      <p>posledni</p>
-    </div>
-    <initialWindow v-else /> -->
+    <initialWindow v-if="initialWindowComputed" />
+    <currentChat v-else />
     <fixedInput :hideMenu="hideMenu" @new-height="handleRowUpdate" />
   </div>
 </template>

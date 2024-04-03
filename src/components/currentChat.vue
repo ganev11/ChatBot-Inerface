@@ -8,30 +8,38 @@ import DOMPurify from 'dompurify'
 const conversationStore = useConversationStore()
 
 // Computed property to get conversations
-const conversations = computed(() => conversationStore.conversations)
+const conversation = computed(() => conversationStore.conversation)
 
-// Computed property to process markdown in conversations
-const processedConversations = computed(() =>
-  conversations.value.map(convo => ({
-    ...convo,
-    content: DOMPurify.sanitize(marked(convo.content))
+// Computed property to process markdown in conversations and differentiate by role
+const processedConversations = computed(() => {
+  // Convert the conversations object into an array of its values
+  const conversationArray = Object.values(conversation.value)
+
+  // Process each conversation in the array
+  return conversationArray.map(convo => ({
+    // Assuming each conversation object is structured correctly
+    // and convo.message.content.parts is an array.
+    id: convo.id,
+    content: DOMPurify.sanitize(marked(convo.message.content.parts.join(' '))),
+    // Add a class based on the role for styling purposes
+    author: convo.message.author.role,
+    class:
+      convo.message.author.role === 'user' ? 'user-message' : 'server-message'
   }))
-)
+})
 </script>
 
 <template>
-  <div
-    :key="textAreaHeight"
-    class="chat"
-    :style="{ paddingBottom: textAreaHeight + 'px' }"
-  >
+  <div class="chat">
     <div
       v-for="convo in processedConversations"
       :key="convo.id"
       class="message"
-      :class="convo.type"
+      :class="convo.class"
     >
-      <div v-html="convo.content"></div>
+      <Span v-if="convo.author === 'user'">You</Span>
+      <Span v-if="convo.author === 'assistant'">Server</Span>
+      <div v-html="convo.content" @click="console.log(convo)"></div>
     </div>
   </div>
 </template>
@@ -71,7 +79,7 @@ const processedConversations = computed(() =>
   min-height: calc(100vh - 230px) !important;
   margin-bottom: 86px;
   margin-right: 50px;
-  width: 75% !important;
+  width: 65% !important;
   max-width: 1000px !important;
   overflow-y: auto;
   padding: 12px;
@@ -119,18 +127,12 @@ const processedConversations = computed(() =>
 }
 </style>
 <style scoped>
-.prompt {
-  text-align: left;
-  color: blue;
+.user-message {
+  background-color: rgba(96, 96, 96, 0);
+  padding-bottom: 35px;
 }
-
-.answer {
-  text-align: right;
-  color: green;
-}
-
-.message {
-  margin: 10px;
-  padding: 5px;
+.server-message {
+  background-color: rgba(50, 50, 50, 0);
+  padding-bottom: 35px;
 }
 </style>
