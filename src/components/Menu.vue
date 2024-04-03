@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useHistory } from '../composables/history.js'
 import ConversationsList from './ConversationsList.vue'
 import { useUser } from '../composables/user.js'
+import { useConversationStore } from '../stores/conversationStore'
 
 const conversationsContainer = ref(null)
 const { fetchOldConversations } = useHistory()
@@ -11,6 +12,7 @@ const { fetchUser } = useUser()
 const conversations = ref([])
 
 const isUserDropdownOpen = ref(false)
+const conversationStore = useConversationStore() // Use the store
 
 // Adjust these as needed, for example, through user actions or scrolling
 const offset = ref(0)
@@ -63,14 +65,15 @@ async function loadConversations(initial = false) {
 
 // Load 10 more items
 function loadMoreConversations() {
-  loadConversations() // This will automatically fetch the next set of items
+  loadConversations()
 }
 function newConversation() {
   // Logic to create a new conversation
   console.log('Creating a new conversation...')
+  conversationStore.startNewConversation()
 }
 onMounted(async () => {
-  await loadConversations(true) // Initial load with true to indicate it's the first load
+  await loadConversations(true)
   try {
     user.value = await fetchUser()
   } catch (error) {

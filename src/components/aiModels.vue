@@ -37,9 +37,12 @@ const modelsStore = useModelsStore()
 const { fetchModels } = useModels()
 const isDropdownOpen = ref(false)
 const modelList = computed(() => modelsStore.getModels)
+import { useConversationStore } from '../stores/conversationStore'
+
 const activeModel = computed(() =>
   modelsStore.getModels.find(model => model.active)
 )
+const conversationStore = useConversationStore() // Use the store
 
 function setActiveModel(modelId) {
   modelsStore.setActiveModel(modelId)
@@ -58,6 +61,7 @@ onMounted(async () => {
 
 function openNewChat() {
   // Your logic to open a new chat
+  conversationStore.startNewConversation()
 }
 
 function toggleDropdown() {
