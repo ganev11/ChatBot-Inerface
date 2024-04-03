@@ -1,16 +1,20 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useHistory } from '../composables/history.js'
 import ConversationsList from './ConversationsList.vue'
-import { useUser } from '../composables/user.js' // Adjust the path according to your project structure
+import { useUser } from '../composables/user.js'
 
-// Call the composable to get access to its methods
+const conversationsContainer = ref(null)
 const { fetchOldConversations } = useHistory()
 const user = ref(null)
 const { fetchUser } = useUser()
 const conversations = ref([])
 
 const isUserDropdownOpen = ref(false)
+
+// Adjust these as needed, for example, through user actions or scrolling
+const offset = ref(0)
+const limit = ref(15)
 
 function toggleUserDropdown() {
   isUserDropdownOpen.value = !isUserDropdownOpen.value
@@ -32,26 +36,54 @@ function logout() {
   closeUserDropdown()
 }
 
-async function loadConversations() {
+const checkScroll = () => {
+  if (conversationsContainer.value) {
+    const { scrollTop, scrollHeight, clientHeight } =
+      conversationsContainer.value
+    if (scrollTop + clientHeight >= scrollHeight - 5) {
+      loadMoreConversations()
+    }
+  }
+}
+
+async function loadConversations(initial = false) {
   try {
-    const data = await fetchOldConversations()
-    return data.items
+    const data = await fetchOldConversations(offset.value, limit.value)
+    if (initial) {
+      conversations.value = data // If initial load, set conversations
+    } else {
+      conversations.value = [...conversations.value, ...data] // Otherwise, append
+    }
+    offset.value += data.length // Update the offset for the next load
+    console.log('data :>> ', data)
   } catch (error) {
     console.error('Failed to load conversations:', error)
   }
 }
+
+// Load 10 more items
+function loadMoreConversations() {
+  loadConversations() // This will automatically fetch the next set of items
+}
+function newConversation() {
+  // Logic to create a new conversation
+  console.log('Creating a new conversation...')
+}
 onMounted(async () => {
-  conversations.value = await loadConversations()
+  await loadConversations(true) // Initial load with true to indicate it's the first load
   try {
-    const userDetails = await fetchUser()
-    user.value = userDetails
+    user.value = await fetchUser()
   } catch (error) {
     console.error('Failed to load user details:', error)
   }
-  console.log('user :>> ', user.value)
+  if (conversationsContainer.value) {
+    conversationsContainer.value.addEventListener('scroll', checkScroll)
+  }
 })
-defineProps({
-  msg: String
+onUnmounted(() => {
+  if (conversationsContainer.value) {
+    conversationsContainer.value.removeEventListener('scroll', checkScroll)
+  }
 })
 const emit = defineEmits(['menu-toggle'])
 function toggleMenu() {
@@ -59,7 +91,6 @@ function toggleMenu() {
   emit('menu-toggle')
 }
 const hideMenu = ref(false)
-const count = ref(0)
 </script>
 
 <template>
@@ -73,17 +104,12 @@ const count = ref(0)
         <!-- menu content -->
 
         <!-- new chat btn fixed -->
-        <div class="new-convo">
+        <div class="new-convo" @click="newConversation">
           New Chat
-          <img
-            class="edit-icon"
-            src="../assets/svg/edit.svg"
-            @click="count++"
-            alt=""
-          />
+          <img class="edit-icon" src="../assets/svg/edit.svg" alt="" />
         </div>
         <!-- history -->
-        <div class="conversations">
+        <div class="conversations" ref="conversationsContainer">
           <ConversationsList :conversations="conversations" />
         </div>
 

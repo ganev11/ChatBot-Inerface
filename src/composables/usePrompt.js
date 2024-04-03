@@ -28,30 +28,14 @@ export function useSendPrompt() {
           return
         }
 
-        // Convert the stream chunk to a string
-        let chunk = new TextDecoder('utf-8').decode(value)
-
-        // Check if the chunk starts with 'data:' and remove this prefix
-        if (chunk.startsWith('data:')) {
-          chunk = chunk.substring(5) // Remove 'data:' prefix
-        }
-
-        try {
-          // Parse the JSON string
-          const jsonData = JSON.parse(chunk)
-
-          // Access the "parts" of each message and process or log them
-          const parts = jsonData.message.content.parts
-          console.log(parts) // This will log the "parts" array of each message
-
-          // You can then do something with the parts, like concatenating them into a complete message
-        } catch (error) {
-          console.error('Error parsing JSON from stream:', error)
-        }
+        // Assuming the streamed data is text, convert from Uint8Array to string
+        data += new TextDecoder('utf-8').decode(value)
+        console.log(data) // Or process data as needed
 
         // Read the next chunk
         readStream()
       }
+
       await readStream()
       // Optionally, return data or handle it as per your application's needs
     } catch (error) {
@@ -62,3 +46,34 @@ export function useSendPrompt() {
 
   return { sendPrompt }
 }
+// const readStream = async () => {
+//   const { done, value } = await reader.read()
+//   if (done) {
+//     console.log('Stream finished')
+//     return
+//   }
+
+//   // Convert the stream chunk to a string
+//   let chunk = new TextDecoder('utf-8').decode(value)
+
+//   // Check if the chunk starts with 'data:' and remove this prefix
+//   if (chunk.startsWith('data:')) {
+//     chunk = chunk.substring(5) // Remove 'data:' prefix
+//   }
+
+//   try {
+//     // Parse the JSON string
+//     const jsonData = JSON.parse(chunk)
+
+//     // Access the "parts" of each message and process or log them
+//     const parts = jsonData.message.content.parts
+//     console.log(parts) // This will log the "parts" array of each message
+
+//     // You can then do something with the parts, like concatenating them into a complete message
+//   } catch (error) {
+//     console.error('Error parsing JSON from stream:', error)
+//   }
+
+//   // Read the next chunk
+//   readStream()
+// }

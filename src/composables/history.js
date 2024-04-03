@@ -1,25 +1,27 @@
 export function useHistory() {
-  // New method to fetch old conversations using Fetch API
-  const fetchOldConversations = async () => {
+  // Adjusted method to fetch old conversations with offset and limit
+  const fetchOldConversations = async (offset = 0, limit = 10) => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:5500/v1/chat/conversations`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: 'Bearer 0d21d7c1-0cb0-4e4e-ac81-82d562aa3566'
-          }
+      const url = new URL('http://127.0.0.1:5500/v1/chat/conversations')
+      // Adding search parameters to the URL
+      url.searchParams.append('offset', offset)
+      url.searchParams.append('limit', limit)
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer 0d21d7c1-0cb0-4e4e-ac81-82d562aa3566'
         }
-      )
-      // console.log('response fetchOldConversations:>> ', response)
+      })
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch conversations')
-      }
-
+      // Convert the response to JSON
       const data = await response.json()
-      console.log('data :>> ', data)
-      return data
+
+      // Transform array of arrays into a single array of objects
+      const items = data.items.map(itemArray => itemArray[0])
+
+      // Return the transformed items
+      return items // This is now a single array of objects
     } catch (error) {
       console.error('Error fetching old conversations:', error)
       throw error // or handle it as needed
@@ -27,36 +29,6 @@ export function useHistory() {
   }
 
   return {
-    fetchOldConversations // Include the new method in the returned object
+    fetchOldConversations // Include the updated method in the returned object
   }
 }
-
-// export function useHistory() {
-//   const fetchOldConversations = async (limit = 20) => {
-//     try {
-//       const url = new URL(`http://127.0.0.1:5500/v1/chat/conversations`)
-//       url.searchParams.append('limit', limit)
-
-//       const response = await fetch(url, {
-//         method: 'GET',
-//         headers: {
-//           Authorization: 'Bearer 0d21d7c1-0cb0-4e4e-ac81-82d562aa3566'
-//         }
-//       })
-
-//       if (!response.ok) {
-//         throw new Error('Failed to fetch conversations')
-//       }
-
-//       const data = await response.json()
-//       return data
-//     } catch (error) {
-//       console.error('Error fetching old conversations:', error)
-//       throw error
-//     }
-//   }
-
-//   return {
-//     fetchOldConversations
-//   }
-// }

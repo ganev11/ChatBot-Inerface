@@ -3,6 +3,7 @@ import fixedInput from './fixedInput.vue' // Adjusted to match the actual file n
 import { ref, onMounted, onUnmounted } from 'vue'
 import aiModels from './aiModels.vue'
 import initialWindow from './initialWindow.vue' // Adjusted to match the actual file name
+import currentChat from './currentChat.vue' // Adjusted to match the actual file name
 
 defineProps({
   hideMenu: Boolean
@@ -53,7 +54,9 @@ onUnmounted(() => {
         <button v-if="false" type="button" @click="count++">count is</button>
       </span>
     </div>
-    <div
+    <currentChat />
+
+    <!-- <div
       v-if="chatting"
       :key="textAreaHeight"
       class="chat"
@@ -87,7 +90,7 @@ onUnmounted(() => {
       <p>hi</p>
       <p>posledni</p>
     </div>
-    <initialWindow v-else />
+    <initialWindow v-else /> -->
     <fixedInput :hideMenu="hideMenu" @new-height="handleRowUpdate" />
   </div>
 </template>
