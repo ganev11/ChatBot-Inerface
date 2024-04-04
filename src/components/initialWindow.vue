@@ -24,8 +24,7 @@ const choosePrompt = async prompt => {
 
   try {
     console.log('payload:', prompt.prompt)
-    const response = await sendPrompt(prompt.prompt)
-    console.log('Conversation started:', response)
+    await sendPrompt(prompt.prompt)
     // Handle response as needed
   } catch (error) {
     console.error('Failed to submit prompt:', error)

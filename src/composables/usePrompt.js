@@ -1,6 +1,14 @@
+import { useConversationStore } from '../stores/conversationStore' // Adjust the path as necessary
+
 export function useSendPrompt() {
+  const conversationStore = useConversationStore()
+
   const sendPrompt = async promptData => {
     try {
+      // Store the prompt data as the current prompt in the store
+      conversationStore.setCurrentPrompt(promptData)
+      conversationStore.setCurrentPrompt(promptData)
+
       const response = await fetch(
         'http://127.0.0.1:5500/v1/chat/conversation',
         {
@@ -18,6 +26,7 @@ export function useSendPrompt() {
       }
 
       const reader = response.body.getReader()
+      // Initialize an empty string to accumulate the streamed data
       let data = ''
 
       // Function to process the stream
@@ -25,19 +34,22 @@ export function useSendPrompt() {
         const { done, value } = await reader.read()
         if (done) {
           console.log('Stream finished')
+          // Call finalizeStream when the stream is finished to process the prompt and response
+          conversationStore.finalizeStream()
           return
         }
 
-        // Assuming the streamed data is text, convert from Uint8Array to string
-        data += new TextDecoder('utf-8').decode(value)
-        console.log(data) // Or process data as needed
+        // Convert the streamed data from Uint8Array to string and append to ongoingResponse
+        const streamedData = new TextDecoder('utf-8').decode(value)
+        conversationStore.appendToOngoingResponse(streamedData)
+        console.log(streamedData) // Or process data as needed
 
-        // Read the next chunk
+        // Recursively read the next chunk
         readStream()
       }
 
       await readStream()
-      // Optionally, return data or handle it as per your application's needs
+      // The data variable isn't used in this updated approach, but you can still return or handle data if needed
     } catch (error) {
       console.error('Error sending prompt:', error)
       throw error
@@ -46,34 +58,3 @@ export function useSendPrompt() {
 
   return { sendPrompt }
 }
-// const readStream = async () => {
-//   const { done, value } = await reader.read()
-//   if (done) {
-//     console.log('Stream finished')
-//     return
-//   }
-
-//   // Convert the stream chunk to a string
-//   let chunk = new TextDecoder('utf-8').decode(value)
-
-//   // Check if the chunk starts with 'data:' and remove this prefix
-//   if (chunk.startsWith('data:')) {
-//     chunk = chunk.substring(5) // Remove 'data:' prefix
-//   }
-
-//   try {
-//     // Parse the JSON string
-//     const jsonData = JSON.parse(chunk)
-
-//     // Access the "parts" of each message and process or log them
-//     const parts = jsonData.message.content.parts
-//     console.log(parts) // This will log the "parts" array of each message
-
-//     // You can then do something with the parts, like concatenating them into a complete message
-//   } catch (error) {
-//     console.error('Error parsing JSON from stream:', error)
-//   }
-
-//   // Read the next chunk
-//   readStream()
-// }

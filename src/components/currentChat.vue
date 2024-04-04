@@ -10,6 +10,12 @@ const conversationStore = useConversationStore()
 // Computed property to get conversations
 const conversation = computed(() => conversationStore.conversation)
 
+// Computed property for currentPrompt
+const currentPrompt = computed(() => conversationStore.currentPrompt)
+
+// Computed property for ongoingResponse
+const ongoingResponse = computed(() => conversationStore.ongoingResponse)
+
 // Computed property to process markdown in conversations and differentiate by role
 const processedConversations = computed(() => {
   // Convert the conversations object into an array of its values
@@ -17,11 +23,8 @@ const processedConversations = computed(() => {
 
   // Process each conversation in the array
   return conversationArray.map(convo => ({
-    // Assuming each conversation object is structured correctly
-    // and convo.message.content.parts is an array.
     id: convo.id,
     content: DOMPurify.sanitize(marked(convo.message.content.parts.join(' '))),
-    // Add a class based on the role for styling purposes
     author: convo.message.author.role,
     class:
       convo.message.author.role === 'user' ? 'user-message' : 'server-message'
@@ -31,6 +34,7 @@ const processedConversations = computed(() => {
 
 <template>
   <div class="chat">
+    <!-- Existing messages -->
     <div
       v-for="convo in processedConversations"
       :key="convo.id"
@@ -39,7 +43,18 @@ const processedConversations = computed(() => {
     >
       <Span v-if="convo.author === 'user'">You</Span>
       <Span v-if="convo.author === 'assistant'">Server</Span>
-      <div v-html="convo.content" @click="console.log(convo)"></div>
+      <div v-html="convo.content"></div>
+    </div>
+    <!-- Display currentPrompt if it exists -->
+    <div v-if="currentPrompt" class="message user-message">
+      <Span>You</Span>
+      <div v-html="DOMPurify.sanitize(marked(currentPrompt))"></div>
+    </div>
+
+    <!-- Display ongoingResponse if it exists -->
+    <div v-if="ongoingResponse" class="message server-message">
+      <Span>Server</Span>
+      <div v-html="DOMPurify.sanitize(marked(ongoingResponse))"></div>
     </div>
   </div>
 </template>
