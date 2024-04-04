@@ -92,7 +92,19 @@ const deleteConversation = conversation => {
   closeDropdown()
 }
 function handleClick(conversation) {
+  // Access ongoingResponse from conversationStore
+  const { ongoingResponse } = conversationStore
+
+  // Check if ongoingResponse is not an empty string
+  if (ongoingResponse !== '') {
+    // If ongoingResponse is not empty, exit the function early
+    console.log('Ongoing response in progress. Cannot load a new conversation.')
+    return
+  }
+
+  // If ongoingResponse is empty, proceed with setting the active model
   modelsStore.setActiveModel(conversation.model_id)
+
   // Now, call the action to fetch the specific conversation
   conversationStore
     .loadSpecificConversation(conversation.id)
@@ -104,6 +116,7 @@ function handleClick(conversation) {
       console.error('Error fetching specific conversation:', error)
     })
 }
+
 const closeDropdown = () => {
   openMenuId.value = null
 }

@@ -74,11 +74,11 @@ export const useConversationStore = defineStore('conversation', {
       }
     },
     finalizeStream() {
-      if (this.lastId === 0) {
-        // load the fetched conversations again to update the list
-        const fetchedConversationsStore = useFetchedConversationsStore()
-        fetchedConversationsStore.fetchConversations()
-      }
+      // if (this.lastId === 0) {
+      // load the fetched conversations again to update the list
+      const fetchedConversationsStore = useFetchedConversationsStore()
+      fetchedConversationsStore.fetchConversations(true)
+      // }
 
       const promptId = this.generateId() // Use the generateId method to get a new ID
       const responseId = this.generateId()
