@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useSendPrompt } from '../composables/usePrompt.js' // Adjust the path as necessary
 
 const { sendPrompt } = useSendPrompt()
@@ -7,34 +7,35 @@ const { sendPrompt } = useSendPrompt()
 const inputText = ref('')
 const textAreaHeight = ref('auto')
 
+const emits = defineEmits(['new-height'])
+
 const adjustTextAreaHeight = () => {
-  const baseHeight = 20 // The base height in pixels for one line of text
-  const lineHeight = 20 // The line height in pixels
-  const maxRows = 6 // Maximum number of rows
+  // const baseHeight = 20
+  const lineHeight = 20
+  const maxRows = 6
 
-  // Calculate the number of rows
   const numberOfLines = inputText.value.split('\n').length
-
-  // Calculate the new height based on the number of lines
   let newHeight = numberOfLines * lineHeight
-
-  // Ensure the new height does not exceed the maximum for 6 rows
   newHeight = Math.min(newHeight, maxRows * lineHeight)
-
-  // Set the textarea height
   textAreaHeight.value = `${newHeight}px`
+
+  // Emitting the new height value to the parent component
+  emits('new-height', newHeight)
 }
 
 const sendMessage = () => {
   if (inputText.value.trim() !== '') {
-    // Implement your send message logic here
     console.log('Message sent:', inputText.value)
     sendPrompt(inputText.value) // Send the input text as a prompt
     inputText.value = '' // Clear the input field after sending the message
   }
 }
 
-// Adjust textarea height when inputText changes
+// Watch for changes in inputText and adjust the textarea height accordingly
+watch(inputText, () => {
+  adjustTextAreaHeight()
+})
+
 onMounted(() => {
   adjustTextAreaHeight()
 })

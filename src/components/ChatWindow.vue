@@ -16,7 +16,8 @@ const mobileScreen = ref(false)
 const initialWindowComputed = computed(() => conversationStore.initialWindow)
 
 function handleRowUpdate(newHeight) {
-  textAreaHeight.value = newHeight
+  console.log('newHeight :>> ', newHeight)
+  textAreaHeight.value = `${newHeight}px` // Update this line if necessary based on your CSS
 }
 function checkMobileScreen() {
   // This is a common breakpoint for mobile devices
@@ -57,8 +58,11 @@ onUnmounted(() => {
         <button v-if="false" type="button" @click="count++">count is</button>
       </span>
     </div>
-    <initialWindow v-if="initialWindowComputed" />
-    <currentChat v-else />
+    <initialWindow
+      :textAreaHeight="textAreaHeight"
+      v-if="initialWindowComputed"
+    />
+    <currentChat :textAreaHeight="textAreaHeight" v-else />
     <fixedInput :hideMenu="hideMenu" @new-height="handleRowUpdate" />
   </div>
 </template>

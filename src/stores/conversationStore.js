@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 // Import the useSpecificConversation composable
 import { useSpecificConversation } from '../composables/specificConversation.js'
+import { useFetchedConversationsStore } from './fetchedConversationsStore' // Adjust the path as necessary
 
 export const useConversationStore = defineStore('conversation', {
   state: () => ({
@@ -73,6 +74,12 @@ export const useConversationStore = defineStore('conversation', {
       }
     },
     finalizeStream() {
+      if (this.lastId === 0) {
+        // load the fetched conversations again to update the list
+        const fetchedConversationsStore = useFetchedConversationsStore()
+        fetchedConversationsStore.fetchConversations()
+      }
+
       const promptId = this.generateId() // Use the generateId method to get a new ID
       const responseId = this.generateId()
 

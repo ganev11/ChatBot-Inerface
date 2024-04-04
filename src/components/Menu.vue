@@ -1,15 +1,17 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useHistory } from '../composables/history.js'
+// import { useHistory } from '../composables/history.js'
 import ConversationsList from './ConversationsList.vue'
 import { useUser } from '../composables/user.js'
+import { useFetchedConversationsStore } from '../stores/fetchedConversationsStore'
 import { useConversationStore } from '../stores/conversationStore'
 
 const conversationsContainer = ref(null)
-const { fetchOldConversations } = useHistory()
+// const { fetchOldConversations } = useHistory()
 const user = ref(null)
 const { fetchUser } = useUser()
-const conversations = ref([])
+// const conversations = ref([])
+const fetchedConversationsStore = useFetchedConversationsStore() // For fetching and initial conversation management
 
 const isUserDropdownOpen = ref(false)
 const conversationStore = useConversationStore() // Use the store
@@ -43,37 +45,37 @@ const checkScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } =
       conversationsContainer.value
     if (scrollTop + clientHeight >= scrollHeight - 5) {
-      loadMoreConversations()
+      fetchedConversationsStore.fetchConversations()
     }
   }
 }
 
-async function loadConversations(initial = false) {
-  try {
-    const data = await fetchOldConversations(offset.value, limit.value)
-    if (initial) {
-      conversations.value = data // If initial load, set conversations
-    } else {
-      conversations.value = [...conversations.value, ...data] // Otherwise, append
-    }
-    offset.value += data.length // Update the offset for the next load
-    console.log('data :>> ', data)
-  } catch (error) {
-    console.error('Failed to load conversations:', error)
-  }
-}
+// async function loadConversations(initial = false) {
+//   try {
+//     const data = await fetchOldConversations(offset.value, limit.value)
+//     if (initial) {
+//       conversations.value = data // If initial load, set conversations
+//     } else {
+//       conversations.value = [...conversations.value, ...data] // Otherwise, append
+//     }
+//     offset.value += data.length // Update the offset for the next load
+//     console.log('data :>> ', data)
+//   } catch (error) {
+//     console.error('Failed to load conversations:', error)
+//   }
+// }
 
 // Load 10 more items
-function loadMoreConversations() {
-  loadConversations()
-}
+// function loadMoreConversations() {
+//   loadConversations()
+// }
 function newConversation() {
   // Logic to create a new conversation
   console.log('Creating a new conversation...')
   conversationStore.startNewConversation()
 }
 onMounted(async () => {
-  await loadConversations(true)
+  await fetchedConversationsStore.fetchConversations(true) // Initial load
   try {
     user.value = await fetchUser()
   } catch (error) {
@@ -113,7 +115,9 @@ const hideMenu = ref(false)
         </div>
         <!-- history -->
         <div class="conversations" ref="conversationsContainer">
-          <ConversationsList :conversations="conversations" />
+          <ConversationsList
+            :conversations="fetchedConversationsStore.conversations"
+          />
         </div>
 
         <!-- user Info fixed -->

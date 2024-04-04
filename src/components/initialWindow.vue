@@ -1,12 +1,15 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineProps } from 'vue'
 import { useInitialPrompts } from '../composables/initialPrompts.js' // Make sure the path is correct
 import { useSendPrompt } from '../composables/usePrompt.js' // Make sure the path is correct
 
 // Create a ref to store the prompts
 const prompts = ref([])
 const { sendPrompt } = useSendPrompt()
-
+// Define props
+const props = defineProps({
+  textAreaHeight: String // Assuming textAreaHeight is a string like '100px'
+})
 // Destructure fetchInitialPrompts from the composable
 const { fetchInitialPrompts } = useInitialPrompts()
 
@@ -36,7 +39,7 @@ const choosePrompt = async prompt => {
   <div
     :key="textAreaHeight"
     class="chat"
-    :style="{ paddingBottom: textAreaHeight + 'px' }"
+    :style="{ paddingBottom: textAreaHeight }"
   >
     <div class="initial-propts">
       <div class="cards-container">

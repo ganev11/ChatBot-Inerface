@@ -1,8 +1,13 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, defineProps } from 'vue'
 import { useConversationStore } from '../stores/conversationStore' // Adjust the path as necessary
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
+
+// Define props
+const props = defineProps({
+  textAreaHeight: String // Assuming textAreaHeight is a string like '100px'
+})
 
 // Initialize Pinia store
 const conversationStore = useConversationStore()
@@ -33,7 +38,7 @@ const processedConversations = computed(() => {
 </script>
 
 <template>
-  <div class="chat">
+  <div class="chat" :style="{ paddingBottom: textAreaHeight }">
     <!-- Existing messages -->
     <div
       v-for="convo in processedConversations"
