@@ -1,17 +1,52 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useSendPrompt } from '../composables/usePrompt.js' // Adjust the path as necessary
+
+const { sendPrompt } = useSendPrompt()
+
+const inputText = ref('')
+const textAreaHeight = ref('auto')
+
+const adjustTextAreaHeight = () => {
+  const baseHeight = 20 // The base height in pixels for one line of text
+  const lineHeight = 20 // The line height in pixels
+  const maxRows = 6 // Maximum number of rows
+
+  // Calculate the number of rows
+  const numberOfLines = inputText.value.split('\n').length
+
+  // Calculate the new height based on the number of lines
+  let newHeight = numberOfLines * lineHeight
+
+  // Ensure the new height does not exceed the maximum for 6 rows
+  newHeight = Math.min(newHeight, maxRows * lineHeight)
+
+  // Set the textarea height
+  textAreaHeight.value = `${newHeight}px`
+}
+
+const sendMessage = () => {
+  if (inputText.value.trim() !== '') {
+    // Implement your send message logic here
+    console.log('Message sent:', inputText.value)
+    sendPrompt(inputText.value) // Send the input text as a prompt
+    inputText.value = '' // Clear the input field after sending the message
+  }
+}
+
+// Adjust textarea height when inputText changes
+onMounted(() => {
+  adjustTextAreaHeight()
+})
+</script>
+
 <template>
-  <!-- <div class="input-content"> -->
-  <!-- <div class="input-bar-container"> -->
-  <!-- <clip /> -->
   <div
     class="input-content"
-    :class="{
-      'max-width': !hideMenu,
-      'max-width-off': hideMenu
-    }"
+    :class="{ 'max-width': !hideMenu, 'max-width-off': hideMenu }"
   >
     <div class="input-div">
       <div class="input-stack">
-        <!-- <img class="clip" src="../assets/svg/paperclip.svg" alt="" />   -->
         <textarea
           type="textarea"
           class="input-bar"
@@ -30,89 +65,13 @@
           </div>
         </span>
       </div>
-      <!--   <span class="input-width">
-        <input
-          type="text"
-          class="input-bar"
-          placeholder="Message ChatGPT…"
-          v-model="inputText"
-          @keyup.enter="sendMessage"
-        />
-      </span>
-
-      <div
-        class="send-button"
-        :class="{ 'send-button-disabled': inputText === '' }"
-        @click="sendMessage"
-      >
-        <b> ↑ </b>
-      </div> -->
     </div>
 
     <div class="small-txt">
       Our AI can make mistakes. Consider checking important information.
     </div>
   </div>
-
-  <!-- </div> -->
 </template>
-
-<script>
-import clip from '../assets/svg/clip.vue'
-
-export default {
-  data() {
-    return {
-      inputText: '',
-      textAreaHeight: 'auto' // Set a default height, can be a specific value like '50px'
-    }
-  },
-  props: {
-    hideMenu: Boolean
-  },
-  components: {
-    clip
-  },
-  methods: {
-    sendMessage() {
-      if (this.inputText.trim() !== '') {
-        // Implement your send message logic here
-        console.log('Message sent:', this.inputText)
-        this.inputText = '' // Clear the input field after sending the message
-      }
-    },
-    adjustTextAreaHeight() {
-      const baseHeight = 20 // The base height in pixels for one line of text
-      const lineHeight = 20 // The line height in pixels
-      const maxRows = 6 // Maximum number of rows
-
-      // Calculate the number of rows
-      const numberOfLines = this.inputText.split('\n').length
-
-      // Calculate the new height based on the number of lines
-      let newHeight = numberOfLines * lineHeight
-
-      // Ensure the new height does not exceed the maximum for 6 rows
-      newHeight = Math.min(newHeight, maxRows * lineHeight)
-
-      // Set the textarea height
-      this.textAreaHeight = `${newHeight}px`
-      this.$emit('new-height', newHeight)
-    }
-  },
-  watch: {
-    inputText() {
-      this.adjustTextAreaHeight()
-    }
-  },
-  mounted() {
-    // Adjust the textarea height when the component is first mounted
-    this.$nextTick(() => {
-      this.adjustTextAreaHeight()
-    })
-  }
-}
-</script>
 
 <style scoped>
 .max-width {
