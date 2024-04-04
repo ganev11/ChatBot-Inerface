@@ -13,6 +13,9 @@ export const useFetchedConversationsStore = defineStore(
     }),
     actions: {
       async fetchConversations(initial = false) {
+        if (initial) {
+          this.offset = 0
+        }
         console.log('fetchinainitial :>> ', initial)
         const { fetchOldConversations } = useHistory() // Use the composable
         try {
