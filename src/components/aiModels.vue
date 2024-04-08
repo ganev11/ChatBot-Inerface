@@ -106,6 +106,7 @@ function closeDropdown() {
   display: inline-block;
   margin: 0.5rem;
   transition: background-color 0.3s;
+  left: -10px !important;
 }
 
 .models-btn:hover {
@@ -128,7 +129,7 @@ function closeDropdown() {
     justify-content: center !important;
     align-items: center;
     position: relative;
-    left: -25%;
+    left: -32%;
   }
 }
 .dropdown-menu {
