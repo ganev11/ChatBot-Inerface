@@ -1,24 +1,17 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-// import { useHistory } from '../composables/history.js'
 import ConversationsList from './ConversationsList.vue'
 import { useUser } from '../composables/user.js'
 import { useFetchedConversationsStore } from '../stores/fetchedConversationsStore'
 import { useConversationStore } from '../stores/conversationStore'
 
 const conversationsContainer = ref(null)
-// const { fetchOldConversations } = useHistory()
 const user = ref(null)
 const { fetchUser } = useUser()
-// const conversations = ref([])
 const fetchedConversationsStore = useFetchedConversationsStore() // For fetching and initial conversation management
 
 const isUserDropdownOpen = ref(false)
 const conversationStore = useConversationStore() // Use the store
-
-// Adjust these as needed, for example, through user actions or scrolling
-const offset = ref(0)
-const limit = ref(15)
 
 function toggleUserDropdown() {
   isUserDropdownOpen.value = !isUserDropdownOpen.value
@@ -50,32 +43,13 @@ const checkScroll = () => {
   }
 }
 
-// async function loadConversations(initial = false) {
-//   try {
-//     const data = await fetchOldConversations(offset.value, limit.value)
-//     if (initial) {
-//       conversations.value = data // If initial load, set conversations
-//     } else {
-//       conversations.value = [...conversations.value, ...data] // Otherwise, append
-//     }
-//     offset.value += data.length // Update the offset for the next load
-//     console.log('data :>> ', data)
-//   } catch (error) {
-//     console.error('Failed to load conversations:', error)
-//   }
-// }
-
-// Load 10 more items
-// function loadMoreConversations() {
-//   loadConversations()
-// }
 function newConversation() {
   // Logic to create a new conversation
   console.log('Creating a new conversation...')
   conversationStore.startNewConversation()
 }
 onMounted(async () => {
-  await fetchedConversationsStore.fetchConversations(true) // Initial load
+  await fetchedConversationsStore.fetchConversations(true) // Initial load (true means initial load)
   try {
     user.value = await fetchUser()
   } catch (error) {
@@ -149,7 +123,9 @@ const hideMenu = ref(false)
       </div>
     </div>
     <!-- Toggle btn -->
-    <span class="tgl" @click="toggleMenu"> </span>
+    <span class="tgl" @click="toggleMenu">
+      <span class="tgl-pin"> </span>
+    </span>
   </div>
 </template>
 
@@ -213,22 +189,28 @@ const hideMenu = ref(false)
   background-color: #171717;
   transition: width 0.5s;
 }
-
 .tgl {
   position: relative;
   cursor: pointer;
   top: 50%;
-  left: 10px;
+  left: 00px;
+  width: 4px;
+  height: 20px;
+  border-radius: 3px;
+  color: white;
+  display: flex;
+  padding: 15px;
+  justify-content: center;
+  align-items: center;
+}
+.tgl-pin {
+  position: relative;
   width: 4px;
   height: 20px;
   border-radius: 3px;
   background-color: #ffffff9c;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
-.tgl:hover {
+.tgl-pin:hover {
   background-color: #ffffff;
 }
 .menu-content-on {
