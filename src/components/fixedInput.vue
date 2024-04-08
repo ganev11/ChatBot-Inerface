@@ -104,6 +104,16 @@ onMounted(() => {
   justify-content: space-between;
   width: 100%;
 }
+@media screen and (max-width: 1100px) {
+  .input-bar {
+    width: 60vw !important;
+  }
+}
+@media screen and (max-width: 900px) {
+  .input-bar {
+    width: 50vw !important;
+  }
+}
 @media screen and (max-width: 768px) {
   .input-content {
     max-width: calc(100% - 2px);
@@ -112,20 +122,21 @@ onMounted(() => {
     width: 80vw !important;
   }
 }
-@media screen and (max-width: 550px) {
-  .input-content {
-    max-width: calc(100% - 2px);
-  }
-  .input-bar {
-    width: 70vw !important;
-  }
-}
 @media screen and (max-width: 670px) {
   .small-txt {
     height: 37px !important;
     margin: 10px !important;
   }
+  .input-bar {
+    width: 70vw !important;
+  }
 }
+@media screen and (max-width: 550px) {
+  .input-content {
+    max-width: calc(100% - 2px);
+  }
+}
+
 .flex {
   display: flex;
   align-items: center;
@@ -143,7 +154,7 @@ onMounted(() => {
   width: 50%;
 }
 .input-bar {
-  width: 46vw;
+  width: 700px;
   min-height: 24px;
   padding: 14px 48px 10px 20px;
   border: 1px solid #5f5f61;
@@ -151,6 +162,8 @@ onMounted(() => {
   background-color: #212121;
   font-size: 16px;
   color: white;
+  max-width: 700px;
+
   resize: none; /* Prevent manual resizing */
 }
 

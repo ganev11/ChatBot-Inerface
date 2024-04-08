@@ -162,35 +162,16 @@ const choosePrompt = async prompt => {
 </style>
 
 <style scoped>
-.cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  width: calc(75vw - 10vw) !important;
-
-  max-width: 1000px;
-  justify-content: center;
-}
-
-.card {
-  flex: 1 1 300px; /* Flex grow, flex shrink, flex basis */
-  border: 1px solid #464646;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 10px;
-  width: calc(50vw - 30vw) !important;
-  max-width: 450px;
-}
 .card:hover {
   cursor: pointer;
   background-color: #292929;
   color: #ededed;
 }
 .card h3 {
-  margin: 0 7px 5px 7px;
+  margin: 0 7px 0 7px;
   color: #ededed;
-  font-weight: 400;
-  font-size: 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 .card p {
   margin: 0 7px;
@@ -206,34 +187,45 @@ const choosePrompt = async prompt => {
 }
 .initial-propts {
   display: flex;
-  width: 100% !important;
   justify-content: center;
   align-items: end;
   margin-top: 220px;
   height: calc(100vh - 325px);
+  width: 100%;
 }
 /* Responsive adjustments */
-@media (max-width: 900px) {
-  .card {
-    max-width: calc(50vw);
-    max-height: 9vh;
-    padding: 7px;
-  }
-  .card h3 {
-    margin: 0 7px 5px 7px;
-  }
-  .card p {
-    margin: 0 7px;
-  }
-  .initial-propts {
-    margin-top: 140px;
-    height: calc(100vh - 250px);
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Creates two columns */
+  gap: 7px; /* Adjusts spacing between grid items */
+  width: calc(100vw - 300px);
+  margin-bottom: 4px;
+  max-width: 750px;
+}
+
+.card {
+  border: 1px solid #464646;
+  border-radius: 15px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Removed the max-width and width properties */
+}
+
+@media screen and (max-width: 900px) {
+  .cards-container {
+    grid-template-columns: 1fr; /* Adjusts to a single column for mobile */
   }
 }
-@media (max-width: 670px) {
-  .initial-propts {
-    margin-top: 90px;
-    height: calc(100vh - 220px);
+
+@media screen and (max-width: 768px) {
+  .cards-container {
+    width: calc(100vw - 40px);
+  }
+}
+@media screen and (max-width: 672px) {
+  .cards-container {
+    margin-bottom: 28px;
   }
 }
 </style>

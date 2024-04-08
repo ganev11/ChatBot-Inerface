@@ -1,6 +1,6 @@
 <script setup>
 import fixedInput from './fixedInput.vue' // Adjusted to match the actual file name
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, defineEmits, onUnmounted, computed } from 'vue'
 import aiModels from './aiModels.vue'
 import initialWindow from './initialWindow.vue' // Adjusted to match the actual file name
 import currentChat from './currentChat.vue' // Adjusted to match the actual file name
@@ -26,7 +26,6 @@ function checkMobileScreen() {
 }
 
 const emit = defineEmits(['menu-toggle-mobile'])
-
 function tohhleMenuMobile() {
   emit('menu-toggle-mobile')
 }
