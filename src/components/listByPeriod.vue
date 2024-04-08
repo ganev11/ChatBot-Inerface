@@ -51,6 +51,7 @@ import { defineProps, ref } from 'vue'
 import BaseModal from './BaseModal.vue'
 import { useBaseModalStore } from './../stores/baseModalStore'
 import { useDeleteConversation } from './../composables/useDeleteConversation'
+import { useFetchedConversationsStore } from '../stores/fetchedConversationsStore' // Adjust the path as necessary
 
 import { useConversationStore } from '../stores/conversationStore'
 import { useModelsStore } from '../stores/modelsStore'
@@ -78,7 +79,9 @@ const handleDeleteConversation = conversation => {
       deleteConversation(conversation.id) // Call the deleteConversation method from the composable
         .then(() => {
           // Handle successful deletion, e.g., refresh the list of conversations or remove the conversation from local state
-          conversationStore.removeConversation(conversation.id) // Example action
+          // load the fetched conversations again to update the list
+          const fetchedConversationsStore = useFetchedConversationsStore()
+          fetchedConversationsStore.fetchConversations(true)
           console.log('Conversation deleted successfully')
         })
         .catch(err => {
