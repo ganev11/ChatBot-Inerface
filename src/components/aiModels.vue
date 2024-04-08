@@ -5,22 +5,24 @@
         {{ activeModel.id }}
       </span>
     </div>
-    <div v-if="isDropdownOpen" class="dropdown-menu">
-      <div class="responsivity-wrapper">
-        <!-- Loop through modelList and display each model's ID -->
-        <div
-          class="model-item dropdown-item"
-          v-for="model in modelList"
-          :key="model.id"
-          @click="setActiveModel(model.id)"
-        >
-          {{ model.id }}
-          <img
-            v-if="model.active"
-            class="active-icon"
-            src="../assets/svg/active.svg"
-            alt=""
-          />
+    <div class="center-drop-down">
+      <div v-if="isDropdownOpen" class="dropdown-menu">
+        <div class="responsivity-wrapper">
+          <!-- Loop through modelList and display each model's ID -->
+          <div
+            class="model-item dropdown-item"
+            v-for="model in modelList"
+            :key="model.id"
+            @click="setActiveModel(model.id)"
+          >
+            {{ model.id }}
+            <img
+              v-if="model.active"
+              class="active-icon"
+              src="../assets/svg/active.svg"
+              alt=""
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -109,14 +111,24 @@ function closeDropdown() {
 .models-btn:hover {
   background-color: #373737;
 }
-
+.center-drop-down {
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+  position: relative;
+  left: -4%;
+  top: 5px;
+}
 @media (max-width: 768px) {
   .dropdown-menu {
-    left: 50%; /* Start by positioning at the middle horizontally */
-    transform: translate(
-      23vw,
-      0
-    ); /* Adjust horizontally to truly center, doesn't affect vertical alignment directly */
+    position: relative;
+  }
+  .center-drop-down {
+    display: flex;
+    justify-content: center !important;
+    align-items: center;
+    position: relative;
+    left: -25%;
   }
 }
 .dropdown-menu {

@@ -50,7 +50,9 @@ onUnmounted(() => {
         'max-width-off': hideMenu || mobileScreen
       }"
     >
-      <span v-if="mobileScreen" @click="tohhleMenuMobile">HAM</span>
+      <span v-if="mobileScreen" @click="tohhleMenuMobile">
+        <img class="ham-icon" src="../assets/svg/ham.svg" alt="" />
+      </span>
       <span>
         <aiModels />
       </span>
@@ -77,6 +79,8 @@ onUnmounted(() => {
   transition: max-width 0.5s;
 }
 .nav-bar {
+  /* background-color: aqua !important; */
+  max-height: 77px;
   position: fixed;
   width: 100%;
   min-height: 40px;
@@ -88,6 +92,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   z-index: 5000;
+  align-items: center;
 }
 .background-chat {
   width: 100%;
@@ -145,5 +150,10 @@ onUnmounted(() => {
 
 .chat::-webkit-scrollbar-corner {
   background-color: black; /* Adjust if needed */
+}
+.ham-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
 </style>
