@@ -9,6 +9,8 @@ const props = defineProps({
   textAreaHeight: String // Assuming textAreaHeight is a string like '100px'
 })
 
+const markedTextMargin = '28px'
+
 // Initialize Pinia store
 const conversationStore = useConversationStore()
 
@@ -46,25 +48,53 @@ const processedConversations = computed(() => {
       class="message"
       :class="convo.class"
     >
-      <Span v-if="convo.author === 'user'">You</Span>
-      <Span v-if="convo.author === 'assistant'">Server</Span>
-      <div v-html="convo.content"></div>
+      <Span v-if="convo.author === 'user'" class="message-owner">
+        <img src="../assets/svg/user.svg" class="icon-user" alt="" />
+        You</Span
+      >
+      <Span v-if="convo.author === 'assistant'" class="message-owner">
+        <img src="../assets/imgs/sst.jpg" class="icon-chat" alt="" />
+        Server</Span
+      >
+      <!-- :style="`margin-left: ${markedTextMargin}`" -->
+      <div v-html="convo.content" class="massage-margin"></div>
     </div>
     <!-- Display currentPrompt if it exists -->
     <div v-if="currentPrompt" class="message user-message">
-      <Span>You</Span>
-      <div v-html="DOMPurify.sanitize(marked(currentPrompt))"></div>
+      <Span class="message-owner">
+        <img src="../assets/svg/user.svg" class="icon-user" alt="" />
+
+        You</Span
+      >
+      <!-- :style="`margin-left: ${markedTextMargin}`" -->
+      <div
+        class="massage-margin"
+        v-html="DOMPurify.sanitize(marked(currentPrompt))"
+      ></div>
     </div>
 
     <!-- Display ongoingResponse if it exists -->
     <div v-if="ongoingResponse" class="message server-message">
-      <Span>Server</Span>
-      <div v-html="DOMPurify.sanitize(marked(ongoingResponse))"></div>
+      <Span class="message-owner">
+        <img src="../assets/imgs/sst.jpg" class="icon-chat" alt="" />
+        Server</Span
+      >
+      <!-- :style="`margin-left: ${markedTextMargin}`" -->
+      <div
+        class="massage-margin"
+        v-html="DOMPurify.sanitize(marked(ongoingResponse))"
+      ></div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.massage-margin {
+  margin-left: 35px;
+  position: relative;
+  top: -12px;
+}
+
 .max-width {
   max-width: calc(100% - 264px);
   transition: max-width 0.5s;
@@ -92,14 +122,30 @@ const processedConversations = computed(() => {
   display: flex;
   justify-content: center;
 }
+
+.message-owner {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.icon-chat {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.icon-user {
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+}
 .chat {
-  margin-top: 60px;
+  margin-top: 80px !important;
   height: calc(100% - 86px);
   min-height: calc(100vh - 230px) !important;
   margin-bottom: 86px;
-  margin-right: 50px;
+  /* margin-right: 50px; */
   width: 65% !important;
-  max-width: 1000px !important;
+  max-width: 692px !important;
   overflow-y: auto;
   padding: 12px;
   box-sizing: border-box;
