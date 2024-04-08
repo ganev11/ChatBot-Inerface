@@ -1,30 +1,35 @@
 <template>
   <!-- Today -->
   <ListByPeriod
+    v-if="todayConversations.length > 0"
     class="conversations-list-margin-bot"
     periodName="Today"
     :conversations="todayConversations"
   />
   <!-- Yesterday -->
   <ListByPeriod
+    v-if="yesterdayConversations.length > 0"
     class="conversations-list-margin-bot"
     periodName="Yesterday"
     :conversations="yesterdayConversations"
   />
   <!-- 7 days -->
   <ListByPeriod
+    v-if="last7DaysConversations.length > 0"
     class="conversations-list-margin-bot"
     periodName="Previous 7 Days"
     :conversations="last7DaysConversations"
   />
   <!-- 30 days -->
   <ListByPeriod
+    v-if="last30DaysConversations.length > 0"
     class="conversations-list-margin-bot"
     periodName="Previous 30 Days"
     :conversations="last30DaysConversations"
   />
   <!-- Older -->
   <ListByPeriod
+    v-if="olderConversations.length > 0"
     class="conversations-list-margin-bot"
     periodName="Older"
     :conversations="olderConversations"
