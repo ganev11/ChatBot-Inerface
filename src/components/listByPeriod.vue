@@ -30,7 +30,7 @@
         >
           <button
             class="delete-btn dropdown-item"
-            @click="deleteConversation(conversation)"
+            @click="handleDeleteConversation(conversation)"
           >
             <img class="delete-icon" src="../assets/svg/delete.svg" />
             Delete chat
@@ -50,14 +50,15 @@
 import { defineProps, ref } from 'vue'
 import BaseModal from './BaseModal.vue'
 import { useBaseModalStore } from './../stores/baseModalStore'
-import { useConversationDeletion } from './../composables/useConversationDeletion'
+import { useDeleteConversation } from './../composables/useDeleteConversation'
+
 import { useConversationStore } from '../stores/conversationStore'
 import { useModelsStore } from '../stores/modelsStore'
 
 const modelsStore = useModelsStore()
 const conversationStore = useConversationStore()
 const modalStore = useBaseModalStore()
-const { deleteConversationCOMP, isDeleting, error } = useConversationDeletion()
+const { deleteConversation } = useDeleteConversation()
 
 const openMenuId = ref(null)
 
@@ -66,31 +67,34 @@ const props = defineProps({
   conversations: Array
 })
 
-const deleteConversation = conversation => {
+const handleDeleteConversation = conversation => {
   modalStore.setModalSettings({
     title: 'Delete chat?',
-    content: `This will delete ${conversation.title} `,
+    content: `This will delete ${conversation.title}. Are you sure?`,
     leftBtnText: 'Close',
     leftBtnAction: () => modalStore.closeModal(),
     rightBtnText: 'Delete',
     rightBtnAction: () => {
-      deleteConversationCOMP(conversation.id)
+      deleteConversation(conversation.id) // Call the deleteConversation method from the composable
         .then(() => {
-          // Handle successful deletion, e.g., refresh the list of conversations
+          // Handle successful deletion, e.g., refresh the list of conversations or remove the conversation from local state
+          conversationStore.removeConversation(conversation.id) // Example action
+          console.log('Conversation deleted successfully')
         })
         .catch(err => {
           // Handle error case
           console.error('Deletion error:', err)
         })
         .finally(() => {
-          modalStore.closeModal()
+          modalStore.closeModal() // Ensure the modal is closed after the operation
         })
     }
   })
 
-  modalStore.openModal()
-  closeDropdown()
+  modalStore.openModal() // Open the modal for user confirmation
+  closeDropdown() // Close any open dropdown, if necessary
 }
+
 function handleClick(conversation) {
   // Access ongoingResponse from conversationStore
   const { ongoingResponse } = conversationStore
