@@ -87,7 +87,6 @@ const processedConversations = computed(() => {
   z-index: 5000;
 }
 .background-chat {
-  width: 100% !important;
   color: rgba(255, 255, 255, 0);
   background-color: #212121;
   display: flex;
@@ -110,7 +109,11 @@ const processedConversations = computed(() => {
   scrollbar-width: thin; /* For Firefox */
   scrollbar-color: transparent transparent; /* For Firefox, set default state to transparent */
 }
-
+@media (max-width: 768px) {
+  .chat {
+    width: 85% !important;
+  }
+}
 /* Default state for Webkit browsers, set scrollbar to transparent */
 .chat::-webkit-scrollbar {
   width: 10px;

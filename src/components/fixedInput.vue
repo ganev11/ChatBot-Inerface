@@ -108,6 +108,17 @@ onMounted(() => {
   .input-content {
     max-width: calc(100% - 2px);
   }
+  .input-bar {
+    width: 80vw !important;
+  }
+}
+@media screen and (max-width: 550px) {
+  .input-content {
+    max-width: calc(100% - 2px);
+  }
+  .input-bar {
+    width: 70vw !important;
+  }
 }
 @media screen and (max-width: 670px) {
   .small-txt {
