@@ -90,7 +90,7 @@ const processedConversations = computed(() => {
 
 <style scoped>
 .massage-margin {
-  margin-left: 35px;
+  margin-left: 38px;
   position: relative;
   top: -12px;
 }
@@ -124,6 +124,7 @@ const processedConversations = computed(() => {
 }
 
 .message-owner {
+  font-weight: 800;
   display: flex;
   align-items: center;
   gap: 15px;

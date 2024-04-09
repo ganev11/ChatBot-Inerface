@@ -131,8 +131,8 @@ const hideMenu = ref(false)
 
 <style scoped>
 .edit-icon {
-  width: 20px;
-  height: 20px;
+  width: 32px !important;
+  height: 32px !important;
 }
 .new-convo {
   width: 100%;
@@ -224,6 +224,7 @@ const hideMenu = ref(false)
 .conversations {
   overflow-y: auto;
   max-height: calc(100vh - 110px);
+  min-height: calc(100vh - 110px);
   scrollbar-width: thin; /* For Firefox */
   scrollbar-color: transparent transparent; /* For Firefox, set default state to transparent */
 }

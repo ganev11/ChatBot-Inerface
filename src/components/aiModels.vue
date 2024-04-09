@@ -10,18 +10,35 @@
         <div class="responsivity-wrapper">
           <!-- Loop through modelList and display each model's ID -->
           <div
-            class="model-item dropdown-item"
+            class="dropdown-item"
             v-for="model in modelList"
             :key="model.id"
             @click="setActiveModel(model.id)"
           >
-            {{ model.id }}
-            <img
-              v-if="model.active"
-              class="active-icon"
-              src="../assets/svg/active.svg"
-              alt=""
-            />
+            <span class="flex-space-between">
+              {{ model.id }}
+
+              <img
+                v-if="model.active"
+                class="active-icon"
+                src="../assets/svg/active.svg"
+                alt=""
+              />
+              <img
+                v-else
+                class="inactive-icon"
+                src="../assets/svg/inactive.svg"
+                alt=""
+              />
+              <div class="new-chat">
+                New chat
+                <img class="edit-icon" src="../assets/svg/edit.svg" alt="" />
+              </div>
+            </span>
+
+            <div class="model-description">
+              Great for everyday tasks. lorem ipsum
+            </div>
           </div>
         </div>
       </div>
@@ -76,6 +93,12 @@ function closeDropdown() {
 </script>
 
 <style scoped>
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
 .models-btn {
   position: relative;
   background-color: #48484800;
@@ -95,20 +118,30 @@ function closeDropdown() {
 </style>
 
 <style scoped>
+.model-description {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #999999;
+}
 .models-btn {
   background-color: #48484800;
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
-  color: #000000;
+  color: #ffffff;
   display: inline-block;
   margin: 0.5rem;
   transition: background-color 0.3s;
   left: -10px !important;
 }
-
+.inactive-icon {
+  width: 15px;
+  height: 15px;
+  margin-right: 3px;
+  opacity: 0.5;
+}
 .models-btn:hover {
   background-color: #373737;
 }
@@ -129,14 +162,13 @@ function closeDropdown() {
     justify-content: center !important;
     align-items: center;
     position: relative;
-    left: -32%;
+    left: -96%;
   }
 }
 .dropdown-menu {
   position: absolute;
   z-index: 1000; /* Adjust z-index as necessary */
-  width: auto;
-  min-width: 180px;
+  min-width: 338px;
   background-color: #333;
   color: #fff;
   border: 1px solid rgb(82, 82, 82);
@@ -144,22 +176,24 @@ function closeDropdown() {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   padding: 8px;
   top: calc(100% + 5px); /* Position below the button */
-  left: 15px;
+  left: 5px;
 }
 
 .dropdown-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   background-color: transparent;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   font-weight: bold;
+  font-size: 14px;
   border: none;
   width: 100%;
-  max-width: 157px;
+  max-width: 306px;
   border-radius: 4px;
   text-align: left;
-  padding: 8px 12px;
+  padding: 16px;
   cursor: pointer;
 }
 
@@ -179,5 +213,31 @@ function closeDropdown() {
 .active-icon {
   width: 20px;
   height: 18px;
+}
+.edit-icon {
+  width: 20px;
+  height: 18px;
+}
+/* Hide icons when a specific dropdown-item is hovered */
+.dropdown-item:hover .active-icon,
+.dropdown-item:hover .inactive-icon {
+  display: none;
+}
+.dropdown-item {
+  align-items: flex-start;
+}
+/* Initially hide the .new-chat div */
+.new-chat {
+  display: none;
+}
+
+/* Show the .new-chat div when its parent dropdown-item is hovered */
+.dropdown-item:hover .new-chat {
+  position: relative;
+  display: flex;
+  top: -5px;
+  left: 5px;
+  align-items: center;
+  gap: 5px;
 }
 </style>
