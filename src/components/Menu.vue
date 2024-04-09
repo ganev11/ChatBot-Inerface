@@ -96,12 +96,12 @@ const hideMenu = ref(false)
 
         <!-- user Info fixed -->
         <div class="user" v-if="user" @click="toggleUserDropdown">
-          <img class="edit-icon" src="../assets/svg/user.svg" alt="" />
+          <img class="user-icon" src="../assets/svg/user.svg" alt="" />
           {{ user.name }}
         </div>
         <div v-if="isUserDropdownOpen" class="dropdown-menu user-dropdown-menu">
           <div class="responsivity-wrapper">
-            <div class="model-item dropdown-item" @click="openSettings">
+            <div class="dropdown-item" @click="openSettings">
               <img
                 class="setting-icon"
                 src="../assets/svg/settings.svg"
@@ -109,7 +109,7 @@ const hideMenu = ref(false)
               />
               Settings
             </div>
-            <div class="model-item dropdown-item" @click="logout">
+            <div class="dropdown-item" @click="logout">
               <img class="logout-icon" src="../assets/svg/logout.svg" alt="" />
               Logout
             </div>
@@ -130,13 +130,18 @@ const hideMenu = ref(false)
 </template>
 
 <style scoped>
-.edit-icon {
+.user-icon {
   width: 32px !important;
   height: 32px !important;
 }
+.edit-icon {
+  margin: 0 !important;
+  width: 20px;
+  height: 20px;
+}
 .new-convo {
   width: 100%;
-  max-width: 216px;
+  max-width: 222px;
   position: relative;
   padding: 8px 8px;
   cursor: pointer;
@@ -299,7 +304,7 @@ const hideMenu = ref(false)
   background-color: #333;
   color: #fff;
   border: 1px solid rgb(82, 82, 82);
-  border-radius: 4px;
+  border-radius: 7px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   padding: 8px;
   bottom: 60px; /* Position below the button */
@@ -311,7 +316,7 @@ const hideMenu = ref(false)
   align-items: center;
   justify-content: start;
   background-color: transparent;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   font-weight: bold;
   border: none;
   width: 100%;

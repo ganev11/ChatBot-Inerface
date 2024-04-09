@@ -2,6 +2,7 @@
   <div v-if="isModalOpen" class="modal-overlay" @click.self="closeModal">
     <div class="modal-window">
       <header class="modal-header">{{ modalSettings.title }}</header>
+      <div class="line"></div>
       <div class="modal-content">{{ modalSettings.content }}</div>
       <footer class="modal-footer">
         <button class="close" @click="leftBtnAction">
@@ -50,10 +51,15 @@ const rightBtnAction = () => {
   justify-content: center;
   z-index: 10000;
 }
-
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: #4d4d4d;
+  margin: 20px 0;
+}
 .modal-window {
   background-color: #343434;
-  padding: 20px;
+  padding: 20px 0;
   border-radius: 15px;
   max-width: 500px;
   width: 100%;
@@ -67,32 +73,36 @@ const rightBtnAction = () => {
   font-weight: bold;
   font-size: 1.1em;
   margin-bottom: 20px;
+  padding: 0 20px;
 }
 
 .modal-content {
   margin-bottom: 20px;
   font-weight: 500;
+  padding: 0 20px;
+  color: white;
 }
 
 .modal-footer {
   text-align: right;
+  padding: 0 20px;
 }
 
 button.close {
   background-color: #343434;
   cursor: pointer;
   border: 1px solid rgb(97, 97, 97);
-  padding: 10px 20px;
+  padding: 10px 15px;
   margin-left: 10px;
-  border-radius: 5px;
+  border-radius: 9px;
 }
 button.confirm {
   background-color: rgb(165, 20, 20);
   cursor: pointer;
-  padding: 10px 20px;
+  padding: 10px 15px;
   margin-left: 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: 9px;
 }
 
 button.close:hover {
