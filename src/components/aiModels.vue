@@ -162,7 +162,7 @@ function closeDropdown() {
     justify-content: center !important;
     align-items: center;
     position: relative;
-    left: -96%;
+    left: -86%;
   }
 }
 .dropdown-menu {

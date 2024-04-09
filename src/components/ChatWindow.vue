@@ -29,7 +29,9 @@ const emit = defineEmits(['menu-toggle-mobile'])
 function tohhleMenuMobile() {
   emit('menu-toggle-mobile')
 }
-
+function newChat() {
+  conversationStore.startNewConversation()
+}
 onMounted(() => {
   checkMobileScreen() // Check immediately on mount
   window.addEventListener('resize', checkMobileScreen) // Add resize listener
@@ -55,8 +57,8 @@ onUnmounted(() => {
       <span>
         <aiModels />
       </span>
-      <span>
-        <button v-if="false" type="button" @click="count++">count is</button>
+      <span v-if="mobileScreen" @click="newChat">
+        <img class="new-icon" src="../assets/svg/edit.svg" alt="" />
       </span>
     </div>
     <initialWindow
@@ -85,7 +87,7 @@ onUnmounted(() => {
   min-height: 40px;
   background-color: #212121;
   color: white;
-  padding: 8px;
+  padding: 8px 10px;
   /* border: 1px solid #4343e1d9; */
   box-sizing: border-box;
   display: flex;
@@ -115,7 +117,12 @@ onUnmounted(() => {
   scrollbar-width: thin; /* For Firefox */
   scrollbar-color: transparent transparent; /* For Firefox, set default state to transparent */
 }
-
+.new-icon {
+  width: 27px;
+  height: 27px;
+  cursor: pointer;
+  color: white;
+}
 /* Default state for Webkit browsers, set scrollbar to transparent */
 .chat::-webkit-scrollbar {
   width: 10px;
@@ -154,5 +161,6 @@ onUnmounted(() => {
   width: 30px;
   height: 30px;
   cursor: pointer;
+  color: white;
 }
 </style>
