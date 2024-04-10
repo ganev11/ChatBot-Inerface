@@ -1,44 +1,46 @@
 <script setup>
-import fixedInput from './fixedInput.vue' // Adjusted to match the actual file name
-import { ref, onMounted, defineEmits, onUnmounted, computed } from 'vue'
+import fixedInput from './fixedInput.vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import aiModels from './aiModels.vue'
-import initialWindow from './initialWindow.vue' // Adjusted to match the actual file name
-import currentChat from './currentChat.vue' // Adjusted to match the actual file name
-import { useConversationStore } from '../stores/conversationStore' // Adjust the path according to your file structure
+import initialWindow from './initialWindow.vue'
+import currentChat from './currentChat.vue'
+import { useConversationStore } from '../stores/conversationStore'
 const conversationStore = useConversationStore()
 
 defineProps({
   hideMenu: Boolean
 })
 
+// Hambuger menu start
+import { useMobileMenuStore } from '../stores/mobileMenuStore'
+const mobileMenu = useMobileMenuStore()
+function tohhleMenuMobile() {
+  mobileMenu.setHamMenuOpen(true)
+}
+// Hambuger menu end
+
 const textAreaHeight = ref(1)
 const mobileScreen = ref(false)
 const initialWindowComputed = computed(() => conversationStore.initialWindow)
 
 function handleRowUpdate(newHeight) {
-  console.log('newHeight :>> ', newHeight)
-  textAreaHeight.value = `${newHeight}px` // Update this line if necessary based on your CSS
+  textAreaHeight.value = `${newHeight}px`
 }
 function checkMobileScreen() {
-  // This is a common breakpoint for mobile devices
   const query = window.matchMedia('(max-width: 768px)')
   mobileScreen.value = query.matches
 }
 
-const emit = defineEmits(['menu-toggle-mobile'])
-function tohhleMenuMobile() {
-  emit('menu-toggle-mobile')
-}
 function newChat() {
   conversationStore.startNewConversation()
 }
 onMounted(() => {
-  checkMobileScreen() // Check immediately on mount
-  window.addEventListener('resize', checkMobileScreen) // Add resize listener
+  checkMobileScreen()
+  window.addEventListener('resize', checkMobileScreen)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', checkMobileScreen) // Clean up listener
+  window.removeEventListener('resize', checkMobileScreen)
 })
 </script>
 

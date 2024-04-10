@@ -1,4 +1,5 @@
 <template>
+  <!-- <MenuMob v-if="isMobile" id="menu-mobile" /> -->
   <Menu id="menu" @menu-toggle="toggleChatbotMargin" />
   <ChatWindow
     :hideMenu="hideMenu"
@@ -7,20 +8,52 @@
       'chat-window-margin-off': hideMenu
     }"
     id="ChatWindow"
+    @menu-toggle-mobile="toggleMobileMenu"
   />
 </template>
 <script setup>
+// import MenuMobile from './components/MenuMobile.vue'
+// import MenuMob from './components/MenuMob.vue'
 import Menu from './components/Menu.vue'
 import ChatWindow from './components/ChatWindow.vue'
+import { useMobileMenuStore } from './stores/mobileMenuStore'
 
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const hideMenu = ref(false)
+const hideMobileMenu = ref(false)
+const screenWidth = ref(window.innerWidth)
+const breakpoint = 768
+
+// Computed property to determine if the viewport is in mobile mode
+const isMobile = ref(screenWidth.value < breakpoint)
+const mobileMenu = useMobileMenuStore()
+
+function setMobileScreen(isMobile) {
+  mobileMenu.setMobileScreen(isMobile)
+}
 
 function toggleChatbotMargin() {
-  console.log('object :>> ')
   hideMenu.value = !hideMenu.value
 }
+function toggleMobileMenu() {
+  hideMobileMenu.value = true
+}
+// Update screenWidth on window resize
+function updateScreenWidth() {
+  screenWidth.value = window.innerWidth
+  isMobile.value = screenWidth.value < breakpoint
+  setMobileScreen(isMobile.value)
+}
+
+onMounted(() => {
+  window.addEventListener('resize', updateScreenWidth)
+  setMobileScreen(isMobile.value)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateScreenWidth)
+})
 </script>
 
 <style>

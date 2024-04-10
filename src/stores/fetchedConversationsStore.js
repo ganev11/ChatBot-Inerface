@@ -31,11 +31,6 @@ export const useFetchedConversationsStore = defineStore(
           console.error('Failed to fetch conversations:', error)
         }
       }
-      //   addNewConversation(newConversation) {
-      //     // Logic to add a new conversation at the beginning
-      //     console.log('Adding a new conversation...')
-      //     this.conversations.unshift(newConversation)
-      //   }
     }
   }
 )
