@@ -161,7 +161,7 @@ function closeMenu() {
   <div
     v-show="isMobile"
     class="menu-mob"
-    :class="{ 'menu-mob-zindex5001': isMobile && isHamOpen }"
+    :class="{ 'menu-mob-zindex5010': isMobile && isHamOpen }"
   >
     <div v-show="isHamOpen" class="menu-mob-background">
       <div>
@@ -251,12 +251,15 @@ function closeMenu() {
 .x-btn {
   border: 1px solid #ffffff;
   max-height: 32px;
+  max-width: 32px;
   cursor: pointer;
-  background-color: #171717ab;
 }
 .x-wrap {
   position: relative;
+  background-color: #1717176b;
+  min-width: 100vw;
   padding: 20px;
+  z-index: 7000;
 }
 .user {
   width: 100%;
@@ -281,8 +284,8 @@ function closeMenu() {
   width: 300px !important;
   z-index: 66 !important;
 }
-.menu-mob-zindex5001 {
-  z-index: 5001 !important;
+.menu-mob-zindex5010 {
+  z-index: 5010 !important;
 }
 .menu-mob-background {
   color: white;
