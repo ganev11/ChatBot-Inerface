@@ -1,8 +1,14 @@
 <template>
   <div>
     <div v-if="modelList" class="models-btn" @click="toggleDropdown">
-      <span v-if="activeModel">
+      <span class="model-current" v-if="activeModel">
         {{ activeModel.id }}
+        <img
+          v-if="activeModel.active"
+          class="down-icon"
+          src="../assets/svg/down.svg"
+          alt=""
+        />
       </span>
     </div>
     <div class="center-drop-down">
@@ -36,9 +42,7 @@
               </div>
             </span>
 
-            <div class="model-description">
-              Great for everyday tasks. lorem ipsum
-            </div>
+            <div class="model-description">Great for everyday tasks.</div>
           </div>
         </div>
       </div>
@@ -142,6 +146,11 @@ function closeDropdown() {
   margin-right: 3px;
   opacity: 0.5;
 }
+.down-icon {
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+}
 .models-btn:hover {
   background-color: #373737;
 }
@@ -153,6 +162,10 @@ function closeDropdown() {
   left: -4%;
   top: 5px;
 }
+.model-current {
+  display: flex;
+  align-items: center;
+}
 @media (max-width: 768px) {
   .dropdown-menu {
     position: relative;
@@ -162,7 +175,7 @@ function closeDropdown() {
     justify-content: center !important;
     align-items: center;
     position: relative;
-    left: -86%;
+    left: -68%;
   }
 }
 .dropdown-menu {

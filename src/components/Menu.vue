@@ -158,10 +158,14 @@ function closeMenu() {
   </div>
   <!-- desktop end -->
   <!-- mobile start -->
+  <!-- v-if="isHamOpen" -->
   <div
     v-show="isMobile"
-    class="menu-mob"
-    :class="{ 'menu-mob-zindex5010': isMobile && isHamOpen }"
+    class="menu-mob-close"
+    :class="{
+      'menu-mob-zindex5010': isMobile && isHamOpen,
+      'menu-mob': isMobile && isHamOpen
+    }"
   >
     <div v-show="isHamOpen" class="menu-mob-background">
       <div>
@@ -282,6 +286,13 @@ function closeMenu() {
   height: 100vh !important;
   position: fixed;
   width: 300px !important;
+  z-index: 66 !important;
+}
+.menu-mob-close {
+  display: flex;
+  height: 100vh !important;
+  position: fixed;
+  width: 1px !important;
   z-index: 66 !important;
 }
 .menu-mob-zindex5010 {
