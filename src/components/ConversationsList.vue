@@ -137,7 +137,7 @@ const olderConversations = computed(() => {
   background-color: #2e2e2e;
 }
 
-.dots-position {
+/* .dots-position {
   position: absolute;
   right: 10px;
   top: 50%;
@@ -146,7 +146,7 @@ const olderConversations = computed(() => {
 }
 .dots-position:hover {
   opacity: 0.5;
-}
+} */
 .gradient {
   position: absolute;
   left: 150px;

@@ -7,7 +7,7 @@
       class="convo"
       v-for="conversation in conversations"
       :key="conversation.id"
-      @click="handleClick(conversation)"
+      @click="handleClick(conversation, $event)"
     >
       {{ conversation.title }}
       <!-- {{ formatUpdateTime(conversation.update_time) }} -->
@@ -15,48 +15,45 @@
       <div class="gradient-end"></div>
       <div class="gradient-hover"></div>
       <div class="gradient-end-hover">
-        <div
-          class="convo-icon"
-          @click="toggleDropdown(conversation.id, $event)"
-        >
+        <div class="convo-icon" @click="openDropDown(conversation.id, $event)">
           <img class="dots-position" src="./../assets/dots.svg" alt="" />
         </div>
       </div>
-      <Teleport to=".conversations">
-        <div
-          class="dropdown-menu"
-          :style="dropdownStyle"
-          v-if="openMenuId === conversation.id"
-        >
-          <button
-            class="delete-btn dropdown-item"
-            @click="handleDeleteConversation(conversation)"
-          >
-            <img class="delete-icon" src="../assets/svg/delete.svg" />
-            Delete chat
-          </button>
-        </div>
-        <div
-          v-if="openMenuId === conversation.id"
-          class="overlay"
-          @click="closeDropdown()"
-        ></div>
-      </Teleport>
     </div>
   </div>
+  <!-- DropdownMenu component -->
+  <DropdownMenu
+    v-if="isDropdownOpen"
+    :id="selectedConversationId"
+    :clickX="dropdownPosition.x"
+    :clickY="dropdownPosition.y"
+  >
+    <!-- Pass dropdown content as slot, or define it here directly -->
+    <button
+      class="delete-btn dropdown-item"
+      @click="handleDeleteConversation(selectedConversationId)"
+    >
+      <img class="delete-icon" src="../assets/svg/delete.svg" />
+      Delete chat
+    </button>
+  </DropdownMenu>
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue'
+import { defineProps, watch, ref } from 'vue'
 import BaseModal from './BaseModal.vue'
+import DropdownMenu from './DropdownMenu.vue'
+
 import { useBaseModalStore } from './../stores/baseModalStore'
 import { useDeleteConversation } from './../composables/useDeleteConversation'
-import { useFetchedConversationsStore } from '../stores/fetchedConversationsStore' // Adjust the path as necessary
+import { useFetchedConversationsStore } from '../stores/fetchedConversationsStore'
 
 import { useConversationStore } from '../stores/conversationStore'
 import { useModelsStore } from '../stores/modelsStore'
+import { useMobileMenuStore } from '../stores/mobileMenuStore'
 
 const modelsStore = useModelsStore()
+const mobileMenu = useMobileMenuStore()
 const conversationStore = useConversationStore()
 const modalStore = useBaseModalStore()
 const { deleteConversation } = useDeleteConversation()
@@ -67,7 +64,23 @@ const props = defineProps({
   periodName: String,
   conversations: Array
 })
-
+const isDropdownOpen = ref(false)
+const dropdownPosition = ref({ x: 0, y: 0 })
+const selectedConversationId = ref(null)
+const openDropDown = (id, event) => {
+  event.stopPropagation()
+  isDropdownOpen.value = true
+  selectedConversationId.value = id
+  dropdownPosition.value = { x: event.clientX, y: event.clientY }
+}
+watch(
+  () => mobileMenu.isMobileScreen,
+  (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      isDropdownOpen.value = false
+    }
+  }
+)
 const handleDeleteConversation = conversation => {
   modalStore.setModalSettings({
     title: 'Delete chat?',
@@ -98,7 +111,8 @@ const handleDeleteConversation = conversation => {
   closeDropdown() // Close any open dropdown, if necessary
 }
 
-function handleClick(conversation) {
+function handleClick(conversation, event) {
+  event.stopPropagation() // Prevent the click event from bubbling up
   // Access ongoingResponse from conversationStore
   const { ongoingResponse } = conversationStore
 
@@ -131,23 +145,49 @@ const closeDropdown = () => {
 const dropdownStyle = ref({}) // For dynamic positioning
 
 // Adjusted toggleDropdown to accept event
-const toggleDropdown = (id, event) => {
-  console.log('event :>> ', event)
-  const clickX = event.clientX
-  const clickY = event.clientY
-  if (openMenuId.value === id) {
-    openMenuId.value = null
-  } else {
-    openMenuId.value = id
-    // Calculate position
-    const bounds = event.target.getBoundingClientRect()
-    dropdownStyle.value = {
-      position: 'absolute',
-      top: `${20 + clickY}px`,
-      left: `${-10 + clickX}px`
-    }
-  }
-}
+// const openDropDown = (id, event) => {
+//   event.stopPropagation() // Prevent click from bubbling up
+
+//   // If the dropdown is already open for the current conversation, close it
+//   if (openMenuId.value === id) {
+//     openMenuId.value = null
+//   } else {
+//     openMenuId.value = id // Open the dropdown for the clicked conversation
+
+//     // Get the position of the conversation item to position the dropdown
+//     const conversationElement = event.currentTarget.closest('.convo')
+//     if (conversationElement) {
+//       const conversationRect = conversationElement.getBoundingClientRect()
+
+//       // Assuming you want the dropdown to appear right below the conversation element,
+//       // you might want to adjust the 'top' property accordingly
+//       dropdownStyle.value = {
+//         position: 'absolute',
+//         top: `${conversationRect.bottom + window.scrollY}px`, // Adjust `+ window.scrollY` if your dropdown is in a scrollable container
+//         left: `${conversationRect.left + window.scrollX}px`, // Adjust `+ window.scrollX` if your dropdown is in a scrollable container
+//         zIndex: 8000 // Ensure it's above other elements
+//       }
+//     }
+//   }
+// }
+
+// console.log('openMenuId.value :>> ', openMenuId.value)
+// console.log('id :>> ', id)
+// const clickX = event.clientX
+// const clickY = event.clientY
+// if (openMenuId.value === id) {
+//   openMenuId.value = null
+// } else {
+//   openMenuId.value = id
+//   // Calculate position
+//   const bounds = event.target.getBoundingClientRect()
+//   dropdownStyle.value = {
+//     position: 'absolute',
+//     top: `${20 + clickY}px`,
+//     left: `${-10 + clickX}px`,
+//     zIndex: 8000
+//   }
+// }
 </script>
 
 <style scoped>
@@ -183,6 +223,7 @@ const toggleDropdown = (id, event) => {
   top: 50%;
   transform: translateY(-50%);
   max-width: 20px;
+  z-index: 8010;
 }
 .dots-position:hover {
   opacity: 0.5;
@@ -304,7 +345,7 @@ const toggleDropdown = (id, event) => {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0); /* Semi-transparent for demonstration */
-  z-index: 10; /* Adjust based on your layout */
+  z-index: 7500; /* Adjust based on your layout */
 }
 
 .dropdown-menu {
