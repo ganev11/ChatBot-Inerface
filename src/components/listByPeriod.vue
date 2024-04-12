@@ -69,11 +69,20 @@ const isDropdownOpen = ref(false)
 const dropdownPosition = ref({ x: 0, y: 0 })
 const selectedConversationId = ref(null)
 const openDropDown = (id, event) => {
-  event.stopPropagation()
-  isDropdownOpen.value = true
-  selectedConversationId.value = id
-  dropdownPosition.value = { x: event.clientX, y: event.clientY }
+  event.stopPropagation() // Prevent the click from bubbling up to parent elements
+  isDropdownOpen.value = true // Open the dropdown
+  selectedConversationId.value = id // Store the ID of the conversation for which the dropdown is opened
+
+  // Get the bounding rectangle of the target element
+  const targetRect = event.currentTarget.getBoundingClientRect()
+
+  // Set the dropdown position to the bottom left corner of the target element
+  dropdownPosition.value = {
+    x: targetRect.left + window.scrollX + 20, // x position is the left of the element
+    y: targetRect.bottom + window.scrollY + 5 // y position is the bottom of the element
+  }
 }
+
 watch(
   () => mobileMenu.isMobileScreen,
   (newValue, oldValue) => {
@@ -140,57 +149,6 @@ function handleClick(conversation, event) {
       console.error('Error fetching specific conversation:', error)
     })
 }
-
-// const closeDropdown = () => {
-//   openMenuId.value = null
-// }
-
-// const dropdownStyle = ref({}) // For dynamic positioning
-
-// Adjusted toggleDropdown to accept event
-// const openDropDown = (id, event) => {
-//   event.stopPropagation() // Prevent click from bubbling up
-
-//   // If the dropdown is already open for the current conversation, close it
-//   if (openMenuId.value === id) {
-//     openMenuId.value = null
-//   } else {
-//     openMenuId.value = id // Open the dropdown for the clicked conversation
-
-//     // Get the position of the conversation item to position the dropdown
-//     const conversationElement = event.currentTarget.closest('.convo')
-//     if (conversationElement) {
-//       const conversationRect = conversationElement.getBoundingClientRect()
-
-//       // Assuming you want the dropdown to appear right below the conversation element,
-//       // you might want to adjust the 'top' property accordingly
-//       dropdownStyle.value = {
-//         position: 'absolute',
-//         top: `${conversationRect.bottom + window.scrollY}px`, // Adjust `+ window.scrollY` if your dropdown is in a scrollable container
-//         left: `${conversationRect.left + window.scrollX}px`, // Adjust `+ window.scrollX` if your dropdown is in a scrollable container
-//         zIndex: 8000 // Ensure it's above other elements
-//       }
-//     }
-//   }
-// }
-
-// console.log('openMenuId.value :>> ', openMenuId.value)
-// console.log('id :>> ', id)
-// const clickX = event.clientX
-// const clickY = event.clientY
-// if (openMenuId.value === id) {
-//   openMenuId.value = null
-// } else {
-//   openMenuId.value = id
-//   // Calculate position
-//   const bounds = event.target.getBoundingClientRect()
-//   dropdownStyle.value = {
-//     position: 'absolute',
-//     top: `${20 + clickY}px`,
-//     left: `${-10 + clickX}px`,
-//     zIndex: 8000
-//   }
-// }
 </script>
 
 <style scoped>
