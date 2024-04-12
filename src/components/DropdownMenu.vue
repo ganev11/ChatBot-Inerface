@@ -39,7 +39,7 @@ const dropdownStyle = computed(() => ({
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(50, 50, 50, 0.427);
+  background-color: rgba(50, 50, 50, 0);
   z-index: 7500; /* Adjust based on your layout */
 }
 .dropdown-menu {

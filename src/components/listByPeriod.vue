@@ -59,7 +59,7 @@ const conversationStore = useConversationStore()
 const modalStore = useBaseModalStore()
 const { deleteConversation } = useDeleteConversation()
 
-const openMenuId = ref(null)
+// const openMenuId = ref(null)
 
 const props = defineProps({
   periodName: String,

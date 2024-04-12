@@ -4,8 +4,10 @@ import ConversationsList from './ConversationsList.vue'
 import { useUser } from '../composables/user.js'
 import { useFetchedConversationsStore } from '../stores/fetchedConversationsStore'
 import { useConversationStore } from '../stores/conversationStore'
+import { watchEffect } from 'vue'
 
-const conversationsContainer = ref(null)
+const conversationsContainer1 = ref(null)
+const conversationsContainer2 = ref(null)
 const user = ref(null)
 const { fetchUser } = useUser()
 const fetchedConversationsStore = useFetchedConversationsStore() // For fetching and initial conversation management
@@ -37,10 +39,10 @@ function logout() {
   closeUserDropdown()
 }
 
-const checkScroll = () => {
-  if (conversationsContainer.value) {
-    const { scrollTop, scrollHeight, clientHeight } =
-      conversationsContainer.value
+const checkScroll = container => {
+  console.log('checkScroll')
+  if (container) {
+    const { scrollTop, scrollHeight, clientHeight } = container
     if (scrollTop + clientHeight >= scrollHeight - 5) {
       fetchedConversationsStore.fetchConversations()
     }
@@ -65,16 +67,23 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to load user details:', error)
   }
-  if (conversationsContainer.value) {
-    conversationsContainer.value.addEventListener('scroll', checkScroll)
-  }
+  ;[conversationsContainer1.value, conversationsContainer2.value].forEach(
+    container => {
+      if (container) {
+        container.addEventListener('scroll', () => checkScroll(container))
+      }
+    }
+  )
 })
 onUnmounted(() => {
-  window.removeEventListener('resize', updateScreenWidth)
-
-  if (conversationsContainer.value) {
-    conversationsContainer.value.removeEventListener('scroll', checkScroll)
-  }
+  window.removeEventListener('resize', updateScreenWidth)[
+    // Remove scroll event listeners from both containers
+    (conversationsContainer1.value, conversationsContainer2.value)
+  ].forEach(container => {
+    if (container) {
+      container.removeEventListener('scroll', checkScroll)
+    }
+  })
 })
 const emit = defineEmits(['menu-toggle'])
 function toggleMenu() {
@@ -97,6 +106,27 @@ function closeMenu() {
   mobileMenu.setHamMenuOpen(false)
 }
 // Hambuger menu end
+
+watchEffect(() => {
+  // Clean up old listeners if any
+  if (conversationsContainer1.value) {
+    conversationsContainer1.value.removeEventListener('scroll', checkScroll)
+  }
+  if (conversationsContainer2.value) {
+    conversationsContainer2.value.removeEventListener('scroll', checkScroll)
+  }
+
+  // Add new listeners based on current visibility and need
+  if (!isMobile.value && conversationsContainer1.value) {
+    conversationsContainer1.value.addEventListener('scroll', () =>
+      checkScroll(conversationsContainer1.value)
+    )
+  } else if (isMobile.value && conversationsContainer2.value) {
+    conversationsContainer2.value.addEventListener('scroll', () =>
+      checkScroll(conversationsContainer2.value)
+    )
+  }
+})
 </script>
 
 <template>
@@ -117,7 +147,7 @@ function closeMenu() {
           <img class="edit-icon" src="../assets/svg/edit.svg" alt="" />
         </div>
         <!-- history -->
-        <div class="conversations" ref="conversationsContainer">
+        <div class="conversations" ref="conversationsContainer1">
           <ConversationsList
             :conversations="fetchedConversationsStore.conversations"
           />
@@ -173,7 +203,7 @@ function closeMenu() {
           <img class="edit-icon" src="../assets/svg/edit.svg" alt="" />
         </div>
         <!-- history -->
-        <div class="conversations" ref="conversationsContainer">
+        <div class="conversations" ref="conversationsContainer2">
           <ConversationsList
             :conversations="fetchedConversationsStore.conversations"
           />
