@@ -250,7 +250,7 @@ function handleClick(conversation, event) {
   bottom: 0px;
   height: 37px;
   left: 150px;
-  width: 85px;
+  width: 89px;
   z-index: 7000;
   border-radius: 4px;
   /* border: 1px solid #3b3b93; */
