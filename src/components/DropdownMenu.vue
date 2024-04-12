@@ -1,6 +1,7 @@
 <!-- DropdownMenu.vue -->
 <template>
   <teleport to="#app">
+    <div class="overlay" @click="closeDropdown"></div>
     <div class="dropdown-menu" :style="dropdownStyle">
       <!-- Your dropdown content here -->
       <slot></slot>
@@ -17,6 +18,12 @@ const props = defineProps({
   clickY: Number
 })
 
+const emits = defineEmits(['close'])
+
+function closeDropdown() {
+  emits('close')
+}
+
 const dropdownStyle = computed(() => ({
   position: 'absolute',
   top: `${props.clickY}px`,
@@ -26,12 +33,22 @@ const dropdownStyle = computed(() => ({
 </script>
 
 <style scoped>
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(50, 50, 50, 0.427);
+  z-index: 7500; /* Adjust based on your layout */
+}
 .dropdown-menu {
   position: absolute;
   padding: 8px;
   z-index: 8000; /* Ensure it's above other items */
   right: 0;
   min-width: 180px;
+  max-width: 200px;
   top: 100%; /* Position it directly below the dots */
   background-color: #333; /* Dark grey background */
   border: 1px solid rgb(103, 103, 103); /* Light grey border */

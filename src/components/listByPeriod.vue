@@ -27,6 +27,7 @@
     :id="selectedConversationId"
     :clickX="dropdownPosition.x"
     :clickY="dropdownPosition.y"
+    @close="closeDropdown"
   >
     <!-- Pass dropdown content as slot, or define it here directly -->
     <button
@@ -110,7 +111,9 @@ const handleDeleteConversation = conversation => {
   modalStore.openModal() // Open the modal for user confirmation
   closeDropdown() // Close any open dropdown, if necessary
 }
-
+function closeDropdown() {
+  isDropdownOpen.value = false
+}
 function handleClick(conversation, event) {
   event.stopPropagation() // Prevent the click event from bubbling up
   // Access ongoingResponse from conversationStore
@@ -138,11 +141,11 @@ function handleClick(conversation, event) {
     })
 }
 
-const closeDropdown = () => {
-  openMenuId.value = null
-}
+// const closeDropdown = () => {
+//   openMenuId.value = null
+// }
 
-const dropdownStyle = ref({}) // For dynamic positioning
+// const dropdownStyle = ref({}) // For dynamic positioning
 
 // Adjusted toggleDropdown to accept event
 // const openDropDown = (id, event) => {
