@@ -147,8 +147,8 @@ function closeDropdown() {
   opacity: 0.5;
 }
 .down-icon {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   margin-left: 5px;
 }
 .models-btn:hover {
