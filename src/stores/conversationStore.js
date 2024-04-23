@@ -6,6 +6,7 @@ import { useFetchedConversationsStore } from './fetchedConversationsStore' // Ad
 
 export const useConversationStore = defineStore('conversation', {
   state: () => ({
+    conversationIsRunning: false,
     // Initialize the conversation data as an array to hold message objects
     conversation: {},
     // Control visibility of the initial chat window
@@ -18,6 +19,9 @@ export const useConversationStore = defineStore('conversation', {
     lastId: 0 // Counter for generating IDs
   }),
   actions: {
+    setConversationIsRunning(value) {
+      this.conversationIsRunning = value
+    },
     // generateId() {
     //   this.lastId += 1 // Increment the ID
     //   return `msg_${this.lastId}` // Return a string ID, e.g., "msg_1"

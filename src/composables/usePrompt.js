@@ -8,6 +8,7 @@ export function useSendPrompt() {
   const sendPrompt = async promptData => {
     try {
       // Store the prompt data as the current prompt in the store
+      conversationStore.setConversationIsRunning(true)
       conversationStore.setCurrentPrompt(promptData)
 
       // Find the active model from the models store
@@ -48,6 +49,7 @@ export function useSendPrompt() {
         if (done) {
           console.log('Stream finished')
           conversationStore.finalizeStream()
+          conversationStore.setConversationIsRunning(false)
           return
         }
 

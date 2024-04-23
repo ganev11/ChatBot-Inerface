@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, defineProps } from 'vue'
+import { ref, computed, defineProps, onMounted, onUnmounted, watch } from 'vue'
 import { useConversationStore } from '../stores/conversationStore' // Adjust the path as necessary
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
@@ -8,6 +8,24 @@ import DOMPurify from 'dompurify'
 const props = defineProps({
   textAreaHeight: String // Assuming textAreaHeight is a string like '100px'
 })
+
+// Ref to the chat container
+const bottomLine = ref(null)
+const didUserScrollManually = ref(false)
+
+// Function to programmatically scroll to the bottom
+function scrollToBottom() {
+  if (didUserScrollManually.value) {
+    return
+  } else {
+    const element = bottomLine.value
+    const y = element.getBoundingClientRect().top + window.scrollY
+    window.scroll({
+      top: y,
+      behavior: 'smooth'
+    })
+  }
+}
 
 const markedTextMargin = '28px'
 
@@ -23,6 +41,10 @@ const currentPrompt = computed(() => conversationStore.currentPrompt)
 // Computed property for ongoingResponse
 const ongoingResponse = computed(() => conversationStore.ongoingResponse)
 
+// Watch for changes on conversationIsRunning
+watch(ongoingResponse, (newVal, oldVal) => {
+  scrollToBottom()
+})
 // Computed property to process markdown in conversations and differentiate by role
 const processedConversations = computed(() => {
   // Convert the conversations object into an array of its values
@@ -37,11 +59,42 @@ const processedConversations = computed(() => {
       convo.message.author.role === 'user' ? 'user-message' : 'server-message'
   }))
 })
+
+// Function to handle user scroll interactions
+const handleScroll = () => {
+  const scrollTop = window.scrollY
+  const windowHeight = window.innerHeight
+  const documentHeight = document.documentElement.scrollHeight
+
+  // Check if the user has scrolled to the bottomLine element
+  if (bottomLine.value) {
+    const bottomLinePosition =
+      bottomLine.value.getBoundingClientRect().top + window.scrollY
+    if (windowHeight + scrollTop >= bottomLinePosition) {
+      didUserScrollManually.value = false
+    } else {
+      didUserScrollManually.value = true
+    }
+  }
+}
+// Add and remove the scroll event listener
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  if (bottomLine.value) {
+    window.removeEventListener('scroll', handleScroll)
+  }
+})
 </script>
 
 <template>
   <div class="chat" :style="{ paddingBottom: textAreaHeight }">
-    <!-- Existing messages -->
+    <!-- did user scroll manually? -->
+    <!-- <div class="ssss">
+      {{ didUserScrollManually }}
+    </div> -->
     <div
       v-for="convo in processedConversations"
       :key="convo.id"
@@ -52,6 +105,7 @@ const processedConversations = computed(() => {
         <img src="../assets/svg/user.svg" class="icon-user" alt="" />
         You</Span
       >
+
       <Span v-if="convo.author === 'assistant'" class="message-owner">
         <img src="../assets/imgs/sst.jpg" class="icon-chat" alt="" />
         Server</Span
@@ -60,6 +114,7 @@ const processedConversations = computed(() => {
       <div v-html="convo.content" class="massage-margin"></div>
     </div>
     <!-- Display currentPrompt if it exists -->
+
     <div v-if="currentPrompt" class="message user-message">
       <Span class="message-owner">
         <img src="../assets/svg/user.svg" class="icon-user" alt="" />
@@ -72,7 +127,6 @@ const processedConversations = computed(() => {
         v-html="DOMPurify.sanitize(marked(currentPrompt))"
       ></div>
     </div>
-
     <!-- Display ongoingResponse if it exists -->
     <div v-if="ongoingResponse" class="message server-message">
       <Span class="message-owner">
@@ -85,6 +139,7 @@ const processedConversations = computed(() => {
         v-html="DOMPurify.sanitize(marked(ongoingResponse))"
       ></div>
     </div>
+    <div ref="bottomLine"></div>
   </div>
 </template>
 
@@ -116,6 +171,10 @@ const processedConversations = computed(() => {
   justify-content: space-between;
   z-index: 5000;
 }
+.ssss {
+  position: fixed;
+  background-color: red;
+}
 .background-chat {
   color: rgba(255, 255, 255, 0);
   background-color: #212121;
@@ -129,6 +188,7 @@ const processedConversations = computed(() => {
   align-items: center;
   gap: 15px;
 }
+
 .icon-chat {
   width: 20px;
   height: 20px;
