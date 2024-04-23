@@ -24,7 +24,7 @@ export function useHistory() {
       return items // This is now a single array of objects
     } catch (error) {
       console.error('Error fetching old conversations:', error)
-      throw error // or handle it as needed
+      // throw error // or handle it as needed
     }
   }
 

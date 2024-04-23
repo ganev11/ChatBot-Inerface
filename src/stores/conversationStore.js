@@ -13,15 +13,17 @@ export const useConversationStore = defineStore('conversation', {
     // State to hold the current prompt text
     currentPrompt: '',
     // State to hold the ongoing response text that's built from streamed data
+    currentConversationId: '',
     ongoingResponse: '',
     lastId: 0 // Counter for generating IDs
   }),
   actions: {
-    generateId() {
-      this.lastId += 1 // Increment the ID
-      return `msg_${this.lastId}` // Return a string ID, e.g., "msg_1"
-    },
+    // generateId() {
+    //   this.lastId += 1 // Increment the ID
+    //   return `msg_${this.lastId}` // Return a string ID, e.g., "msg_1"
+    // },
     async loadSpecificConversation(conversationId) {
+      this.currentConversationId = conversationId
       const { fetchSpecificConversation } = useSpecificConversation()
 
       try {
@@ -47,6 +49,7 @@ export const useConversationStore = defineStore('conversation', {
     setCurrentPrompt(prompt) {
       // Set the currentPrompt state with the new prompt
       this.currentPrompt = prompt
+      this.ongoingResponse = ' '
       this.initialWindow = false
     },
     appendToOngoingResponse(streamedData) {
@@ -58,7 +61,7 @@ export const useConversationStore = defineStore('conversation', {
 
         // Parse the remaining string as JSON
         const parsedData = JSON.parse(jsonData)
-
+        this.currentConversationId = parsedData.conversation_id
         // Check if the parsed object contains the necessary properties
         if (
           parsedData &&
@@ -80,8 +83,10 @@ export const useConversationStore = defineStore('conversation', {
       fetchedConversationsStore.fetchConversations(true)
       // }
 
-      const promptId = this.generateId() // Use the generateId method to get a new ID
-      const responseId = this.generateId()
+      // const promptId = this.generateId() // Use the generateId method to get a new ID
+      // const responseId = this.generateId()
+      const promptId = this.currentConversationId // Use the generateId method to get a new ID
+      const responseId = this.currentConversationId
 
       const promptObj = {
         [promptId]: {

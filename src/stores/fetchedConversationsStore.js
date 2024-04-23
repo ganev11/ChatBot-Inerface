@@ -7,7 +7,20 @@ export const useFetchedConversationsStore = defineStore(
   'fetchedConversations',
   {
     state: () => ({
-      conversations: [],
+      conversations: [
+        {
+          conversation_template_id: null,
+          create_time: new Date().toISOString(),
+          current_node: null,
+          gizmo_id: null,
+          id: 'default12345678',
+          is_archived: false,
+          mapping: null,
+          title: 'New Conversation',
+          update_time: new Date().toISOString(),
+          workspace_id: null
+        }
+      ],
       offset: 0,
       limit: 15
     }),

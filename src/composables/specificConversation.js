@@ -11,11 +11,8 @@ export function useSpecificConversation() {
         }
       )
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch conversations')
-      }
-
       const data = await response.json()
+      console.log('fetchSpecificConversation :>> ', data)
       return data
     } catch (error) {
       console.error('Error fetching old conversations:', error)

@@ -3,7 +3,7 @@ export function useModels() {
   const fetchModels = async () => {
     try {
       const response = await fetch(
-        'http://127.0.0.1:5500/v1/models', // Updated URL to fetch models
+        'https://chat.sstrader.com/api/v1/models', // Updated URL to fetch models
         {
           method: 'GET',
           headers: {
