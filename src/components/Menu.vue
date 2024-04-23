@@ -190,8 +190,10 @@ watchEffect(() => {
   <!-- mobile start -->
   <div
     v-show="isMobile"
-    class="menu-mob"
-    :class="{ 'menu-mob-zindex5010': isMobile && isHamOpen }"
+    :class="{
+      'menu-mob-zindex5010': isMobile && isHamOpen,
+      'menu-mob': isMobile && isHamOpen
+    }"
   >
     <div v-show="isHamOpen" class="menu-mob-background">
       <div>
