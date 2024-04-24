@@ -22,10 +22,10 @@ export const useConversationStore = defineStore('conversation', {
     setConversationIsRunning(value) {
       this.conversationIsRunning = value
     },
-    // generateId() {
-    //   this.lastId += 1 // Increment the ID
-    //   return `msg_${this.lastId}` // Return a string ID, e.g., "msg_1"
-    // },
+    generateId() {
+      this.lastId += 1 // Increment the ID
+      return `msg_${this.lastId}` // Return a string ID, e.g., "msg_1"
+    },
     async loadSpecificConversation(conversationId) {
       this.currentConversationId = conversationId
       const { fetchSpecificConversation } = useSpecificConversation()
@@ -81,16 +81,17 @@ export const useConversationStore = defineStore('conversation', {
       }
     },
     finalizeStream() {
+      console.log('finalizeStream')
       // if (this.lastId === 0) {
       // load the fetched conversations again to update the list
       const fetchedConversationsStore = useFetchedConversationsStore()
       fetchedConversationsStore.fetchConversations(true)
       // }
 
-      // const promptId = this.generateId() // Use the generateId method to get a new ID
-      // const responseId = this.generateId()
-      const promptId = this.currentConversationId // Use the generateId method to get a new ID
-      const responseId = this.currentConversationId
+      const promptId = this.generateId() // Use the generateId method to get a new ID
+      const responseId = this.generateId()
+      // const promptId = this.currentConversationId // Use the generateId method to get a new ID
+      // const responseId = this.currentConversationId
 
       const promptObj = {
         [promptId]: {
@@ -119,8 +120,9 @@ export const useConversationStore = defineStore('conversation', {
           children: []
         }
       }
-
+      console.log('12345 :>> ', this.conversation)
       this.conversation = { ...this.conversation, ...promptObj, ...responseObj }
+      console.log('54321 :>> ', this.conversation)
       this.currentPrompt = ''
       this.ongoingResponse = ''
     }

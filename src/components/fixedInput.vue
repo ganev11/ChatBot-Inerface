@@ -39,6 +39,13 @@ watch(inputText, () => {
 onMounted(() => {
   adjustTextAreaHeight()
 })
+
+const handleKeydown = event => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault() // Prevent default to avoid a new line
+    sendMessage()
+  }
+}
 </script>
 
 <template>
@@ -53,6 +60,7 @@ onMounted(() => {
           class="input-bar"
           placeholder="Message ChatGPT…"
           v-model="inputText"
+          @keydown="handleKeydown"
           wrap="hard"
           :style="{ height: textAreaHeight }"
         />
