@@ -118,18 +118,14 @@ onUnmounted(() => {
 
         <!-- user Info fixed -->
         <div class="user" v-if="user" @click="toggleUserDropdown">
-          <img class="user-icon" src="../assets/svg/user.svg" alt="" />
+          <img class="user-icon" :src="user.picture" alt="" />
+
           {{ user.name }}
         </div>
         <div v-if="isUserDropdownOpen" class="dropdown-menu user-dropdown-menu">
           <div class="responsivity-wrapper">
             <div class="dropdown-item" @click="openSettings">
-              <img
-                class="setting-icon"
-                src="../assets/svg/settings.svg"
-                alt=""
-              />
-              Settings
+              <img class="setting-icon" :src="user.picture alt="" /> Settings
             </div>
             <div class="dropdown-item" @click="logout">
               <img class="logout-icon" src="../assets/svg/logout.svg" alt="" />

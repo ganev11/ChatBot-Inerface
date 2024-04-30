@@ -155,7 +155,7 @@ watchEffect(() => {
 
         <!-- user Info fixed -->
         <div class="user" v-if="user" @click="toggleUserDropdown">
-          <img class="user-icon" src="../assets/svg/user.svg" alt="" />
+          <img class="user-icon" :src="user.picture" alt="" />
           {{ user.name }}
         </div>
         <div v-if="isUserDropdownOpen" class="dropdown-menu user-dropdown-menu">
@@ -213,7 +213,7 @@ watchEffect(() => {
 
         <!-- user Info fixed -->
         <div class="user" v-if="user" @click="toggleUserDropdown">
-          <img class="user-icon" src="../assets/svg/user.svg" alt="" />
+          <img class="user-icon" :src="user.picture" alt="" />
           {{ user.name }}
         </div>
         <div v-if="isUserDropdownOpen" class="dropdown-menu user-dropdown-menu">
@@ -253,6 +253,7 @@ watchEffect(() => {
 .user-icon {
   width: 32px !important;
   height: 32px !important;
+  border-radius: 50%;
 }
 .edit-icon {
   margin: 0 !important;

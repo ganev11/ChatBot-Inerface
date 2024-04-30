@@ -95,7 +95,7 @@ onUnmounted(() => {
 
         <!-- user Info fixed -->
         <div class="user" v-if="user" @click="toggleUserDropdown">
-          <img class="edit-icon" src="../assets/svg/user.svg" alt="" />
+          <img class="edit-icon" :src="user.picture" alt="" />
           {{ user.name }}
         </div>
         <div v-if="isUserDropdownOpen" class="dropdown-menu user-dropdown-menu">
