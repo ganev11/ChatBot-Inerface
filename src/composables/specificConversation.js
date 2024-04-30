@@ -2,7 +2,9 @@ export function useSpecificConversation() {
   const fetchSpecificConversation = async conversationId => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:5500/v1/chat/conversation/${conversationId}`,
+        // `http://127.0.0.1:5500/v1/chat/conversation/${conversationId}`,
+        `https://chat.sstrader.com/api/v1/chat/conversation/${conversationId}`,
+
         {
           method: 'GET',
           headers: {

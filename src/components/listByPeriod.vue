@@ -124,6 +124,9 @@ function closeDropdown() {
   isDropdownOpen.value = false
 }
 function handleClick(conversation, event) {
+  console.log('conversation :>> ', conversation)
+  console.log('event :>> ', event)
+
   event.stopPropagation() // Prevent the click event from bubbling up
   // Access ongoingResponse from conversationStore
   const { ongoingResponse } = conversationStore

@@ -3,7 +3,8 @@ export function useInitialPrompts() {
   const fetchInitialPrompts = async () => {
     try {
       const response = await fetch(
-        'http://127.0.0.1:5500/v1/prompt_library/', // URL to fetch initial prompts
+        // 'http://127.0.0.1:5500/v1/prompt_library/', // URL to fetch initial prompts
+        'https://chat.sstrader.com/api/v1/prompt_library', // URL to fetch initial prompts
         {
           method: 'GET',
           headers: {

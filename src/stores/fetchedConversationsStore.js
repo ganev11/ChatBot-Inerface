@@ -7,20 +7,7 @@ export const useFetchedConversationsStore = defineStore(
   'fetchedConversations',
   {
     state: () => ({
-      conversations: [
-        {
-          conversation_template_id: null,
-          create_time: new Date().toISOString(),
-          current_node: null,
-          gizmo_id: null,
-          id: 'default12345678',
-          is_archived: false,
-          mapping: null,
-          title: 'New Conversation',
-          update_time: new Date().toISOString(),
-          workspace_id: null
-        }
-      ],
+      conversations: [],
       offset: 0,
       limit: 15
     }),
@@ -29,8 +16,8 @@ export const useFetchedConversationsStore = defineStore(
         if (initial) {
           this.offset = 0
         }
-        console.log('fetchinainitial :>> ', initial)
-        const { fetchOldConversations } = useHistory() // Use the composable
+        console.log('fetching initial:', initial)
+        const { fetchOldConversations } = useHistory()
         try {
           const data = await fetchOldConversations(this.offset, this.limit)
           if (initial) {
