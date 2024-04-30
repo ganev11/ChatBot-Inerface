@@ -38,10 +38,10 @@ export function useUser() {
 
       if (response.ok) {
         const userData = await response.json()
-        const sessionId = userData.session.id // Assuming session ID is available in the 'session' object
+        const sessionId = userData.session.id
 
         // Use the obtained session ID as the bearer token for subsequent API calls
-        const userResponse = await fetch('https://chat.sstrader.com/me', {
+        const userResponse = await fetch('https://auth.sstrader.com/api/me', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${sessionId}` // Use the session ID as the bearer token
