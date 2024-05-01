@@ -36,6 +36,8 @@
 import locStorage from '../services/local-storage'
 
 export function useUser() {
+  console.log('sessionId :>> ')
+
   // Function to fetch user details
   const fetchUser = async () => {
     try {
@@ -48,7 +50,7 @@ export function useUser() {
       // const response = await fetch('https://auth.sstrader.com/api/me', {
       //   method: 'GET',
       //   headers: {
-      //     Authorization: 'Bearer 5F55d2F288CECf743cB94BdbfE177D74'
+      //     Authorization: 'Bearer 852a6CE16BACAb70DAfbD5dDD985A1eB'
       //   }
       // })
 
@@ -64,7 +66,7 @@ export function useUser() {
 
       const userData = await response.json()
       const sessionId = userData.session.id
-
+      console.log('sessionId :>> ', sessionId)
       // Save the session ID into local storage
       locStorage.setItem('sessionId', sessionId)
 

@@ -17,7 +17,7 @@
 import Menu from './components/Menu.vue'
 import ChatWindow from './components/ChatWindow.vue'
 import { useMobileMenuStore } from './stores/mobileMenuStore'
-
+import { useUser } from '../src/composables/user.js' // Import your useUser hook
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const hideMenu = ref(false)
@@ -49,6 +49,10 @@ function updateScreenWidth() {
 onMounted(() => {
   window.addEventListener('resize', updateScreenWidth)
   setMobileScreen(isMobile.value)
+
+  // Fetch user details and set session ID to local storage
+  const { fetchUser } = useUser()
+  fetchUser()
 })
 
 onUnmounted(() => {

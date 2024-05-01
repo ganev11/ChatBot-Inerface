@@ -64,6 +64,7 @@ onMounted(async () => {
 
   try {
     user.value = await fetchUser()
+    console.log('user.value :>> ', user.value)
   } catch (error) {
     console.error('Failed to load user details:', error)
   }
