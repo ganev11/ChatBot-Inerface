@@ -1,19 +1,22 @@
+import locStorage from '../services/local-storage'
+
 export function useInitialPrompts() {
   // Method to fetch initial prompts using Fetch API
   const fetchInitialPrompts = async () => {
     try {
+      // Retrieve the session ID from local storage
+      const sessionId = locStorage.getItem('sessionId')
+
       const response = await fetch(
-        // 'http://127.0.0.1:5500/v1/prompt_library/', // URL to fetch initial prompts
         'https://chat.sstrader.com/api/v1/prompt_library', // URL to fetch initial prompts
         {
           method: 'GET',
           headers: {
-            Authorization: 'Bearer 0d21d7c1-0cb0-4e4e-ac81-82d562aa3566' // Assuming the same authorization token is required
+            Authorization: `Bearer ${sessionId}` // Use the session ID as the bearer token
           }
         }
       )
-      // Uncomment the next line to see the response in the console
-      // console.log('response fetchInitialPrompts:>> ', response);
+
       if (!response.ok) {
         throw new Error('Failed to fetch initial prompts')
       }

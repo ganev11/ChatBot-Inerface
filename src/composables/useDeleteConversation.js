@@ -1,14 +1,18 @@
-// useDeleteConversation.js
+import locStorage from '../services/local-storage'
+
 export function useDeleteConversation() {
   const deleteConversation = async conversationId => {
     console.log('deleteConversation conversationId :>> ', conversationId)
     try {
+      // Retrieve the session ID from local storage
+      const sessionId = locStorage.getItem('sessionId')
+
       const response = await fetch(
         `http://127.0.0.1:5500/v1/chat/conversation/${conversationId}`,
         {
           method: 'PATCH', // Use DELETE method for deletion
           headers: {
-            Authorization: 'Bearer 0d21d7c1-0cb0-4e4e-ac81-82d562aa3566' // Keep the Authorization header
+            Authorization: `Bearer ${sessionId}` // Use the session ID as the bearer token
           }
           // No body needed for DELETE request
         }

@@ -1,17 +1,22 @@
+import locStorage from '../services/local-storage'
+
 export function useModels() {
   // Adjusted method to fetch models using Fetch API
   const fetchModels = async () => {
     try {
+      // Retrieve the session ID from local storage
+      const sessionId = locStorage.getItem('sessionId')
+
       const response = await fetch(
         'https://chat.sstrader.com/api/v1/models', // Updated URL to fetch models
         {
           method: 'GET',
           headers: {
-            Authorization: 'Bearer 0d21d7c1-0cb0-4e4e-ac81-82d562aa3566'
+            Authorization: `Bearer ${sessionId}` // Use the session ID as the bearer token
           }
         }
       )
-      // console.log('response fetchModels:>> ', response)
+
       if (!response.ok) {
         throw new Error('Failed to fetch models')
       }

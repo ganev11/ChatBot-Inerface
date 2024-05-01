@@ -1,3 +1,4 @@
+import locStorage from '../services/local-storage'
 import { useConversationStore } from '../stores/conversationStore' // Adjust the path as necessary
 import { useModelsStore } from '../stores/modelsStore' // Adjust the path as necessary
 
@@ -7,6 +8,9 @@ export function useSendPrompt() {
 
   const sendPrompt = async promptData => {
     try {
+      // Retrieve the session ID from local storage
+      const sessionId = locStorage.getItem('sessionId')
+
       // Store the prompt data as the current prompt in the store
       conversationStore.setConversationIsRunning(true)
       conversationStore.setCurrentPrompt(promptData)
@@ -30,7 +34,7 @@ export function useSendPrompt() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Bearer 0d21d7c1-0cb0-4e4e-ac81-82d562aa3566'
+            Authorization: `Bearer ${sessionId}` // Use the session ID as the bearer token
           },
           body: JSON.stringify(requestBody)
         }

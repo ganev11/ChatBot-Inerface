@@ -34,6 +34,7 @@
 //     fetchOldConversations // Include the updated method in the returned object
 //   }
 // }
+import locStorage from '../services/local-storage'
 
 export function useHistory() {
   const fetchOldConversations = async (offset = 0, limit = 10) => {
@@ -43,10 +44,13 @@ export function useHistory() {
       url.searchParams.append('offset', offset)
       url.searchParams.append('limit', limit)
 
+      // Retrieve the session ID from local storage
+      const sessionId = locStorage.getItem('sessionId')
+
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          Authorization: 'Bearer YOUR_ACCESS_TOKEN_HERE' // Replace with your access token
+          Authorization: `Bearer ${sessionId}` // Use the session ID as the bearer token
         }
       })
 
