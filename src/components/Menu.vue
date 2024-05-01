@@ -73,13 +73,11 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to load user details:', error)
   }
-  ;[conversationsContainer1.value, conversationsContainer2.value].forEach(
-    container => {
-      if (container) {
-        container.addEventListener('scroll', () => checkScroll(container))
-      }
+  ;[conversationsContainer1.value, conversationsContainer2.value].forEach(container => {
+    if (container) {
+      container.addEventListener('scroll', () => checkScroll(container))
     }
-  )
+  })
 })
 onUnmounted(() => {
   window.removeEventListener('resize', updateScreenWidth)[
@@ -124,13 +122,9 @@ watchEffect(() => {
 
   // Add new listeners based on current visibility and need
   if (!isMobile.value && conversationsContainer1.value) {
-    conversationsContainer1.value.addEventListener('scroll', () =>
-      checkScroll(conversationsContainer1.value)
-    )
+    conversationsContainer1.value.addEventListener('scroll', () => checkScroll(conversationsContainer1.value))
   } else if (isMobile.value && conversationsContainer2.value) {
-    conversationsContainer2.value.addEventListener('scroll', () =>
-      checkScroll(conversationsContainer2.value)
-    )
+    conversationsContainer2.value.addEventListener('scroll', () => checkScroll(conversationsContainer2.value))
   }
 })
 </script>
@@ -139,12 +133,8 @@ watchEffect(() => {
   <!-- mobile start -->
   <!-- desktop start -->
   <div class="menu" v-if="!isMobile">
-    <div
-      :class="{ 'background-menu': !hideMenu, 'background-menu-off': hideMenu }"
-    >
-      <div
-        :class="{ 'menu-content-on': !hideMenu, 'menu-content-off': hideMenu }"
-      >
+    <div :class="{ 'background-menu': !hideMenu, 'background-menu-off': hideMenu }">
+      <div :class="{ 'menu-content-on': !hideMenu, 'menu-content-off': hideMenu }">
         <!-- menu content -->
 
         <!-- new chat btn fixed -->
@@ -154,9 +144,7 @@ watchEffect(() => {
         </div>
         <!-- history -->
         <div class="conversations" ref="conversationsContainer1">
-          <ConversationsList
-            :conversations="fetchedConversationsStore.conversations"
-          />
+          <ConversationsList :conversations="fetchedConversationsStore.conversations" />
         </div>
 
         <!-- user Info fixed -->
@@ -167,11 +155,7 @@ watchEffect(() => {
         <div v-if="isUserDropdownOpen" class="dropdown-menu user-dropdown-menu">
           <div class="responsivity-wrapper">
             <div class="dropdown-item" @click="openSettings">
-              <img
-                class="setting-icon"
-                src="../assets/svg/settings.svg"
-                alt=""
-              />
+              <img class="setting-icon" src="../assets/svg/settings.svg" alt="" />
               Settings
             </div>
             <div class="dropdown-item" @click="logout">
@@ -180,11 +164,7 @@ watchEffect(() => {
             </div>
           </div>
         </div>
-        <div
-          v-if="isUserDropdownOpen"
-          class="overlay"
-          @click="closeUserDropdown"
-        ></div>
+        <div v-if="isUserDropdownOpen" class="overlay" @click="closeUserDropdown"></div>
       </div>
     </div>
     <!-- Toggle btn -->
@@ -212,9 +192,7 @@ watchEffect(() => {
         </div>
         <!-- history -->
         <div class="conversations" ref="conversationsContainer2">
-          <ConversationsList
-            :conversations="fetchedConversationsStore.conversations"
-          />
+          <ConversationsList :conversations="fetchedConversationsStore.conversations" />
         </div>
 
         <!-- user Info fixed -->
@@ -225,11 +203,7 @@ watchEffect(() => {
         <div v-if="isUserDropdownOpen" class="dropdown-menu user-dropdown-menu">
           <div class="responsivity-wrapper">
             <div class="dropdown-item" @click="openSettings">
-              <img
-                class="setting-icon"
-                src="../assets/svg/settings.svg"
-                alt=""
-              />
+              <img class="setting-icon" src="../assets/svg/settings.svg" alt="" />
               Settings
             </div>
             <div class="dropdown-item" @click="logout">
@@ -238,11 +212,7 @@ watchEffect(() => {
             </div>
           </div>
         </div>
-        <div
-          v-if="isUserDropdownOpen"
-          class="overlay"
-          @click="closeUserDropdown"
-        ></div>
+        <div v-if="isUserDropdownOpen" class="overlay" @click="closeUserDropdown"></div>
       </div>
     </div>
     <!-- Close btn -->
@@ -331,6 +301,7 @@ watchEffect(() => {
   background-color: #171717;
   height: calc(100vh - 24px);
   width: 238px;
+  min-width: 80%;
   padding: 12px;
   transition: width 0.5s;
 }
