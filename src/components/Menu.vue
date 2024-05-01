@@ -1,4 +1,5 @@
 <script setup>
+import locStorage from '../services/local-storage'
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import ConversationsList from './ConversationsList.vue'
 import { useUser } from '../composables/user.js'
@@ -37,6 +38,10 @@ function logout() {
   // Logic to logout
   console.log('Logging out...')
   closeUserDropdown()
+  // Remove the session ID from local storage
+  locStorage.deleteItem('sessionId')
+  // Redirect the user to the logout URL
+  window.location.href = 'https://auth.sstrader.com/logout'
 }
 
 const checkScroll = container => {
