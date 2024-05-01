@@ -57,8 +57,7 @@ export function useUser() {
       if (!response.ok) {
         if (response.status === 401) {
           // User is not authorized, redirect to login page
-          window.location.href =
-            'https://auth.sstrader.con/login?return_url=chat.sstrader.com'
+          window.location.href = 'https://auth.sstrader.com/login?return_url=chat.sstrader.com'
         } else {
           throw new Error('Failed to fetch user details')
         }
