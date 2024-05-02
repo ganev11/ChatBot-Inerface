@@ -32,8 +32,9 @@ h1 {
   display: flex;
   margin: 0;
   padding: 0;
+  height: 100vh !important;
+  overflow: hidden !important;
 }
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
