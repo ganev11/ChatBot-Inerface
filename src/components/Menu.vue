@@ -506,4 +506,13 @@ watchEffect(() => {
   background-color: rgba(0, 0, 0, 0); /* Transparent, change as needed */
   z-index: 8000; /* Below dropdown menu but above other content */
 }
+@media (max-width: 769px) {
+  .conversations {
+    max-height: calc(100vh - 190px);
+    min-height: calc(100vh - 190px);
+  }
+  .dropdown-menu.user-dropdown-menu {
+    bottom: 90px !important;
+  }
+}
 </style>
