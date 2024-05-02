@@ -192,6 +192,7 @@ onUnmounted(() => {
   background-color: #171717;
   height: calc(100vh - 24px);
   width: 238px !important;
+  min-width: 238px !important;
   padding: 12px;
   transition: width 0.5s;
   /* border: 4px solid #333; */

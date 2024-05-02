@@ -175,7 +175,9 @@ function handleClick(conversation, event) {
   cursor: pointer;
   font-size: 0.9rem;
   border-radius: 4px;
-  text-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .convo:hover {
   background-color: #2e2e2e;
