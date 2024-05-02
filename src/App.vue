@@ -72,6 +72,10 @@ onUnmounted(() => {
   box-sizing: border-box;
   background-color: #212121;
   color: white;
+  overflow: auto;
+}
+#ChatWindow::-webkit-scrollbar {
+  display: none; /* This hides the scrollbar but allows scrolling */
 }
 .chat-window-margin-on {
   margin-left: 262px;
