@@ -200,25 +200,21 @@ onUnmounted(() => {
   border-radius: 50%;
 }
 .chat {
-  margin-top: 80px !important;
-  height: calc(100% - 86px);
-  min-height: calc(100vh - 230px) !important;
-  margin-bottom: 86px;
-  /* margin-right: 50px; */
-  width: 65% !important;
-  max-width: 692px !important;
-  overflow-y: auto;
-  padding: 12px;
-  box-sizing: border-box;
-  /* Firefox scrollbar styling */
-  color: white;
-  background-color: #212121;
+  margin-top: 80px; /* Maintain your top margin */
+  margin-bottom: 86px; /* Maintain your bottom margin */
+  width: 100%; /* Maintain your width settings */
+  padding: 12px 18%; /* Padding inside the chat box */
+  box-sizing: border-box; /* Ensures padding doesn't add to width */
+  color: white; /* Text color */
+  background-color: #212121; /* Background color */
+  overflow-y: auto; /* Allows scrolling when content exceeds container height */
   scrollbar-width: thin; /* For Firefox */
   scrollbar-color: transparent transparent; /* For Firefox, set default state to transparent */
 }
+
 @media (max-width: 768px) {
   .chat {
-    width: 85% !important;
+    padding: 12px 8%; /* Padding inside the chat box */
   }
 }
 /* Default state for Webkit browsers, set scrollbar to transparent */

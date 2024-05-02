@@ -104,21 +104,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
 }
-.chat {
-  margin-top: 60px;
-  height: calc(100% - 86px);
-  margin-bottom: 86px;
-  width: max-content;
 
-  overflow-y: auto;
-  padding: 12px;
-  box-sizing: border-box;
-  /* Firefox scrollbar styling */
-  color: white;
-  background-color: #212121;
-  scrollbar-width: thin; /* For Firefox */
-  scrollbar-color: transparent transparent; /* For Firefox, set default state to transparent */
-}
 .new-icon {
   width: 27px;
   height: 27px;
