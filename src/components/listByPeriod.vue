@@ -92,9 +92,12 @@ watch(
   }
 )
 const handleDeleteConversation = conversation => {
+  const foundConvo = props.conversations.find(
+    convo => convo.id === conversation
+  )
   modalStore.setModalSettings({
     title: 'Delete chat?',
-    content: `This will delete ${conversation.title}. Are you sure?`,
+    content: `This will delete "${foundConvo.title}".`,
     leftBtnText: 'Close',
     leftBtnAction: () => modalStore.closeModal(),
     rightBtnText: 'Delete',
