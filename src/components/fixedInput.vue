@@ -58,7 +58,7 @@ const handleKeydown = event => {
         <textarea
           type="textarea"
           class="input-bar"
-          placeholder="Message ChatGPT…"
+          placeholder="Send Message..."
           v-model="inputText"
           @keydown="handleKeydown"
           wrap="hard"

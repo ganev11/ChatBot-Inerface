@@ -42,7 +42,7 @@
               </div>
             </span>
 
-            <div class="model-description">Great for everyday tasks.</div>
+            <div class="model-description">{{ model.description }}</div>
           </div>
         </div>
       </div>
