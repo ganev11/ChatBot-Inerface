@@ -43,7 +43,7 @@ export const useConversationStore = defineStore('conversation', {
     startNewConversation() {
       // Reset the conversation data to an empty array
       this.conversation = {}
-
+      this.currentConversationId = ''
       // Show the initial chat window
       this.initialWindow = true
       // Clear the current prompt and ongoing response
