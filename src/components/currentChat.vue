@@ -3,6 +3,8 @@ import { ref, computed, defineProps, onMounted, onUnmounted, watch } from 'vue'
 import { useConversationStore } from '../stores/conversationStore' // Adjust the path as necessary
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
+import { useUser } from '../composables/user.js'
+const { fetchUser } = useUser()
 
 // Define props
 const props = defineProps({
@@ -12,6 +14,7 @@ const props = defineProps({
 // Ref to the chat container
 const bottomLine = ref(null)
 const didUserScrollManually = ref(false)
+const user = ref(null)
 
 const chatContainer = ref(null)
 
@@ -87,8 +90,15 @@ const handleScroll = () => {
   }
 }
 // Add and remove the scroll event listener
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener('scroll', handleScroll)
+
+  try {
+    user.value = await fetchUser()
+    console.log('user.value currentChat :>> ', user.value)
+  } catch (error) {
+    console.error('Failed to load user details:', error)
+  }
 })
 
 onUnmounted(() => {
@@ -115,7 +125,13 @@ onUnmounted(() => {
       :class="convo.class"
     >
       <Span v-if="convo.author === 'user'" class="message-owner">
-        <img src="../assets/svg/user.svg" class="icon-user" alt="" />
+        <img
+          v-if="user && user.picture"
+          class="icon-user"
+          :src="user.picture"
+          alt=""
+        />
+        <img v-else src="../assets/svg/user.svg" class="icon-user" alt="" />
         You</Span
       >
 
@@ -130,7 +146,13 @@ onUnmounted(() => {
 
     <div v-if="currentPrompt" class="message user-message">
       <Span class="message-owner">
-        <img src="../assets/svg/user.svg" class="icon-user" alt="" />
+        <img
+          v-if="user && user.picture"
+          class="icon-user"
+          :src="user.picture"
+          alt=""
+        />
+        <img v-else src="../assets/svg/user.svg" class="icon-user" alt="" />
 
         You</Span
       >
