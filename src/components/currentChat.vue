@@ -13,17 +13,25 @@ const props = defineProps({
 const bottomLine = ref(null)
 const didUserScrollManually = ref(false)
 
-// Function to programmatically scroll to the bottom
+const chatContainer = ref(null)
+
 function scrollToBottom() {
   if (didUserScrollManually.value) {
     return
   } else {
     const element = bottomLine.value
-    const y = element.getBoundingClientRect().top + window.scrollY
-    window.scroll({
-      top: y,
-      behavior: 'smooth'
-    })
+    const chatEl = chatContainer.value // Get the .chat element
+
+    if (chatEl && element) {
+      // Calculate the position to scroll to in the .chat container
+      const elementTop = element.getBoundingClientRect().top
+      const chatTop = chatEl.getBoundingClientRect().top
+      const scrollPosition = elementTop - chatTop + chatEl.scrollTop
+
+      chatEl.scrollTo({
+        top: scrollPosition
+      })
+    }
   }
 }
 
@@ -42,6 +50,7 @@ const currentPrompt = computed(() => conversationStore.currentPrompt)
 const ongoingResponse = computed(() => conversationStore.ongoingResponse)
 
 // Watch for changes on conversationIsRunning
+
 watch(ongoingResponse, (newVal, oldVal) => {
   scrollToBottom()
 })
@@ -90,7 +99,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="chat" :style="{ paddingBottom: textAreaHeight }">
+  <div
+    class="chat"
+    ref="chatContainer"
+    :style="{ paddingBottom: textAreaHeight }"
+  >
     <!-- did user scroll manually? -->
     <!-- <div class="ssss">
       {{ didUserScrollManually }}
