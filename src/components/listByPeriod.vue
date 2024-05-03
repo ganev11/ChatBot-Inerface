@@ -91,9 +91,9 @@ watch(
     }
   }
 )
-const handleDeleteConversation = conversation => {
+const handleDeleteConversation = conversationId => {
   const foundConvo = props.conversations.find(
-    convo => convo.id === conversation
+    convo => convo.id === conversationId
   )
   modalStore.setModalSettings({
     title: 'Delete chat?',
@@ -102,7 +102,7 @@ const handleDeleteConversation = conversation => {
     leftBtnAction: () => modalStore.closeModal(),
     rightBtnText: 'Delete',
     rightBtnAction: () => {
-      deleteConversation(conversation.id) // Call the deleteConversation method from the composable
+      deleteConversation(conversationId) // Call the deleteConversation method from the composable
         .then(() => {
           // Handle successful deletion, e.g., refresh the list of conversations or remove the conversation from local state
           // load the fetched conversations again to update the list

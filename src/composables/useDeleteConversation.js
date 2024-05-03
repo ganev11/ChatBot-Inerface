@@ -8,7 +8,7 @@ export function useDeleteConversation() {
       const sessionId = locStorage.getItem('sessionId')
 
       const response = await fetch(
-        `http://127.0.0.1:5500/v1/chat/conversation/${conversationId}`,
+        `https://chat.sstrader.com/api/v1/chat/conversation/${conversationId}`,
         {
           method: 'PATCH', // Use DELETE method for deletion
           headers: {
