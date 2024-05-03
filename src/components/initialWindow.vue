@@ -178,13 +178,13 @@ const choosePrompt = async prompt => {
   color: #9a9a9a;
   font-size: 0.8rem;
 }
-
+/* 
 .card h3,
 .card p {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
+} */
 .initial-propts {
   display: flex;
   justify-content: center;
@@ -202,6 +202,7 @@ const choosePrompt = async prompt => {
   width: calc(100vw - 300px);
   margin-bottom: 4px;
   max-width: 750px;
+  align-items: stretch; /* Ensures all items in a row are of equal height */
 }
 
 .card {
@@ -209,7 +210,21 @@ const choosePrompt = async prompt => {
   border-radius: 15px;
   padding: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* Removed the max-width and width properties */
+  display: flex;
+  flex-direction: column;
+}
+
+.card h3 {
+  margin: 0 0 10px 0;
+}
+
+.card p {
+  flex-grow: 1; /* Ensures the paragraph takes up all available space */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* Limits the number of visible lines */
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 }
 
 @media screen and (max-width: 900px) {
