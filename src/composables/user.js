@@ -41,23 +41,24 @@ export function useUser() {
   // Function to fetch user details
   const fetchUser = async () => {
     try {
-      // // ! Fetch user profile to obtain session ID
-      // // const response = await fetch('https://auth.sstrader.com/api/me', {
-      // //   method: 'GET',
-      // //   credentials: 'include' // Include credentials (cookies) in the request
-      // // })
-      // ! Fetch user profile using the access token
+      //! Fetch user profile to obtain session ID
       const response = await fetch('https://auth.sstrader.com/api/me', {
         method: 'GET',
-        headers: {
-          Authorization: 'Bearer rGJOfWVxyEI9BKV0ovEA2'
-        }
+        credentials: 'include' // Include credentials (cookies) in the request
       })
+      // // ! Fetch user profile using the access token
+      // const response = await fetch('https://auth.sstrader.com/api/me', {
+      //   method: 'GET',
+      //   headers: {
+      //     Authorization: 'Bearer 852a6CE16BACAb70DAfbD5dDD985A1eB'
+      //   }
+      // })
 
       if (!response.ok) {
         if (response.status === 401) {
           // User is not authorized, redirect to login page
-          window.location.href = 'https://auth.sstrader.com/login?return_url=chat.sstrader.com'
+          window.location.href =
+            'https://auth.sstrader.com/login?return_url=chat.sstrader.com'
         } else {
           throw new Error('Failed to fetch user details')
         }
