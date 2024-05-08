@@ -9,7 +9,7 @@ export const useFetchedConversationsStore = defineStore(
     state: () => ({
       conversations: [],
       offset: 0,
-      limit: 15
+      limit: 25
     }),
     actions: {
       async fetchConversations(initial = false) {
