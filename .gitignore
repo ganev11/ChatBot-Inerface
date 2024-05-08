@@ -26,6 +26,7 @@ dist-ssr
 #Prettier
 .prettierrc
 
-src/composables/user.js
+src/composables/user_local.js
+src/composables/user_production.js
 src/App_local.vue
 src/App_production.vue
