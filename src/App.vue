@@ -18,8 +18,8 @@
 import Menu from './components/Menu.vue'
 import ChatWindow from './components/ChatWindow.vue'
 import { useMobileMenuStore } from './stores/mobileMenuStore'
-import { useUser } from './composables/user.js'
 import { ref, onMounted, onUnmounted, onBeforeMount } from 'vue'
+import { useUser } from './composables/user.js'
 
 const appReady = ref(false) // Controls rendering based on readiness
 const hideMenu = ref(false)
