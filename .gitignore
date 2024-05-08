@@ -27,6 +27,5 @@ dist-ssr
 .prettierrc
 
 src/composables/user.js
-src/App.vue
 src/App_local.vue
 src/App_production.vue
