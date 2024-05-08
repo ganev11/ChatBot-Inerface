@@ -37,7 +37,7 @@
 import locStorage from '../services/local-storage'
 
 export function useHistory() {
-  const fetchOldConversations = async (offset = 0, limit = 10) => {
+  const fetchOldConversations = async (offset = 0, limit = 25) => {
     try {
       const url = new URL('https://chat.sstrader.com/api/v1/chat/conversations')
 
