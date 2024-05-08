@@ -1,18 +1,17 @@
 <template>
-  <div v-if="appReady">
-    <!-- Menu component and ChatWindow only render after fetchUser has completed -->
-    <Menu id="menu" @menu-toggle="toggleChatbotMargin" />
-    <ChatWindow
-      :key="rerender"
-      :hideMenu="hideMenu"
-      :class="{
-        'chat-window-margin-on': !hideMenu,
-        'chat-window-margin-off': hideMenu
-      }"
-      id="ChatWindow"
-      @menu-toggle-mobile="toggleMobileMenu"
-    />
-  </div>
+  <!-- Menu component and ChatWindow only render after fetchUser has completed -->
+  <Menu v-if="appReady" id="menu" @menu-toggle="toggleChatbotMargin" />
+  <ChatWindow
+    v-if="appReady"
+    :key="rerender"
+    :hideMenu="hideMenu"
+    :class="{
+      'chat-window-margin-on': !hideMenu,
+      'chat-window-margin-off': hideMenu
+    }"
+    id="ChatWindow"
+    @menu-toggle-mobile="toggleMobileMenu"
+  />
 </template>
 
 <script setup>
