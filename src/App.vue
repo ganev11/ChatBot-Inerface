@@ -13,10 +13,6 @@
       @menu-toggle-mobile="toggleMobileMenu"
     />
   </div>
-  <div v-else>
-    <!-- Optional: Display a loading spinner or message while fetching user details -->
-    Loading user data...
-  </div>
 </template>
 
 <script setup>
