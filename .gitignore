@@ -25,3 +25,6 @@ dist-ssr
 
 #Prettier
 .prettierrc
+
+src/composables/user.js
+src/composables/App.js
