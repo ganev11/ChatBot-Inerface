@@ -128,8 +128,6 @@ function closeDropdown() {
   isDropdownOpen.value = false
 }
 function handleClick(conversation, event) {
-  mittBus.emit('scrollDown')
-
   event.stopPropagation() // Prevent the click event from bubbling up
   // Access ongoingResponse from conversationStore
   const { ongoingResponse } = conversationStore
@@ -149,7 +147,7 @@ function handleClick(conversation, event) {
     .loadSpecificConversation(conversation.id)
     .then(() => {
       // Here you can handle any post-fetch logic, like updating the UI
-      console.log('Fetched specific conversation with ID:', conversation.id)
+      mittBus.emit('scrollDown')
     })
     .catch(error => {
       console.error('Error fetching specific conversation:', error)

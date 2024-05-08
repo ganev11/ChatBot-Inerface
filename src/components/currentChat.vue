@@ -19,9 +19,7 @@ const user = ref(null)
 
 const chatContainer = ref(null)
 function scrollToBottomWithDelay() {
-  setTimeout(() => {
-    scrollToBottom()
-  }, 600)
+  scrollToBottom()
 }
 function scrollToBottom() {
   const element = bottomLine.value
