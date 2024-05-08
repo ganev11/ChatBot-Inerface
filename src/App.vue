@@ -1,25 +1,32 @@
 <template>
-  <!-- <MenuMob v-if="isMobile" id="menu-mobile" /> -->
-  <Menu id="menu" @menu-toggle="toggleChatbotMargin" />
-  <ChatWindow
-    :hideMenu="hideMenu"
-    :class="{
-      'chat-window-margin-on': !hideMenu,
-      'chat-window-margin-off': hideMenu
-    }"
-    id="ChatWindow"
-    @menu-toggle-mobile="toggleMobileMenu"
-  />
+  <div v-if="appReady">
+    <!-- Menu component and ChatWindow only render after fetchUser has completed -->
+    <Menu id="menu" @menu-toggle="toggleChatbotMargin" />
+    <ChatWindow
+      :key="rerender"
+      :hideMenu="hideMenu"
+      :class="{
+        'chat-window-margin-on': !hideMenu,
+        'chat-window-margin-off': hideMenu
+      }"
+      id="ChatWindow"
+      @menu-toggle-mobile="toggleMobileMenu"
+    />
+  </div>
+  <div v-else>
+    <!-- Optional: Display a loading spinner or message while fetching user details -->
+    Loading user data...
+  </div>
 </template>
+
 <script setup>
-// import MenuMobile from './components/MenuMobile.vue'
-// import MenuMob from './components/MenuMob.vue'
 import Menu from './components/Menu.vue'
 import ChatWindow from './components/ChatWindow.vue'
 import { useMobileMenuStore } from './stores/mobileMenuStore'
 import { useUser } from '../src/composables/user.js' // Import your useUser hook
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, onBeforeMount } from 'vue'
 
+const appReady = ref(false) // Controls rendering based on readiness
 const hideMenu = ref(false)
 const hideMobileMenu = ref(false)
 const screenWidth = ref(window.innerWidth)
@@ -28,6 +35,7 @@ const breakpoint = 768
 // Computed property to determine if the viewport is in mobile mode
 const isMobile = ref(screenWidth.value < breakpoint)
 const mobileMenu = useMobileMenuStore()
+const rerender = ref(0)
 
 function setMobileScreen(isMobile) {
   mobileMenu.setMobileScreen(isMobile)
@@ -36,9 +44,11 @@ function setMobileScreen(isMobile) {
 function toggleChatbotMargin() {
   hideMenu.value = !hideMenu.value
 }
+
 function toggleMobileMenu() {
   hideMobileMenu.value = true
 }
+
 // Update screenWidth on window resize
 function updateScreenWidth() {
   screenWidth.value = window.innerWidth
@@ -46,13 +56,20 @@ function updateScreenWidth() {
   setMobileScreen(isMobile.value)
 }
 
+const initializeApp = async () => {
+  const { fetchUser } = useUser()
+  await fetchUser()
+  appReady.value = true // Set the app as ready after fetching user details
+  rerender.value++ // Force re-render if necessary
+}
+
+onBeforeMount(() => {
+  initializeApp()
+})
+
 onMounted(() => {
   window.addEventListener('resize', updateScreenWidth)
   setMobileScreen(isMobile.value)
-
-  // Fetch user details and set session ID to local storage
-  const { fetchUser } = useUser()
-  fetchUser()
 })
 
 onUnmounted(() => {
