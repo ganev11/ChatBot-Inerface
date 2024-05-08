@@ -18,7 +18,7 @@ const didUserScrollManually = ref(false)
 const user = ref(null)
 
 const chatContainer = ref(null)
-function scrollToBottomWithDelay() {
+function scrollToBottomAfterFetchedConvo() {
   scrollToBottom()
 }
 function scrollToBottom() {
@@ -99,14 +99,15 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to load user details:', error)
   }
-  mittBus.on('scrollDown', scrollToBottomWithDelay)
+  mittBus.on('scrollDown', scrollToBottomAfterFetchedConvo)
+  scrollToBottom()
 })
 
 onUnmounted(() => {
   if (bottomLine.value) {
     window.removeEventListener('scroll', handleScroll)
   }
-  mittBus.off('scrollDown', scrollToBottomWithDelay)
+  mittBus.off('scrollDown', scrollToBottomAfterFetchedConvo)
 })
 </script>
 

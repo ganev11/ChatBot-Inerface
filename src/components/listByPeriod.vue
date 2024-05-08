@@ -128,6 +128,8 @@ function closeDropdown() {
   isDropdownOpen.value = false
 }
 function handleClick(conversation, event) {
+  mittBus.emit('scrollDown')
+
   event.stopPropagation() // Prevent the click event from bubbling up
   // Access ongoingResponse from conversationStore
   const { ongoingResponse } = conversationStore
