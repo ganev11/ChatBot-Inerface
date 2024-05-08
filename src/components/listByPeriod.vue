@@ -44,6 +44,7 @@
 import { defineProps, watch, ref } from 'vue'
 import BaseModal from './BaseModal.vue'
 import DropdownMenu from './DropdownMenu.vue'
+import mittBus from '../services/mitt.js'
 
 import { useBaseModalStore } from './../stores/baseModalStore'
 import { useDeleteConversation } from './../composables/useDeleteConversation'
@@ -127,8 +128,7 @@ function closeDropdown() {
   isDropdownOpen.value = false
 }
 function handleClick(conversation, event) {
-  console.log('conversation :>> ', conversation)
-  console.log('event :>> ', event)
+  mittBus.emit('scrollDown')
 
   event.stopPropagation() // Prevent the click event from bubbling up
   // Access ongoingResponse from conversationStore

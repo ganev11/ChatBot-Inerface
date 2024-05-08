@@ -5,6 +5,7 @@ import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { useUser } from '../composables/user.js'
 const { fetchUser } = useUser()
+import mittBus from '../services/mitt.js'
 
 // Define props
 const props = defineProps({
@@ -17,24 +18,24 @@ const didUserScrollManually = ref(false)
 const user = ref(null)
 
 const chatContainer = ref(null)
-
+function scrollToBottomWithDelay() {
+  setTimeout(() => {
+    scrollToBottom()
+  }, 600)
+}
 function scrollToBottom() {
-  if (didUserScrollManually.value) {
-    return
-  } else {
-    const element = bottomLine.value
-    const chatEl = chatContainer.value // Get the .chat element
+  const element = bottomLine.value
+  const chatEl = chatContainer.value // Get the .chat element
 
-    if (chatEl && element) {
-      // Calculate the position to scroll to in the .chat container
-      const elementTop = element.getBoundingClientRect().top
-      const chatTop = chatEl.getBoundingClientRect().top
-      const scrollPosition = elementTop - chatTop + chatEl.scrollTop
+  if (chatEl && element) {
+    // Calculate the position to scroll to in the .chat container
+    const elementTop = element.getBoundingClientRect().top
+    const chatTop = chatEl.getBoundingClientRect().top
+    const scrollPosition = elementTop - chatTop + chatEl.scrollTop
 
-      chatEl.scrollTo({
-        top: scrollPosition
-      })
-    }
+    chatEl.scrollTo({
+      top: scrollPosition
+    })
   }
 }
 
@@ -57,6 +58,7 @@ const ongoingResponse = computed(() => conversationStore.ongoingResponse)
 watch(ongoingResponse, (newVal, oldVal) => {
   scrollToBottom()
 })
+
 // Computed property to process markdown in conversations and differentiate by role
 const processedConversations = computed(() => {
   // Convert the conversations object into an array of its values
@@ -99,12 +101,14 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to load user details:', error)
   }
+  mittBus.on('scrollDown', scrollToBottomWithDelay)
 })
 
 onUnmounted(() => {
   if (bottomLine.value) {
     window.removeEventListener('scroll', handleScroll)
   }
+  mittBus.off('scrollDown', scrollToBottomWithDelay)
 })
 </script>
 
@@ -124,6 +128,7 @@ onUnmounted(() => {
       class="message"
       :class="convo.class"
     >
+      <!-- <button @click="scrollToBottom">scrollToBottom</button> -->
       <Span v-if="convo.author === 'user'" class="message-owner">
         <img
           v-if="user && user.picture"
