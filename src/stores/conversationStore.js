@@ -98,6 +98,7 @@ export const useConversationStore = defineStore('conversation', {
           }
         }
       } catch (error) {
+        console.log('this.buffer :>> ', this.buffer)
         console.error('Error appending to ongoing response:', error)
         // Optionally handle the buffer differently on error
       }

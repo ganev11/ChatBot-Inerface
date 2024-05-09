@@ -49,27 +49,51 @@ const conversation = computed(() => conversationStore.conversation)
 const currentPrompt = computed(() => conversationStore.currentPrompt)
 
 // Computed property for ongoingResponse
-const ongoingResponse = computed(() => conversationStore.ongoingResponse)
+const sanitizedOngoingResponse = computed(() => {
+  // Retrieve the raw ongoing response text
+  const rawResponse = conversationStore.ongoingResponse
+
+  // Process the response with 'marked' first to handle Markdown formatting
+  let markedResponse = marked(rawResponse)
+
+  // Replace '\n' with '<br>' in the HTML output from Markdown
+  markedResponse = markedResponse.replace(/\n/g, '<p>')
+
+  // Sanitize the final HTML to ensure it's safe to display
+  return DOMPurify.sanitize(markedResponse)
+})
 
 // Watch for changes on conversationIsRunning
 
-watch(ongoingResponse, (newVal, oldVal) => {
+watch(sanitizedOngoingResponse, (newVal, oldVal) => {
   scrollToBottom()
 })
 
 // Computed property to process markdown in conversations and differentiate by role
 const processedConversations = computed(() => {
-  // Convert the conversations object into an array of its values
   const conversationArray = Object.values(conversation.value)
 
-  // Process each conversation in the array
-  return conversationArray.map(convo => ({
-    id: convo.id,
-    content: DOMPurify.sanitize(marked(convo.message.content.parts.join(' '))),
-    author: convo.message.author.role,
-    class:
-      convo.message.author.role === 'user' ? 'user-message' : 'server-message'
-  }))
+  return conversationArray.map(convo => {
+    // Join parts with spaces; assume that parts are correctly formatted for Markdown
+    let formattedContent = convo.message.content.parts.join(' ')
+
+    // Process the content with 'marked' first to handle Markdown formatting
+    let markedContent = marked(formattedContent)
+
+    // Replace '\n' with '<br>' in the HTML output from Markdown
+    markedContent = markedContent.replace(/\n/g, '<p>')
+
+    // Sanitize the final HTML to ensure it's safe to display
+    let sanitizedContent = DOMPurify.sanitize(markedContent)
+
+    return {
+      id: convo.id,
+      content: sanitizedContent,
+      author: convo.message.author.role,
+      class:
+        convo.message.author.role === 'user' ? 'user-message' : 'server-message'
+    }
+  })
 })
 
 // Function to handle user scroll interactions
@@ -145,6 +169,7 @@ onUnmounted(() => {
       >
       <!-- :style="`margin-left: ${markedTextMargin}`" -->
       <div v-html="convo.content" class="massage-margin"></div>
+      <!-- {{ convo.content }} -->
     </div>
     <!-- Display currentPrompt if it exists -->
 
@@ -167,16 +192,13 @@ onUnmounted(() => {
       ></div>
     </div>
     <!-- Display ongoingResponse if it exists -->
-    <div v-if="ongoingResponse" class="message server-message">
+    <div v-if="sanitizedOngoingResponse" class="message server-message">
       <Span class="message-owner">
         <img src="../assets/imgs/sst.jpg" class="icon-chat" alt="" />
         Server</Span
       >
       <!-- :style="`margin-left: ${markedTextMargin}`" -->
-      <div
-        class="massage-margin"
-        v-html="DOMPurify.sanitize(marked(ongoingResponse))"
-      ></div>
+      <div class="message-margin" v-html="sanitizedOngoingResponse"></div>
     </div>
     <div ref="bottomLine"></div>
   </div>
