@@ -60,7 +60,7 @@ export function useSendPrompt() {
 
         const streamedData = new TextDecoder('utf-8').decode(value)
         conversationStore.appendToOngoingResponse(streamedData)
-        console.log(streamedData) // Or process data as needed
+        // console.log(streamedData) // Or process data as needed
 
         readStream()
       }

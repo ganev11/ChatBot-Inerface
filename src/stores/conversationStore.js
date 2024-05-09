@@ -57,31 +57,53 @@ export const useConversationStore = defineStore('conversation', {
       this.initialWindow = false
     },
     appendToOngoingResponse(streamedData) {
-      try {
-        // Remove the leading "data: " and any surrounding quotes from the streamedData string
-        const jsonData = streamedData
-          .replace(/^data:\s*['"]?/, '')
-          .replace(/['"]?$/, '')
+      // Append new streamed data to the buffer
+      this.buffer += streamedData
 
-        // Parse the remaining string as JSON
-        const parsedData = JSON.parse(jsonData)
-        this.currentConversationId = parsedData.conversation_id
-        // Check if the parsed object contains the necessary properties
-        if (
-          parsedData &&
-          parsedData.message &&
-          parsedData.message.content &&
-          parsedData.message.content.parts
-        ) {
-          const newParts = parsedData.message.content.parts
-          this.ongoingResponse += newParts.join(' ')
+      try {
+        // Continuously check for complete JSON objects in the buffer
+        while (this.buffer.includes('\n')) {
+          // Find the first newline, which delimits the end of a JSON object
+          let endIndex = this.buffer.indexOf('\n')
+          let jsonData = this.buffer.substring(0, endIndex).trim()
+
+          // Remove the processed JSON string and any trailing newline from the buffer
+          this.buffer = this.buffer.substring(endIndex + 1).trim()
+
+          // Clean up jsonData from any wrapping artifacts
+          jsonData = jsonData.replace(/^data:\s*/, '')
+
+          // Check that jsonData contains data before parsing
+          if (jsonData) {
+            const parsedData = JSON.parse(jsonData)
+            this.currentConversationId = parsedData.conversation_id
+
+            // Check if parsedData contains the expected properties
+            if (
+              parsedData &&
+              parsedData.message &&
+              parsedData.message.content &&
+              parsedData.message.content.parts
+            ) {
+              const newParts = parsedData.message.content.parts
+
+              // Process each part, adding it to the ongoing response
+              newParts.forEach(part => {
+                // Add the part to the ongoing response as-is
+                this.ongoingResponse += part
+              })
+            }
+          } else {
+            console.error('Received empty JSON data:', jsonData) // This now should only log if jsonData is genuinely empty
+          }
         }
       } catch (error) {
         console.error('Error appending to ongoing response:', error)
+        // Optionally handle the buffer differently on error
       }
     },
     finalizeStream() {
-      console.log('finalizeStream')
+      console.log('finalizeStream', this.conversation)
       // if (this.lastId === 0) {
       // load the fetched conversations again to update the list
       const fetchedConversationsStore = useFetchedConversationsStore()
