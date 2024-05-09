@@ -1,5 +1,5 @@
 <template>
-  <!-- Menu component and ChatWindow only render after fetchUser has completed -->
+  <ErrorMessage />
   <Menu v-if="appReady" id="menu" @menu-toggle="toggleChatbotMargin" />
   <ChatWindow
     v-if="appReady"
@@ -13,19 +13,22 @@
     @menu-toggle-mobile="toggleMobileMenu"
   />
 </template>
-
 <script setup>
 import Menu from './components/Menu.vue'
 import ChatWindow from './components/ChatWindow.vue'
 import { useMobileMenuStore } from './stores/mobileMenuStore'
+import { useUser } from '../src/composables/user.js'
 import { ref, onMounted, onUnmounted, onBeforeMount } from 'vue'
-import { useUser } from './composables/user.js'
+import mittBus from './services/mitt.js'
+import ErrorMessage from './components/ErrorMessage.vue'
 
-const appReady = ref(false) // Controls rendering based on readiness
+const appReady = ref(false)
 const hideMenu = ref(false)
 const hideMobileMenu = ref(false)
 const screenWidth = ref(window.innerWidth)
 const breakpoint = 768
+const errorMessage = ref('')
+const showError = ref(false)
 
 // Computed property to determine if the viewport is in mobile mode
 const isMobile = ref(screenWidth.value < breakpoint)
@@ -58,6 +61,17 @@ const initializeApp = async () => {
   rerender.value++ // Force re-render if necessary
 }
 
+// // Listen for error messages
+// const handleShowError = message => {
+//   console.log('message :>> ', message)
+//   errorMessage.value = message
+//   showError.value = true
+//   setTimeout(() => {
+//     showError.value = false
+//     errorMessage.value = ''
+//   }, 5000)
+// }
+
 onBeforeMount(() => {
   initializeApp()
 })
@@ -65,10 +79,12 @@ onBeforeMount(() => {
 onMounted(() => {
   window.addEventListener('resize', updateScreenWidth)
   setMobileScreen(isMobile.value)
+  // mittBus.on('showError', handleShowError)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateScreenWidth)
+  // mittBus.off('showError', handleShowError)
 })
 </script>
 

@@ -1,4 +1,5 @@
 import locStorage from '../services/local-storage'
+import mittBus from '../services/mitt.js'
 
 export function useModels() {
   // Adjusted method to fetch models using Fetch API
@@ -16,16 +17,15 @@ export function useModels() {
           }
         }
       )
-
       if (!response.ok) {
         throw new Error('Failed to fetch models')
       }
-
       const data = await response.json()
       return data
     } catch (error) {
       console.error('Error fetching models:', error)
-      throw error // or handle it as needed
+      mittBus.emit('showError', error.message)
+      throw error
     }
   }
 

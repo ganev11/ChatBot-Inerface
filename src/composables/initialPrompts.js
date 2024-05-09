@@ -1,4 +1,5 @@
 import locStorage from '../services/local-storage'
+import mittBus from '../services/mitt.js'
 
 export function useInitialPrompts() {
   // Method to fetch initial prompts using Fetch API
@@ -25,6 +26,7 @@ export function useInitialPrompts() {
       return data
     } catch (error) {
       console.error('Error fetching initial prompts:', error)
+      mittBus.emit('showError', error.message)
       throw error // or handle it as needed
     }
   }

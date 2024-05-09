@@ -1,4 +1,5 @@
 import locStorage from '../services/local-storage'
+import mittBus from '../services/mitt.js'
 
 export function useSpecificConversation() {
   const fetchSpecificConversation = async conversationId => {
@@ -21,6 +22,7 @@ export function useSpecificConversation() {
       return data
     } catch (error) {
       console.error('Error fetching specific conversation:', error)
+      mittBus.emit('showError', error.message)
       throw error // or handle it as needed
     }
   }

@@ -1,4 +1,5 @@
 import locStorage from '../services/local-storage'
+import mittBus from '../services/mitt.js'
 
 export function useDeleteConversation() {
   const deleteConversation = async conversationId => {
@@ -26,6 +27,7 @@ export function useDeleteConversation() {
       return data
     } catch (error) {
       console.error('Error deleting conversation:', error)
+      mittBus.emit('showError', error.message)
       throw error // Or handle it as needed
     }
   }

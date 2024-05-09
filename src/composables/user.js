@@ -1,4 +1,5 @@
 import locStorage from '../services/local-storage'
+import mittBus from '../services/mitt.js'
 
 export function useUser() {
   console.log('sessionId :>> ')
@@ -38,6 +39,7 @@ export function useUser() {
       return userData
     } catch (error) {
       console.error('Error fetching user details:', error)
+      mittBus.emit('showError', error.message)
       throw error // or handle it according to your error handling strategy
     }
   }

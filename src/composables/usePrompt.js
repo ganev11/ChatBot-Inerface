@@ -1,6 +1,7 @@
 import locStorage from '../services/local-storage'
 import { useConversationStore } from '../stores/conversationStore' // Adjust the path as necessary
 import { useModelsStore } from '../stores/modelsStore' // Adjust the path as necessary
+import mittBus from '../services/mitt.js'
 
 export function useSendPrompt() {
   const conversationStore = useConversationStore()
@@ -67,6 +68,7 @@ export function useSendPrompt() {
       await readStream()
     } catch (error) {
       console.error('Error sending prompt:', error)
+      mittBus.emit('showError', error.message)
       throw error
     }
   }
