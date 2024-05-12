@@ -2,7 +2,7 @@ import locStorage from '../services/local-storage'
 import mittBus from '../services/mitt.js'
 
 export function useHistory() {
-  const fetchOldConversations = async (offset = 0, limit = 10) => {
+  const fetchOldConversations = async (offset = 0, limit = 25) => {
     try {
       const url = new URL('https://chat.sstrader.com/api/v1/chat/conversations')
 
